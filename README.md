@@ -22,7 +22,7 @@ This project, built with **SpringCloud** for backend services and **Next.js** fo
   - `auth-service/`: Handles user authentication and authorization.
 - `frontend/`: Built with Next.js for rendering and managing the bidirectional JSON editor interface.
 - `docs/`: Project documentation.
-- `tests/`: Automated tests for backend and frontend components.
+- `examples/`: Automated tests for backend and frontend components.
 
 ## Prerequisites
 
