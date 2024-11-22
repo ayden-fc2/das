@@ -736,3 +736,16 @@ com.intellij.dvcs.repo.RepoStateException: Unknown repository state in file:///h
 2024-11-22 15:10:06,974 [3383930]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
 2024-11-22 15:10:07,226 [3384182] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
 2024-11-22 15:10:07,226 [3384182] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
+2024-11-22 15:10:07,477 [3384433]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:07,978 [3384934]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:08,365 [3385321]   WARN - #git4idea.repo.GitRepositoryReader - Couldn't identify neither current branch nor current revision.
+2024-11-22 15:10:08,479 [3385435]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:08,980 [3385936]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:09,481 [3386437]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:09,982 [3386938]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:10,484 [3387440]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:10,987 [3387943]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:11,487 [3388443]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:11,948 [3388904] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
+2024-11-22 15:10:11,948 [3388904] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
+2024-11-22 15:10:11,989 [3388945]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
