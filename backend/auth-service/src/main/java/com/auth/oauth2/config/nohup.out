@@ -1,0 +1,79 @@
+The disableGPU setting is set to undefined
+Not disabling GPU
+Main: Starting cleanup of stale files
+Main: Cleanup of stale files completed
+Main~createDefaultWorkingDir - Default working dir creation already attempted
+1732177705909 main info "Booting Postman 11.20.0, linux-6.11.9-arch1-1 on x64"
+1732177705910 main info "EventBus~initialize - Success"
+1732177705913 main info "Proxy configuration has not been setup"
+1732177705913 main info "CloudProxyManager~init - Success"
+1732177705964 main info "performShellDataMigration: Migration has already been done. Bailing out"
+1732177705971 main info "UpdateHandler~init - Success"
+1732177705973 main info "LeaderSelection: Initialized successfully"
+1732177705974 main info "VersionDependencyService: Initialized successfully"
+1732177705986 main info "GPU detected VID 32902 DID 3366 ACTIVE true"
+1732177705989 main info "shellController~init: Success"
+1732177705989 main info "shellMeta~init: Success"
+1732177705989 main info "partitionMigrationService: State of V7 partition:"
+1732177705989 main info "partitionMigrationService: V7 partitions",[]
+1732177705990 main info "partitionMigrationService~rectifyNamespaceOfScratchPadPartition: There is no partition with scratchpad namespace"
+1732177705990 main info "partitionMigrationService~rectifyNamespaceOfScratchPadPartition: There is no transit partition which could have been used for scratchpad"
+1732177705990 main info "partitionMigrationService~init: Success"
+1732177705991 main info "partitionMigrationService~runV8PartitionsIntegrity: Two way migration~ removing the following partitions from v8",[]
+1732177705991 main info "userPartitionService~_rectifyTheActivePartitionOfApplication: Setting the active partition to ",null
+1732177705996 main info "LinuxAutoUpdater~Cleanup - Initial cleanup successful"
+1732177706002 main info "newAccountRegionPreferenceService~getPreferenceWithFallback - Preference not found in storage."
+1732177706002 main info "newAccountRegionPreferenceService~getToggleMenuTemplate - Using preference:","useUSRegion"
+1732177706018 main info "userPartitionService~init: Success"
+1732177706053 main info "userPartitionService: State of v8 partition system:"
+1732177706053 main info "shell~init~getPartitionToLoad: loading scratchpad partition"
+1732177706053 main info "userPartitionService: List of partitions:",[{"partitionId":"b26a7b3d-4b56-40d2-9de4-b0e30e8e3717","namespace":"scratchPad","userId":0,"teamId":0,"isDirty":false}]
+1732177706053 main info "userPartitionService: users global meta:",{}
+1732177706053 main info "Main:windowManager~newRequesterWindow: Fetch and update runtime config: undefined"
+1732177709556 main info "RuntimeIPCAgent~started: Success"
+1732177709574 main info "Main~scratchpadThemeAction:: action: set, value: dark"
+1732177709578 main info "Main~scratchpadThemeAction:: action: set, value: dark"
+1732177709592 main info "Main~scratchpadThemeAction:: action: set, value: dark"
+1732177709614 main info "UpdateHandler~app-update-events - Received event",{"name":"checkForElectronVersionUpdated","namespace":"appUpdate"}
+1732177709624 main info "windowManager: First requester booted successfully."
+1732177709624 main info "windowManager~restoreWindows: Restoring requester windows"
+1732177709624 main info "Main~AppEvents - Received booted event for process requester.Version undefined UI Version: undefined Desktop Platform Version: 11.20.0"
+[37972:1121/162846.438404:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 1 times!
+[37972:1121/162846.450908:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 2 times!
+1732177726664 main info "VersionDependencyService: Resetting UI version as user logged out/switched account"
+1732177726665 main info "Main - model-events~user - (users, add) received"
+1732177727029 main info "AuthHandler~open: Received dom-ready event."
+1732177727033 main info "AuthHandler~open: Received did-finish-load event."
+1732177727391 main warn "AuthHandler~open: Current app is not default protocol client - Falling back to polling mechanism."
+1732177727394 main info "newAccountRegionPreferenceService~getPreferenceWithFallback - Preference not found in storage."
+1732177727394 main info "newAccountRegionPreferenceService~getRegionPreference - Using preference:","useUSRegion"
+1732177727394 main info "AuthHandler~open: new Account region preference:","us"
+1732177727395 main info "AuthHandler~open: get multiLoginToken token."
+1732177727395 main info "AuthHandler~open: Publishing initialize event to auth-window channel."
+Warning: vkCreateInstance: Found no drivers!
+Warning: vkCreateInstance failed with VK_ERROR_INCOMPATIBLE_DRIVER
+    at CheckVkSuccessImpl (../../../../src/third_party/dawn/src/dawn/native/vulkan/VulkanError.cpp:101)
+    at CreateVkInstance (../../../../src/third_party/dawn/src/dawn/native/vulkan/BackendVk.cpp:493)
+    at Initialize (../../../../src/third_party/dawn/src/dawn/native/vulkan/BackendVk.cpp:379)
+    at Create (../../../../src/third_party/dawn/src/dawn/native/vulkan/BackendVk.cpp:301)
+    at operator() (../../../../src/third_party/dawn/src/dawn/native/vulkan/BackendVk.cpp:556)
+
+1732177921320 main info "Quitting app"
+[37903:1121/163201.479217:ERROR:command_buffer_proxy_impl.cc(319)] GPU state invalid after WaitForGetOffsetInRange.
+[37903:1121/163201.499609:ERROR:zygote_communication_linux.cc(290)] Failed to send GetTerminationStatus message to zygote
+1732177921510 main info "userPartitionService: State of v8 partition system:"
+1732177921511 main info "shell~init~getPartitionToLoad: loading scratchpad partition"
+1732177921511 main info "userPartitionService: List of partitions:",[{"partitionId":"b26a7b3d-4b56-40d2-9de4-b0e30e8e3717","namespace":"scratchPad","userId":0,"teamId":0,"isDirty":false}]
+1732177921511 main info "userPartitionService: users global meta:",{}
+1732177921512 main info "Main:windowManager~newRequesterWindow: Fetch and update runtime config: undefined"
+[37903:1121/163201.526150:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.529790:ERROR:network_service_instance_impl.cc(601)] Network service crashed, restarting service.
+[37903:1121/163201.555419:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.571508:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.576328:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.577211:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.578263:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.579728:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.580379:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.581020:ERROR:gpu_process_host.cc(987)] GPU process launch failed: error_code=1002
+[37903:1121/163201.581037:FATAL:gpu_data_manager_impl_private.cc(448)] GPU process isn't usable. Goodbye.

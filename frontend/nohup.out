@@ -1,0 +1,738 @@
+2024-11-22 14:15:06,775 [  83731]   WARN - #c.i.s.ComponentManagerImpl - `preload=NOT_HEADLESS` must be used only for core services (service=com.jetbrains.rdserver.toolWindow.BackendServerToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2024-11-22 14:15:06,775 [  83731]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.users.BackendUserManager, plugin=com.jetbrains.codeWithMe)
+2024-11-22 14:15:06,775 [  83731]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.ports.CwmPortForwardingToolWindowManager, plugin=com.jetbrains.codeWithMe)
+2024-11-22 14:15:06,775 [  83731]   WARN - #c.i.s.ComponentManagerImpl - `preload=TRUE` must be used only for core services (service=com.intellij.cwm.plugin.following.FollowMeManagerService, plugin=com.jetbrains.codeWithMe)
+2024-11-22 14:15:09,948 [  86904]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.jcef.JBCefOsrComponent.<init>(JBCefOsrComponent.java:52)
+2024-11-22 14:15:11,675 [  88631]   WARN - #org.intellij.plugins.markdown.ui.preview.jcef.impl.JcefBrowserPipeImpl - No subscribers for documentReady!
+Attached data: 
+2024-11-22 14:15:12,139 [  89095]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:15:12,140 [  89096]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:15:14,641 [  91597]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:15:14,641 [  91597]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:15:15,003 [  91959]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:15:15,003 [  91959]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:15:15,973 [  92929]   WARN - org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint - Unsupported notification method: @/tailwindCSS/projectInitialized
+2024-11-22 14:15:59,374 [ 136330]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.GotItTooltip.<init>(GotItTooltip.kt:94)
+2024-11-22 14:15:59,396 [ 136352] SEVERE - #c.i.i.p.PluginManager - Cannot invoke "com.intellij.ui.awt.RelativePoint.getPoint(java.awt.Component)" because the return value of "com.intellij.util.ui.PositionTracker.recalculateLocation(Object)" is null
+java.lang.NullPointerException: Cannot invoke "com.intellij.ui.awt.RelativePoint.getPoint(java.awt.Component)" because the return value of "com.intellij.util.ui.PositionTracker.recalculateLocation(Object)" is null
+	at com.intellij.ui.BalloonImpl.show(BalloonImpl.java:502)
+	at com.intellij.ui.BalloonImpl.show(BalloonImpl.java:450)
+	at com.intellij.ui.GotItTooltip.createAndShow(GotItTooltip.kt:460)
+	at com.intellij.ui.GotItTooltip.showImpl(GotItTooltip.kt:363)
+	at com.intellij.ui.GotItTooltip.show(GotItTooltip.kt:316)
+	at com.intellij.javascript.debugger.attach.JSDebuggerUrlFilter$JSDebuggerStarterHyperlinkInfo.showNotification(JSDebuggerUrlFilter.kt:78)
+	at com.intellij.javascript.debugger.attach.JSDebuggerUrlFilter$JSDebuggerStarterHyperlinkInfo.navigate(JSDebuggerUrlFilter.kt:59)
+	at com.intellij.terminal.JBTerminalWidget.lambda$convertInfo$3(JBTerminalWidget.java:126)
+	at com.jediterm.terminal.model.hyperlinks.LinkInfo.navigate(LinkInfo.java:13)
+	at com.jediterm.terminal.ui.TerminalPanel$2.mouseClicked(TerminalPanel.java:259)
+	at java.desktop/java.awt.AWTEventMulticaster.mouseClicked(AWTEventMulticaster.java:278)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6665)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3394)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6427)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5032)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4860)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4963)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4586)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4518)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2810)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4860)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:783)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:728)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:755)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:753)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:752)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.kt:675)
+	at com.intellij.ide.IdeEventQueue.dispatchMouseEvent(IdeEventQueue.kt:621)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent$lambda$21(IdeEventQueue.kt:564)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runWriteIntentReadAction(AnyThreadWriteThreadingSupport.kt:128)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.kt:564)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent$lambda$18$lambda$17$lambda$16$lambda$15(IdeEventQueue.kt:355)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:857)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent$lambda$18$lambda$17$lambda$16(IdeEventQueue.kt:354)
+	at com.intellij.ide.IdeEventQueueKt.performActivity$lambda$2$lambda$1(IdeEventQueue.kt:1045)
+	at com.intellij.openapi.application.WriteIntentReadAction.lambda$run$0(WriteIntentReadAction.java:24)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.runWriteIntentReadAction(AnyThreadWriteThreadingSupport.kt:128)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runWriteIntentReadAction(ApplicationImpl.java:916)
+	at com.intellij.openapi.application.WriteIntentReadAction.compute(WriteIntentReadAction.java:55)
+	at com.intellij.openapi.application.WriteIntentReadAction.run(WriteIntentReadAction.java:23)
+	at com.intellij.ide.IdeEventQueueKt.performActivity$lambda$2(IdeEventQueue.kt:1045)
+	at com.intellij.ide.IdeEventQueueKt.performActivity$lambda$3(IdeEventQueue.kt:1054)
+	at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:117)
+	at com.intellij.ide.IdeEventQueueKt.performActivity(IdeEventQueue.kt:1054)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent$lambda$18(IdeEventQueue.kt:349)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.kt:395)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:117)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:105)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:92)
+2024-11-22 14:15:59,406 [ 136362] SEVERE - #c.i.i.p.PluginManager - WebStorm 2024.3  Build #WS-243.21565.180
+2024-11-22 14:15:59,406 [ 136362] SEVERE - #c.i.i.p.PluginManager - JDK: 21.0.5; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2024-11-22 14:15:59,406 [ 136362] SEVERE - #c.i.i.p.PluginManager - OS: Linux
+2024-11-22 14:16:05,373 [ 142329]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.GotItTooltip.<init>(GotItTooltip.kt:94)
+2024-11-22 14:16:24,111 [ 161067]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:16:24,112 [ 161068]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:16:29,227 [ 166183]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.GotItTooltip.<init>(GotItTooltip.kt:94)
+2024-11-22 14:16:29,954 [ 166910] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
+2024-11-22 14:17:17,408 [ 214364]   WARN - #c.i.i.u.UIThemeBean - Unknown field: CombinedDiff
+2024-11-22 14:17:17,408 [ 214364]   WARN - #c.i.i.u.UIThemeBean - Unknown field: BlockBorder
+2024-11-22 14:19:03,392 [ 320348]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:19:03,393 [ 320349]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:19:09,848 [ 326804]   WARN - #c.i.o.v.i.l.NativeFileWatcherImpl - table error: collision at 4196 (new /home/ayden/Documents/dev/das/frontend/node_modules/@img/.sharp-linux-arm64-ne9PJisM, existing /home/ayden/Documents/dev/das/frontend/node_modules/@img/sharp-linux-arm64)
+2024-11-22 14:19:09,862 [ 326818]   WARN - #c.i.o.v.i.l.NativeFileWatcherImpl - Watcher terminated with exit code 3
+2024-11-22 14:19:13,653 [ 330609]   WARN - org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint - Unsupported notification method: @/tailwindCSS/projectInitialized
+2024-11-22 14:19:24,076 [ 341032]   WARN - org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint - Unsupported notification method: @/tailwindCSS/projectInitialized
+2024-11-22 14:19:45,906 [ 362862]   WARN - org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint - Unsupported notification method: @/tailwindCSS/projectInitialized
+2024-11-22 14:19:59,511 [ 376467]   WARN - org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint - Unsupported notification method: @/tailwindCSS/projectInitialized
+2024-11-22 14:20:25,822 [ 402778]   WARN - #git4idea.statistics.GitAvailabilityChecker - Connect to github.com:443 [github.com/20.205.243.166] failed: Connect timed out
+org.apache.http.conn.ConnectTimeoutException: Connect to github.com:443 [github.com/20.205.243.166] failed: Connect timed out
+	at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:151)
+	at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:376)
+	at org.apache.http.impl.execchain.MainClientExec.establishRoute(MainClientExec.java:393)
+	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:236)
+	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:186)
+	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89)
+	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:110)
+	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)
+	at git4idea.statistics.GitAvailabilityChecker.sendHeadRequest(GitAvailabilityChecker.kt:42)
+	at git4idea.statistics.GitAvailabilityChecker.checkRemoteStatus(GitAvailabilityChecker.kt:34)
+	at git4idea.statistics.GitAvailabilityChecker.checkRepoStatus(GitAvailabilityChecker.kt:22)
+	at git4idea.GitStatisticsCollector.getMetrics(GitStatisticsCollector.kt:93)
+	at com.intellij.internal.statistic.service.fus.collectors.ProjectUsagesCollector.collect$lambda$2(ProjectUsagesCollector.kt:81)
+	at com.intellij.openapi.progress.CoroutinesKt.blockingContextInner(coroutines.kt:341)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invokeSuspend(coroutines.kt:233)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invoke(coroutines.kt)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invoke(coroutines.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.CoroutineScopeKt.coroutineScope(CoroutineScope.kt:261)
+	at com.intellij.openapi.progress.CoroutinesKt.blockingContext(coroutines.kt:232)
+	at com.intellij.internal.statistic.service.fus.collectors.ProjectUsagesCollector.collect$suspendImpl(ProjectUsagesCollector.kt:80)
+	at com.intellij.internal.statistic.service.fus.collectors.ProjectUsagesCollector.collect(ProjectUsagesCollector.kt)
+	at com.intellij.internal.statistic.service.fus.collectors.ProjectFUStateUsagesLogger$logProjectState$2$1.invokeSuspend(FUStateUsagesLogger.kt:228)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+Caused by: java.net.SocketTimeoutException: Connect timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:546)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at org.apache.http.conn.ssl.SSLConnectionSocketFactory.connectSocket(SSLConnectionSocketFactory.java:368)
+	at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:142)
+	... 30 more
+2024-11-22 14:20:39,033 [ 415989]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: loaded meta data with 16 key-value pairs and 57 tensors from /home/ayden/.cache/JetBrains/WebStorm2024.3/full-line/models/97631069-0ad6-320f-a611-0d0771f5fc9e/flcc.model (version GGUF V3 (latest))
+
+2024-11-22 14:20:39,033 [ 415989]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+
+2024-11-22 14:20:39,033 [ 415989]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   0:                       general.architecture str              = llama
+
+2024-11-22 14:20:39,033 [ 415989]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   1:                               general.name str              = Pytorch_Model.Bin
+
+2024-11-22 14:20:39,033 [ 415989]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   2:                         general.size_label str              = 111M
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   3:                           llama.vocab_size u32              = 16384
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   4:                       llama.context_length u32              = 1536
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   5:                     llama.embedding_length u32              = 1024
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   6:                          llama.block_count u32              = 6
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   7:                  llama.feed_forward_length u32              = 2816
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   8:                 llama.rope.dimension_count u32              = 128
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv   9:                 llama.attention.head_count u32              = 8
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv  10:              llama.attention.head_count_kv u32              = 8
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv  11:     llama.attention.layer_norm_rms_epsilon f32              = 0.000001
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv  12:                       llama.rope.freq_base f32              = 10000.000000
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv  13:                          general.file_type u32              = 15
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv  14:                       tokenizer.ggml.model str              = no_vocab
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - kv  15:               general.quantization_version u32              = 2
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - type  f32:   13 tensors
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - type q4_K:   39 tensors
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_model_loader: - type q6_K:    5 tensors
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: format           = GGUF V3 (latest)
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: arch             = llama
+
+2024-11-22 14:20:39,034 [ 415990]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: vocab type       = no vocab
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_vocab          = 16384
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_merges         = 0
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: vocab_only       = 0
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_ctx_train      = 1536
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_embd           = 1024
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_layer          = 6
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_head           = 8
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_head_kv        = 8
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_rot            = 128
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_swa            = 0
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_embd_head_k    = 128
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_embd_head_v    = 128
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_gqa            = 1
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_embd_k_gqa     = 1024
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_embd_v_gqa     = 1024
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: f_norm_eps       = 0.0e+00
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: f_norm_rms_eps   = 1.0e-06
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+
+2024-11-22 14:20:39,035 [ 415991]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: f_logit_scale    = 0.0e+00
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_ff             = 2816
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_expert         = 0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_expert_used    = 0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: causal attn      = 1
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: pooling type     = 0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: rope type        = 0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: rope scaling     = linear
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: freq_base_train  = 10000.0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: freq_scale_train = 1
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: n_ctx_orig_yarn  = 1536
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: rope_finetuned   = unknown
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: ssm_d_conv       = 0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: ssm_d_inner      = 0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: ssm_d_state      = 0
+
+2024-11-22 14:20:39,036 [ 415992]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: ssm_dt_rank      = 0
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: ssm_dt_b_c_rms   = 0
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: model type       = ?B
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: model ftype      = Q4_K - Medium
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: model params     = 110.64 M
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: model size       = 65.45 MiB (4.96 BPW) 
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: general.name     = Pytorch_Model.Bin
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_print_meta: max token length = 0
+
+2024-11-22 14:20:39,037 [ 415993]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_tensors: ggml ctx size =    0.03 MiB
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llm_load_tensors:        CPU buffer size =    65.45 MiB
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - ..........................................
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: n_ctx      = 4608
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: n_batch    = 1536
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: n_ubatch   = 512
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: flash_attn = 0
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: freq_base  = 10000.0
+
+2024-11-22 14:20:39,063 [ 416019]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: freq_scale = 1
+
+2024-11-22 14:20:39,084 [ 416040]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_kv_cache_init:        CPU KV buffer size =   108.00 MiB
+
+2024-11-22 14:20:39,084 [ 416040]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: KV self size  =  108.00 MiB, K (f16):   54.00 MiB, V (f16):   54.00 MiB
+
+2024-11-22 14:20:39,084 [ 416040]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model:        CPU  output buffer size =     0.06 MiB
+
+2024-11-22 14:20:39,086 [ 416042]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model:        CPU compute buffer size =    89.01 MiB
+
+2024-11-22 14:20:39,086 [ 416042]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: graph nodes  = 198
+
+2024-11-22 14:20:39,086 [ 416042]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - llama_new_context_with_model: graph splits = 1
+
+2024-11-22 14:20:41,060 [ 418016]   WARN - #c.i.c.ComponentStoreImpl - Scheme file "Project_Default.xml" is not loaded because defines duplicated name "Project Default"
+2024-11-22 14:21:02,701 [ 439657]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:21:02,702 [ 439658]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:21:02,718 [ 439674] SEVERE - #c.i.c.d.i.PassExecutorService - null
+com.intellij.openapi.progress.IndicatorCancellationException
+	at com.intellij.openapi.progress.ContextKt$cancelWithIndicator$1.invokeSuspend(context.kt:135)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:111)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:99)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+Caused by: com.intellij.openapi.progress.ProcessCanceledException
+	at com.intellij.openapi.progress.util.AbstractProgressIndicatorBase.throwIfCanceled(AbstractProgressIndicatorBase.java:172)
+	at com.intellij.openapi.progress.util.AbstractProgressIndicatorBase.checkCanceled(AbstractProgressIndicatorBase.java:162)
+	at com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator.checkCanceled(DaemonProgressIndicator.java:111)
+	at com.intellij.openapi.progress.ContextKt$cancelWithIndicator$1.invokeSuspend(context.kt:131)
+	... 8 more
+2024-11-22 14:21:02,719 [ 439675] SEVERE - #c.i.c.d.i.PassExecutorService - WebStorm 2024.3  Build #WS-243.21565.180
+2024-11-22 14:21:02,719 [ 439675] SEVERE - #c.i.c.d.i.PassExecutorService - JDK: 21.0.5; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2024-11-22 14:21:02,719 [ 439675] SEVERE - #c.i.c.d.i.PassExecutorService - OS: Linux
+2024-11-22 14:21:08,298 [ 445254]   WARN - org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint - Unsupported notification method: @/tailwindCSS/projectInitialized
+2024-11-22 14:21:08,853 [ 445809]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:21:08,853 [ 445809]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:38:26,689 [1483645]   WARN - #c.i.f.f.SettingsConnectionService - Connection reset
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:318)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:346)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:796)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:1099)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:489)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:483)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.decode(SSLSocketInputRecord.java:160)
+	at java.base/sun.security.ssl.SSLTransport.decode(SSLTransport.java:111)
+	at java.base/sun.security.ssl.SSLSocketImpl.decode(SSLSocketImpl.java:1506)
+	at java.base/sun.security.ssl.SSLSocketImpl.readHandshakeRecord(SSLSocketImpl.java:1421)
+	at java.base/sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:455)
+	at java.base/sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:426)
+	at java.base/sun.net.www.protocol.https.HttpsClient.afterConnect(HttpsClient.java:586)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:187)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1690)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1614)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:531)
+	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307)
+	at com.intellij.util.io.HttpRequests.openConnection(HttpRequests.java:626)
+	at com.intellij.util.io.HttpRequests$RequestImpl.getConnection(HttpRequests.java:366)
+	at com.intellij.util.io.HttpRequests$RequestImpl.getInputStream(HttpRequests.java:374)
+	at com.intellij.facet.frameworks.SettingsConnectionService.lambda$readSettings$0(SettingsConnectionService.java:51)
+	at com.intellij.util.io.HttpRequests.doProcess(HttpRequests.java:529)
+	at com.intellij.util.io.HttpRequests.process(HttpRequests.java:511)
+	at com.intellij.util.io.HttpRequests$RequestBuilderImpl.connect(HttpRequests.java:340)
+	at com.intellij.util.io.RequestBuilder.connect(RequestBuilder.java:58)
+	at com.intellij.facet.frameworks.SettingsConnectionService.readSettings(SettingsConnectionService.java:48)
+	at com.intellij.facet.frameworks.SettingsConnectionService.getSettingValue(SettingsConnectionService.java:75)
+	at com.intellij.facet.frameworks.SettingsConnectionService.getServiceUrl(SettingsConnectionService.java:68)
+	at com.intellij.database.dataSource.artifacts.DatabaseArtifactLoaderImpl.getRemoteArtifactListUrl(DatabaseArtifactLoaderImpl.java:478)
+	at com.intellij.database.dataSource.artifacts.DatabaseArtifactLoaderImpl.loadArtifactList(DatabaseArtifactLoaderImpl.java:490)
+	at com.intellij.database.dataSource.artifacts.DatabaseArtifactManager.loadProvidedArtifactList(DatabaseArtifactManager.java:251)
+	at com.intellij.database.dataSource.artifacts.DatabaseArtifactManager.loadArtifactsList(DatabaseArtifactManager.java:245)
+	at com.intellij.database.dataSource.artifacts.DatabaseArtifactManager.loadArtifacts(DatabaseArtifactManager.java:91)
+	at com.intellij.database.dataSource.artifacts.DatabaseArtifactManager.lambda$new$0(DatabaseArtifactManager.java:87)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport$executeOnPooledThread$1.run(AnyThreadWriteThreadingSupport.kt:167)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at com.intellij.util.concurrency.ContextCallable.lambda$call$1(ContextCallable.java:74)
+	at com.intellij.util.concurrency.ContextCallable.call(ContextCallable.java:83)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at com.intellij.util.concurrency.ChildContext$runInChildContext$1.invoke(propagation.kt:101)
+	at com.intellij.util.concurrency.ChildContext$runInChildContext$1.invoke(propagation.kt:101)
+	at com.intellij.util.concurrency.ChildContext.runInChildContext(propagation.kt:107)
+	at com.intellij.util.concurrency.ChildContext.runInChildContext(propagation.kt:101)
+	at com.intellij.util.concurrency.ContextRunnable.run(ContextRunnable.java:27)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:735)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:732)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:732)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2024-11-22 14:40:00,938 [1577894]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:40:00,938 [1577894]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:42:41,717 [1738673]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:42:41,717 [1738673]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:42:57,941 [1754897]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:42:57,941 [1754897]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:43:39,455 [1796411]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:43:39,456 [1796412]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:05,002 [1821958]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:05,002 [1821958]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:08,473 [1825429]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:08,473 [1825429]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:21,843 [1838799]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:21,843 [1838799]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:41,832 [1858788]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:41,832 [1858788]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:52,693 [1869649]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:44:52,693 [1869649]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:46:28,185 [1965141]   WARN - #c.i.l.t.c.l.i.TypeScriptServiceCompletionContributor - Exceeded the 150ms threshold for getCompletionItems. Is your Future asynchronous? time: 323ms, service: TypeScriptServerServiceImpl
+2024-11-22 14:46:48,543 [1985499]   WARN - #c.i.l.t.c.l.i.TypeScriptServiceCompletionContributor - Exceeded the 150ms threshold for getCompletionItems. Is your Future asynchronous? time: 308ms, service: TypeScriptServerServiceImpl
+2024-11-22 14:46:49,230 [1986186]   WARN - #c.i.l.t.c.l.i.TypeScriptServiceCompletionContributor - Exceeded the 150ms threshold for getCompletionItems. Is your Future asynchronous? time: 190ms, service: TypeScriptServerServiceImpl
+2024-11-22 14:47:17,306 [2014262]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:47:17,306 [2014262]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:47:26,188 [2023144]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:47:26,189 [2023145]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:47:53,871 [2050827]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:47:53,871 [2050827]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:47:58,518 [2055474]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:47:58,518 [2055474]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:02,443 [2059399]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:02,443 [2059399]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:09,212 [2066168]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:09,213 [2066169]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:13,227 [2070183]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:13,228 [2070184]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:19,820 [2076776]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:19,820 [2076776]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:57,757 [2114713]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:48:57,758 [2114714]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:12,645 [2129601]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:12,645 [2129601]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:17,341 [2134297]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:17,341 [2134297]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:46,093 [2163049]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:46,093 [2163049]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:56,446 [2173402]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:49:56,447 [2173403]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:50:13,901 [2190857]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:50:13,901 [2190857]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:51:40,538 [2277494] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 8 >= 8
+2024-11-22 14:51:40,540 [2277496] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 8 >= 8
+2024-11-22 14:51:40,547 [2277503] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 8 >= 8
+2024-11-22 14:51:40,547 [2277503] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 8 >= 8
+2024-11-22 14:51:45,016 [2281972]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:51:45,017 [2281973]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:51:48,081 [2285037]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:51:48,081 [2285037]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:51:53,758 [2290714]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:51:53,758 [2290714]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:52:12,694 [2309650]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:52:12,694 [2309650]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:52:28,601 [2325557]   WARN - #o.j.c.f.l.p.d.a.n.NativeServerDiagnostic$Companion - 2024-11-22 06:52:28.601283 [flcc_grpc_inference_service.cpp:131:init_log_probs] call ended, got an exception 'std::future_error: Broken promise' during execution
+
+2024-11-22 14:53:48,848 [2405804]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:53:48,848 [2405804]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:54:09,931 [2426887]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:54:09,933 [2426889]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:54:15,856 [2432812]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:54:15,856 [2432812]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:55:04,079 [2481035]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:55:04,079 [2481035]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:55:53,709 [2530665]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:55:53,709 [2530665]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:56:04,637 [2541593]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:56:04,637 [2541593]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:56:07,912 [2544868]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:56:07,912 [2544868]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:58:25,230 [2682186]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:58:25,230 [2682186]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:59:22,279 [2739235] SEVERE - #c.i.p.i.f.i.FileManagerImpl - Accessing invalid virtual file: file:///home/ayden/Documents/dev/das/frontend/src/app/home/page.tsx; original:56033; found:-; File.exists()=false
+com.intellij.openapi.vfs.InvalidVirtualFileAccessException: Accessing invalid virtual file: file:///home/ayden/Documents/dev/das/frontend/src/app/home/page.tsx; original:56033; found:-; File.exists()=false
+	at com.intellij.psi.impl.file.impl.FileManagerImpl.findFile(FileManagerImpl.java:378)
+	at com.intellij.psi.impl.PsiManagerImpl.findFile(PsiManagerImpl.java:163)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$2$1.invoke(RecentContextRetriever.kt:72)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$2$1.invoke(RecentContextRetriever.kt:70)
+	at com.intellij.openapi.application.rw.InternalReadAction.insideReadAction(InternalReadAction.kt:114)
+	at com.intellij.openapi.application.rw.InternalReadAction.tryReadCancellable$lambda$4(InternalReadAction.kt:104)
+	at com.intellij.openapi.application.rw.CancellableReadActionKt.cancellableReadActionInternal$lambda$3$lambda$2$lambda$1(cancellableReadAction.kt:32)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.tryRunReadAction(AnyThreadWriteThreadingSupport.kt:351)
+	at com.intellij.openapi.application.impl.ApplicationImpl.tryRunReadAction(ApplicationImpl.java:971)
+	at com.intellij.openapi.application.rw.CancellableReadActionKt.cancellableReadActionInternal$lambda$3$lambda$2(cancellableReadAction.kt:30)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtilService.runActionAndCancelBeforeWrite(ProgressIndicatorUtilService.java:66)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runActionAndCancelBeforeWrite(ProgressIndicatorUtils.java:157)
+	at com.intellij.openapi.application.rw.CancellableReadActionKt.cancellableReadActionInternal(cancellableReadAction.kt:28)
+	at com.intellij.openapi.application.rw.InternalReadAction.tryReadCancellable(InternalReadAction.kt:103)
+	at com.intellij.openapi.application.rw.InternalReadAction.tryReadAction(InternalReadAction.kt:87)
+	at com.intellij.openapi.application.rw.InternalReadAction.readLoop(InternalReadAction.kt:74)
+	at com.intellij.openapi.application.rw.InternalReadAction.access$readLoop(InternalReadAction.kt:16)
+	at com.intellij.openapi.application.rw.InternalReadAction$runReadAction$6.invokeSuspend(InternalReadAction.kt:53)
+	at com.intellij.openapi.application.rw.InternalReadAction$runReadAction$6.invoke(InternalReadAction.kt)
+	at com.intellij.openapi.application.rw.InternalReadAction$runReadAction$6.invoke(InternalReadAction.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:163)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.openapi.application.rw.InternalReadAction.runReadAction(InternalReadAction.kt:49)
+	at com.intellij.openapi.application.rw.PlatformReadWriteActionSupport.executeReadAction(PlatformReadWriteActionSupport.kt:38)
+	at com.intellij.openapi.application.ReadWriteActionSupport.executeReadAction$default(ReadWriteActionSupport.kt:15)
+	at com.intellij.openapi.application.CoroutinesKt.constrainedReadAction(coroutines.kt:62)
+	at com.intellij.openapi.application.CoroutinesKt.readAction(coroutines.kt:29)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$$inlined$mapNotNull$1$2.emit(Emitters.kt:221)
+	at kotlinx.coroutines.flow.FlowKt__BuildersKt$asFlow$$inlined$unsafeFlow$3.collect(SafeCollector.common.kt:114)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$$inlined$mapNotNull$1.collect(SafeCollector.common.kt:112)
+	at kotlinx.coroutines.flow.FlowKt__LimitKt$takeWhile$$inlined$unsafeFlow$1.collect(SafeCollector.common.kt:123)
+	at kotlinx.coroutines.flow.FlowKt__CollectionKt.toCollection(Collection.kt:22)
+	at kotlinx.coroutines.flow.FlowKt.toCollection(Unknown Source)
+	at kotlinx.coroutines.flow.FlowKt__CollectionKt.toList(Collection.kt:11)
+	at kotlinx.coroutines.flow.FlowKt.toList(Unknown Source)
+	at kotlinx.coroutines.flow.FlowKt__CollectionKt.toList$default(Collection.kt:11)
+	at kotlinx.coroutines.flow.FlowKt.toList$default(Unknown Source)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever.retrieveChunks(RecentContextRetriever.kt:84)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever.getContextIds(RecentContextRetriever.kt:30)
+	at org.jetbrains.completion.full.line.local.suggest.collector.CompletionInputBuilder.buildRecentContext(CompletionInputBuilder.kt:146)
+	at org.jetbrains.completion.full.line.local.suggest.collector.CompletionInputBuilder.smartContextComposition(CompletionInputBuilder.kt:78)
+	at org.jetbrains.completion.full.line.local.suggest.collector.CompletionInputBuilder.build(CompletionInputBuilder.kt:63)
+	at org.jetbrains.completion.full.line.local.suggest.collector.FullLineLocalCompletionGenerator.generateWithSearch(FullLineLocalCompletionGenerator.kt:65)
+	at org.jetbrains.completion.full.line.local.suggest.collector.FullLineLocalCompletionGenerator.access$generateWithSearch(FullLineLocalCompletionGenerator.kt:22)
+	at org.jetbrains.completion.full.line.local.suggest.collector.FullLineLocalCompletionGenerator$generateWithSearch$1.invokeSuspend(FullLineLocalCompletionGenerator.kt)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2024-11-22 14:59:22,282 [2739238] SEVERE - #c.i.p.i.f.i.FileManagerImpl - WebStorm 2024.3  Build #WS-243.21565.180
+2024-11-22 14:59:22,282 [2739238] SEVERE - #c.i.p.i.f.i.FileManagerImpl - JDK: 21.0.5; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2024-11-22 14:59:22,282 [2739238] SEVERE - #c.i.p.i.f.i.FileManagerImpl - OS: Linux
+2024-11-22 14:59:22,283 [2739239] SEVERE - #c.i.p.i.f.i.FileManagerImpl - Last Action: EditorLeft
+2024-11-22 14:59:22,285 [2739241] SEVERE - #c.i.p.i.f.i.FileManagerImpl - Accessing invalid virtual file: file:///home/ayden/Documents/dev/das/frontend/src/app/register/page.tsx; original:56032; found:-; File.exists()=false
+com.intellij.openapi.vfs.InvalidVirtualFileAccessException: Accessing invalid virtual file: file:///home/ayden/Documents/dev/das/frontend/src/app/register/page.tsx; original:56032; found:-; File.exists()=false
+	at com.intellij.psi.impl.file.impl.FileManagerImpl.findFile(FileManagerImpl.java:378)
+	at com.intellij.psi.impl.PsiManagerImpl.findFile(PsiManagerImpl.java:163)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$2$1.invoke(RecentContextRetriever.kt:72)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$2$1.invoke(RecentContextRetriever.kt:70)
+	at com.intellij.openapi.application.rw.InternalReadAction.insideReadAction(InternalReadAction.kt:114)
+	at com.intellij.openapi.application.rw.InternalReadAction.tryReadCancellable$lambda$4(InternalReadAction.kt:104)
+	at com.intellij.openapi.application.rw.CancellableReadActionKt.cancellableReadActionInternal$lambda$3$lambda$2$lambda$1(cancellableReadAction.kt:32)
+	at com.intellij.openapi.application.impl.AnyThreadWriteThreadingSupport.tryRunReadAction(AnyThreadWriteThreadingSupport.kt:351)
+	at com.intellij.openapi.application.impl.ApplicationImpl.tryRunReadAction(ApplicationImpl.java:971)
+	at com.intellij.openapi.application.rw.CancellableReadActionKt.cancellableReadActionInternal$lambda$3$lambda$2(cancellableReadAction.kt:30)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtilService.runActionAndCancelBeforeWrite(ProgressIndicatorUtilService.java:66)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runActionAndCancelBeforeWrite(ProgressIndicatorUtils.java:157)
+	at com.intellij.openapi.application.rw.CancellableReadActionKt.cancellableReadActionInternal(cancellableReadAction.kt:28)
+	at com.intellij.openapi.application.rw.InternalReadAction.tryReadCancellable(InternalReadAction.kt:103)
+	at com.intellij.openapi.application.rw.InternalReadAction.tryReadAction(InternalReadAction.kt:87)
+	at com.intellij.openapi.application.rw.InternalReadAction.readLoop(InternalReadAction.kt:74)
+	at com.intellij.openapi.application.rw.InternalReadAction.access$readLoop(InternalReadAction.kt:16)
+	at com.intellij.openapi.application.rw.InternalReadAction$runReadAction$6.invokeSuspend(InternalReadAction.kt:53)
+	at com.intellij.openapi.application.rw.InternalReadAction$runReadAction$6.invoke(InternalReadAction.kt)
+	at com.intellij.openapi.application.rw.InternalReadAction$runReadAction$6.invoke(InternalReadAction.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:163)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.openapi.application.rw.InternalReadAction.runReadAction(InternalReadAction.kt:49)
+	at com.intellij.openapi.application.rw.PlatformReadWriteActionSupport.executeReadAction(PlatformReadWriteActionSupport.kt:38)
+	at com.intellij.openapi.application.ReadWriteActionSupport.executeReadAction$default(ReadWriteActionSupport.kt:15)
+	at com.intellij.openapi.application.CoroutinesKt.constrainedReadAction(coroutines.kt:62)
+	at com.intellij.openapi.application.CoroutinesKt.readAction(coroutines.kt:29)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$$inlined$mapNotNull$1$2.emit(Emitters.kt:221)
+	at kotlinx.coroutines.flow.FlowKt__BuildersKt$asFlow$$inlined$unsafeFlow$3.collect(SafeCollector.common.kt:114)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever$retrieveChunks$$inlined$mapNotNull$1.collect(SafeCollector.common.kt:112)
+	at kotlinx.coroutines.flow.FlowKt__LimitKt$takeWhile$$inlined$unsafeFlow$1.collect(SafeCollector.common.kt:123)
+	at kotlinx.coroutines.flow.FlowKt__CollectionKt.toCollection(Collection.kt:22)
+	at kotlinx.coroutines.flow.FlowKt.toCollection(Unknown Source)
+	at kotlinx.coroutines.flow.FlowKt__CollectionKt.toList(Collection.kt:11)
+	at kotlinx.coroutines.flow.FlowKt.toList(Unknown Source)
+	at kotlinx.coroutines.flow.FlowKt__CollectionKt.toList$default(Collection.kt:11)
+	at kotlinx.coroutines.flow.FlowKt.toList$default(Unknown Source)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever.retrieveChunks(RecentContextRetriever.kt:84)
+	at org.jetbrains.completion.full.line.local.generation.RecentContextRetriever.getContextIds(RecentContextRetriever.kt:30)
+	at org.jetbrains.completion.full.line.local.suggest.collector.CompletionInputBuilder.buildRecentContext(CompletionInputBuilder.kt:146)
+	at org.jetbrains.completion.full.line.local.suggest.collector.CompletionInputBuilder.smartContextComposition(CompletionInputBuilder.kt:78)
+	at org.jetbrains.completion.full.line.local.suggest.collector.CompletionInputBuilder.build(CompletionInputBuilder.kt:63)
+	at org.jetbrains.completion.full.line.local.suggest.collector.FullLineLocalCompletionGenerator.generateWithSearch(FullLineLocalCompletionGenerator.kt:65)
+	at org.jetbrains.completion.full.line.local.suggest.collector.FullLineLocalCompletionGenerator.access$generateWithSearch(FullLineLocalCompletionGenerator.kt:22)
+	at org.jetbrains.completion.full.line.local.suggest.collector.FullLineLocalCompletionGenerator$generateWithSearch$1.invokeSuspend(FullLineLocalCompletionGenerator.kt)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2024-11-22 14:59:22,286 [2739242] SEVERE - #c.i.p.i.f.i.FileManagerImpl - WebStorm 2024.3  Build #WS-243.21565.180
+2024-11-22 14:59:22,286 [2739242] SEVERE - #c.i.p.i.f.i.FileManagerImpl - JDK: 21.0.5; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2024-11-22 14:59:22,286 [2739242] SEVERE - #c.i.p.i.f.i.FileManagerImpl - OS: Linux
+2024-11-22 14:59:22,287 [2739243] SEVERE - #c.i.p.i.f.i.FileManagerImpl - Last Action: EditorLeft
+2024-11-22 14:59:46,564 [2763520]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 14:59:46,564 [2763520]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:00:59,016 [2835972]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:00:59,016 [2835972]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index= , workTree=D, path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:08,751 [2965707]   WARN - #c.i.u.Alarm - Do not create alarm without coroutineScope: com.intellij.ui.GotItTooltip.<init>(GotItTooltip.kt:94)
+2024-11-22 15:03:18,776 [2975732]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:18,777 [2975733]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:19,221 [2976177]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:19,222 [2976178]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:27,075 [2984031]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:27,076 [2984032]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:40,314 [2997270]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:40,314 [2997270]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:45,485 [3002441]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:45,485 [3002441]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:48,134 [3005090]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:03:48,135 [3005091]   WARN - #git4idea.status.GitStagingAreaHolder - Ignoring change under another root: GitFileStatus(index=D, workTree= , path=/home/ayden/Documents/dev/das/libreDWG/exp/exp1/.DS_Store, origPath=null); root: /home/ayden/Documents/dev/das; mapped root: null
+2024-11-22 15:07:09,195 [3206151] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
+2024-11-22 15:07:09,196 [3206152] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
+2024-11-22 15:10:04,945 [3381901]   WARN - #git4idea.repo.GitRepositoryReader - Needed a single revision
+com.intellij.openapi.vcs.VcsException: Needed a single revision
+	at git4idea.commands.GitCommandResult.throwOnError(GitCommandResult.java:172)
+	at git4idea.commands.GitCommandResult.getOutputOrThrow(GitCommandResult.java:156)
+	at git4idea.repo.GitRepositoryReader.resolveHeadRevision(GitRepositoryReader.kt:290)
+	at git4idea.repo.GitRepositoryReader.readState(GitRepositoryReader.kt:55)
+	at git4idea.repo.GitRepositoryImpl.readRepoInfo(GitRepositoryImpl.kt:174)
+	at git4idea.repo.GitRepositoryImpl.update(GitRepositoryImpl.kt:161)
+	at git4idea.repo.GitRepositoryUpdater.filesChanged(GitRepositoryUpdater.kt:144)
+	at com.intellij.vfs.AsyncVfsEventsPostProcessorImpl$processEvents$2.invokeSuspend(AsyncVfsEventsPostProcessorImpl.kt:67)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.internal.SoftLimitedDispatcher$Worker.run(SoftLimitedDispatcher.kt:125)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:99)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2024-11-22 15:10:04,946 [3381902]   WARN - #git4idea.repo.GitRepositoryReader - Unknown repository state in file:///home/ayden/Documents/dev/das
+com.intellij.dvcs.repo.RepoStateException: Unknown repository state in file:///home/ayden/Documents/dev/das
+	at git4idea.repo.GitRepositoryReader.readState(GitRepositoryReader.kt:60)
+	at git4idea.repo.GitRepositoryImpl.readRepoInfo(GitRepositoryImpl.kt:174)
+	at git4idea.repo.GitRepositoryImpl.update(GitRepositoryImpl.kt:161)
+	at git4idea.repo.GitRepositoryUpdater.filesChanged(GitRepositoryUpdater.kt:144)
+	at com.intellij.vfs.AsyncVfsEventsPostProcessorImpl$processEvents$2.invokeSuspend(AsyncVfsEventsPostProcessorImpl.kt:67)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.internal.SoftLimitedDispatcher$Worker.run(SoftLimitedDispatcher.kt:125)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:99)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2024-11-22 15:10:04,948 [3381904]   WARN - #git4idea.repo.GitRepositoryReader - Couldn't identify neither current branch nor current revision.
+2024-11-22 15:10:04,968 [3381924]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:05,308 [3382264]   WARN - #git4idea.repo.GitRepositoryReader - Needed a single revision
+com.intellij.openapi.vcs.VcsException: Needed a single revision
+	at git4idea.commands.GitCommandResult.throwOnError(GitCommandResult.java:172)
+	at git4idea.commands.GitCommandResult.getOutputOrThrow(GitCommandResult.java:156)
+	at git4idea.repo.GitRepositoryReader.resolveHeadRevision(GitRepositoryReader.kt:290)
+	at git4idea.repo.GitRepositoryReader.readState(GitRepositoryReader.kt:55)
+	at git4idea.repo.GitRepositoryImpl.readRepoInfo(GitRepositoryImpl.kt:174)
+	at git4idea.repo.GitRepositoryImpl.update(GitRepositoryImpl.kt:161)
+	at git4idea.status.GitChangesCollector.getHead(GitChangesCollector.java:229)
+	at git4idea.status.GitChangesCollector.collect(GitChangesCollector.java:53)
+	at git4idea.status.GitChangeProvider.getChanges(GitChangeProvider.java:86)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.actualUpdate(ChangeListManagerImpl.java:726)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.iterateScopes(ChangeListManagerImpl.java:639)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.lambda$updateImmediately$12(ChangeListManagerImpl.java:544)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$14(CoreProgressManager.java:674)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:749)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:705)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:673)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:79)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.lambda$updateImmediately$15(ChangeListManagerImpl.java:543)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.lambda$runUnderDisposeAwareIndicator$13(BackgroundTaskUtil.java:342)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.lambda$runUnderDisposeAwareIndicator$15(BackgroundTaskUtil.java:371)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$1(CoreProgressManager.java:223)
+	at com.intellij.platform.diagnostic.telemetry.helpers.TraceKt.use(trace.kt:45)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$2(CoreProgressManager.java:222)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$14(CoreProgressManager.java:674)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:749)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:705)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:673)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:79)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:203)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.runUnderDisposeAwareIndicator(BackgroundTaskUtil.java:366)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.runUnderDisposeAwareIndicator(BackgroundTaskUtil.java:341)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.runUnderDisposeAwareIndicator(BackgroundTaskUtil.java:333)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.updateImmediately(ChangeListManagerImpl.java:493)
+	at com.intellij.openapi.vcs.changes.UpdateRequestsQueue$RefreshRunnable.run(UpdateRequestsQueue.java:278)
+	at com.intellij.openapi.vcs.changes.ChangeListScheduler$schedule$future$1.invokeSuspend$lambda$0(ChangeListScheduler.kt:29)
+	at com.intellij.openapi.progress.CoroutinesKt.blockingContextInner(coroutines.kt:341)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invokeSuspend(coroutines.kt:233)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invoke(coroutines.kt)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invoke(coroutines.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.CoroutineScopeKt.coroutineScope(CoroutineScope.kt:261)
+	at com.intellij.openapi.progress.CoroutinesKt.blockingContext(coroutines.kt:232)
+	at com.intellij.openapi.vcs.changes.ChangeListScheduler$schedule$future$1.invokeSuspend(ChangeListScheduler.kt:28)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:111)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:99)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2024-11-22 15:10:05,309 [3382265]   WARN - #git4idea.repo.GitRepositoryReader - Unknown repository state in file:///home/ayden/Documents/dev/das
+com.intellij.dvcs.repo.RepoStateException: Unknown repository state in file:///home/ayden/Documents/dev/das
+	at git4idea.repo.GitRepositoryReader.readState(GitRepositoryReader.kt:60)
+	at git4idea.repo.GitRepositoryImpl.readRepoInfo(GitRepositoryImpl.kt:174)
+	at git4idea.repo.GitRepositoryImpl.update(GitRepositoryImpl.kt:161)
+	at git4idea.status.GitChangesCollector.getHead(GitChangesCollector.java:229)
+	at git4idea.status.GitChangesCollector.collect(GitChangesCollector.java:53)
+	at git4idea.status.GitChangeProvider.getChanges(GitChangeProvider.java:86)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.actualUpdate(ChangeListManagerImpl.java:726)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.iterateScopes(ChangeListManagerImpl.java:639)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.lambda$updateImmediately$12(ChangeListManagerImpl.java:544)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$14(CoreProgressManager.java:674)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:749)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:705)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:673)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:79)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.lambda$updateImmediately$15(ChangeListManagerImpl.java:543)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.lambda$runUnderDisposeAwareIndicator$13(BackgroundTaskUtil.java:342)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.lambda$runUnderDisposeAwareIndicator$15(BackgroundTaskUtil.java:371)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$1(CoreProgressManager.java:223)
+	at com.intellij.platform.diagnostic.telemetry.helpers.TraceKt.use(trace.kt:45)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$2(CoreProgressManager.java:222)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$14(CoreProgressManager.java:674)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:749)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:705)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:673)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:79)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:203)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.runUnderDisposeAwareIndicator(BackgroundTaskUtil.java:366)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.runUnderDisposeAwareIndicator(BackgroundTaskUtil.java:341)
+	at com.intellij.openapi.progress.util.BackgroundTaskUtil.runUnderDisposeAwareIndicator(BackgroundTaskUtil.java:333)
+	at com.intellij.openapi.vcs.changes.ChangeListManagerImpl.updateImmediately(ChangeListManagerImpl.java:493)
+	at com.intellij.openapi.vcs.changes.UpdateRequestsQueue$RefreshRunnable.run(UpdateRequestsQueue.java:278)
+	at com.intellij.openapi.vcs.changes.ChangeListScheduler$schedule$future$1.invokeSuspend$lambda$0(ChangeListScheduler.kt:29)
+	at com.intellij.openapi.progress.CoroutinesKt.blockingContextInner(coroutines.kt:341)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invokeSuspend(coroutines.kt:233)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invoke(coroutines.kt)
+	at com.intellij.openapi.progress.CoroutinesKt$blockingContext$2.invoke(coroutines.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:62)
+	at kotlinx.coroutines.CoroutineScopeKt.coroutineScope(CoroutineScope.kt:261)
+	at com.intellij.openapi.progress.CoroutinesKt.blockingContext(coroutines.kt:232)
+	at com.intellij.openapi.vcs.changes.ChangeListScheduler$schedule$future$1.invokeSuspend(ChangeListScheduler.kt:28)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:111)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:99)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:608)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:873)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:763)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:750)
+2024-11-22 15:10:05,310 [3382266]   WARN - #git4idea.repo.GitRepositoryReader - Couldn't identify neither current branch nor current revision.
+2024-11-22 15:10:05,470 [3382426]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:05,972 [3382928]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:06,472 [3383428]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:06,974 [3383930]   WARN - #git4idea.branch.GitBranchUtil - Current revision is null in DETACHED state. isFresh: true
+2024-11-22 15:10:07,226 [3384182] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10
+2024-11-22 15:10:07,226 [3384182] SEVERE - com.jediterm.terminal.model.TerminalTextBuffer - Attempt to get line out of bounds: 10 >= 10

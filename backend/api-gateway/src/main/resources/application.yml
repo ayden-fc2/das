@@ -1,0 +1,30 @@
+server:
+  port: 2073
+
+spring:
+  application:
+    name: api-gateway
+  servlet:
+    multipart:
+      max-file-size: 3GB
+      max-request-size: 3GB
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:2072/eureka/ #Eureka??
+zuul:
+  sensitive-headers: Access-Control-Allow-Origin
+  ignored-headers: Access-Control-Allow-Origin,H-APP-Id,Token,APPToken
+  routes:
+    example2060:
+      path: /example2060/**
+      service-id: example2060
+      #url: http://localhost:2060
+    auth-service:
+      path: /auth-service/**
+      service-id: auth-service
