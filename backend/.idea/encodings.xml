@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/api-gateway/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example2060/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example2060/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/service-discovery/src/main/java" charset="UTF-8" />

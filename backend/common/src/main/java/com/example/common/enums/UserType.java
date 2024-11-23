@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum UserType {
-    SuperManager("SUPER_MANAGER_TYPE","超级管理员"),
-    Manager("MANAGER_TYPE","管理员"),
-    Controller("CONTROLLER_TYPE","控制者"),
-    Observer("OBSERVER_TYPE","观察者");
+    SuperManager("SUPER_MANAGER_TYPE", "超级管理员"),
+    Manager("MANAGER_TYPE", "管理员"),
+    Controller("CONTROLLER_TYPE", "控制者"),
+    Observer("OBSERVER_TYPE", "观察者");
 
     private final String type;
     private final String message;
@@ -17,4 +17,15 @@ public enum UserType {
         this.message = message;
     }
 
+    // Getter for type
+    public String getType() {
+        return type;
+    }
+
+    // Getter for message
+    public String getMessage() {
+        return message;
+    }
 }
+
+

@@ -10,6 +10,7 @@
         <module name="api-gateway" />
         <module name="auth-service" />
         <module name="example2060" />
+        <module name="common" />
         <module name="service-discovery" />
       </profile>
     </annotationProcessing>

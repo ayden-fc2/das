@@ -18,7 +18,7 @@ import java.nio.file.AccessDeniedException;
  */
 @RestControllerAdvice
 @Slf4j
-public class ExceptionControllerAdvice {
+public class outExceptionControllerAdvice {
     @ExceptionHandler(MyException.class)
     public ResponseBean handleServiceException(MyException e) {
         return e.getFailResponse();
@@ -31,7 +31,7 @@ public class ExceptionControllerAdvice {
         } else if (e instanceof AccessDeniedException) {
             return ResponseBean.fail("参数不足");
         }else {
-            log.error("拦截异常:", e);
+            // log.error("拦截异常:", e);
             return ResponseBean.fail(e.getMessage());
         }
     }
