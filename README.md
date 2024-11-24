@@ -1,7 +1,8 @@
 # DWG Structurizer
 
-A cloud-based application that automatically structures AutoCAD DWG files into JSON format and provides an interactive interface for visualization and bidirectional adjustments.
+A cloud-based application that automatically structures DCS DWG files into JSON format and provides an interactive interface for visualization and bidirectional adjustments.
 
+| [quick view](http://www.fivecheers.com:3000)
 ## Project Overview
 
 This project, built with **SpringCloud** for backend services and **Next.js** for frontend interaction, aims to streamline the extraction and organization of DWG files by converting them into a structured JSON format. The structured data is then displayed on the frontend, where users can make fine-grained adjustments that are saved back to the backend.
