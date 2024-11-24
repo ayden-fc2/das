@@ -3,7 +3,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Button, Typography, Container, Box, Divider } from "@mui/material";
+import { Button, Typography, Container, Box } from "@mui/material";
 
 const HomePage: React.FC = () => {
     return (

@@ -2,21 +2,16 @@
 
 // pages/register.tsx
 
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import Link from "next/link";
-import {useAlert} from "@/app/components/AlertBanner";
 
 const RegisterPage: React.FC = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const { showAlert } = useAlert();
 
-    useEffect(()=>{
-        showAlert('The login and registration functionality is currently unavailable. Please use the test account "1234@test.com" with the password "1234".', 'warning')
-    }, [])
 
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();

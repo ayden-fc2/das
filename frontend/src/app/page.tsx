@@ -4,25 +4,17 @@
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import { Button, Typography, Container, Box } from '@mui/material';
-import { get } from '@/app/utils/api'
+import { isTokenExpired } from '@/app/utils/api'
 
 const HomePage: React.FC = () => {
 
     // 初次加载页面判断token是否有效
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     useEffect(()=>{
-        const checkAuthStatus = async () => {
-            try {
-                const response = await get<{ success: number; message: string; data: any }>("/auth-service/test");
-                if (response.success) {
-                    setIsLoggedIn(true);
-                }
-            } catch (error) {
-                console.error("Error checking auth status:", error);
-            }
-        };
-
-        checkAuthStatus();
+        const token: string | null = localStorage.getItem("jwt");
+        if (token){
+            setIsLoggedIn(!isTokenExpired(token));
+        }
     }, [])
 
     return (

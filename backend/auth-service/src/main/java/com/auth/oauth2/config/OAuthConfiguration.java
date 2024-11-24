@@ -50,7 +50,7 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
                 .scopes("write", "read")
                 .authorities(UserType.SuperManager.getType(), UserType.Manager.getType(), UserType.Controller.getType(), UserType.Observer.getType())
                 .authorizedGrantTypes("client_credentials", "implicit", "refresh_token", "password", "authorization_code")
-                .accessTokenValiditySeconds(1800);//30分钟有效
+                .accessTokenValiditySeconds(30);//30分钟有效
     }
 
     //配置令牌的访问端点和令牌服务
