@@ -42,7 +42,7 @@ public class SignServiceImpl implements SignService {
         try {
             List<AccountSt> accountList = um.selectAccounts(tryPhoneNum);
             if (accountList.size()<1){
-                return ResponseBean.fail("登陆失败，该手机号还未注册");
+                return ResponseBean.fail("登陆失败，该账号还未注册");
             }else{
                 if (accountList.get(0).getPasswordDetail().equals(tryPassword)){
                     //请求某用户的OAuth2令牌
@@ -103,7 +103,7 @@ public class SignServiceImpl implements SignService {
     public ResponseBean getPhoneCode(String phoneNum, int mode) {
         //生成6位验证码
         String verificationCode = generateVerificationCode(6);
-        // 创建一个 VerificationInfo 对象并设置手机号、验证码和模式
+        // 创建一个 VerificationInfo 对象并设置账号、验证码和模式
         TmpInfo info = new TmpInfo();
         info.setPhoneNumber(phoneNum);
         info.setVerificationCode(verificationCode);
@@ -191,7 +191,7 @@ public class SignServiceImpl implements SignService {
         try{
             List<AccountSt> accountList = um.selectAccounts(phoneNum);
             if (accountList.size()>0){
-                return ResponseBean.fail("当前手机号已注册");
+                return ResponseBean.fail("当前账号已注册");
             }
             if (!checkCode(phoneNum, mode).equals(code)){
                 return ResponseBean.fail("验证码错误");
@@ -215,7 +215,7 @@ public class SignServiceImpl implements SignService {
         try{
             List<AccountSt> accountList = um.selectAccounts(phoneNum);
             if (accountList.size() < 1){
-                return ResponseBean.fail("该手机号还未注册");
+                return ResponseBean.fail("该账号还未注册");
             }
             if (!checkCode(phoneNum, mode).equals(code)){
                 return ResponseBean.fail("验证码错误");

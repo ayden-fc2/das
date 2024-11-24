@@ -4,13 +4,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @ClassName ResponseBean
- * @Description 请求Json返回值
- * @Author ShenHaoran
- * @Version : v1.0
- * @CreateTime : 2023/12/22 17:49
- */
 @Data
 @NoArgsConstructor
 public class ResponseBean<T> {

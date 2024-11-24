@@ -28,3 +28,10 @@ zuul:
     auth-service:
       path: /auth-service/**
       service-id: auth-service
+    dwg-handler:
+      path: /dwg-handler/**
+      service-id: dwg-handler
+    file-manage:
+      path: /file-manage/**
+      service-id: file-manage
+
