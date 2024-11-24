@@ -18,8 +18,8 @@ public class ZuulSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/auth-service/**",
                         "/example2060/**",
-                        "/file2075/**",
-                        "log2076/**"
+                        "/dwg-handler/**",
+                        "/file-manage/**"
                 )
                 .permitAll()
                 .anyRequest()

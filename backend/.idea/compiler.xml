@@ -7,9 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api-gateway" />
+        <module name="file-manage" />
         <module name="auth-service" />
         <module name="example2060" />
+        <module name="dwg-handler" />
+        <module name="common" />
+        <module name="api-gateway" />
         <module name="service-discovery" />
       </profile>
     </annotationProcessing>

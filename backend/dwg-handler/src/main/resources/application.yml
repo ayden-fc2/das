@@ -1,0 +1,25 @@
+server:
+  port: 2075
+
+spring:
+  application:
+    name: dwg-handler
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://www.fivecheers.com:3306/das_database?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    username: das_manager
+    password: 10708022
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:2072/eureka/ #Eureka??
+

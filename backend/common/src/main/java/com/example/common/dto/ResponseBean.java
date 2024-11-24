@@ -1,19 +1,10 @@
 package com.example.common.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @ClassName ResponseBean
- * @Description 请求Json返回值
- * @Author ShenHaoran
- * @Version : v1.0
- * @CreateTime : 2023/12/22 17:49
- */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ResponseBean<T> {
     /**
@@ -33,6 +24,13 @@ public class ResponseBean<T> {
      */
     @JSONField(name = "data", ordinal = 1)
     protected T data;
+
+    // 全参构造方法（手动定义）
+    public ResponseBean(Integer success, String message, T data) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
+    }
 
     /**
      * 实现功能：常用成功的返回，带额外数据
@@ -59,7 +57,7 @@ public class ResponseBean<T> {
      * @param message 出错信息
      * @return 请求失败ResponseBean
      */
-    public static ResponseBean fail(String message) {
-        return new ResponseBean(0, message, null);
+    public static ResponseBean<Void> fail(String message) {
+        return new ResponseBean<>(0, message, null);
     }
 }

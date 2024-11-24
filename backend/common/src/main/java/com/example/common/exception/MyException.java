@@ -3,13 +3,7 @@ package com.example.common.exception;
 
 import com.example.common.dto.ResponseBean;
 
-/**
- * @ClassName MyException
- * @Description 自定义异常类
- * @Author ShenHaoran
- * @Version : v1.0
- * @CreateTime : 2023/12/22 18:05
- */
+
 public class MyException extends RuntimeException{
     /**
      * 提示信息

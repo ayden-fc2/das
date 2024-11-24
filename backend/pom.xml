@@ -10,13 +10,17 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>example2060</module>
         <!-- eureka port 2072 -->
         <module>service-discovery</module>
-        <!-- zuul port 2073 -->
-        <module>api-gateway</module>
         <!-- auth port 2074 -->
         <module>auth-service</module>
+        <!-- zuul port 2073 -->
+        <module>api-gateway</module>
+        <!-- libreDWG caller 2075 -->
+        <module>dwg-handler</module>
+        <!-- file-manage -->
+        <module>file-manage</module>
+        <module>example2060</module>
     </modules>
 
     <properties>
