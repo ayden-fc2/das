@@ -1,7 +1,8 @@
 "use client"
 
-import React, { createContext, useContext, useState } from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import { Snackbar, Alert, AlertColor } from "@mui/material";
+import {info, setAlerter} from "@/app/utils/alerter";
 
 // 定义 Alert 上下文的类型
 interface AlertContextProps {
@@ -22,6 +23,12 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setSeverity(sev);
         setOpen(true);
     };
+
+    useEffect(() => {
+        setAlerter({ showAlert });
+        // 全局提示，observer账号
+        info('The login and registration functionality is currently unavailable. Please use the test account "1234@test.com" with the password "1234".')
+    }, []);
 
     const handleClose = () => {
         setOpen(false);

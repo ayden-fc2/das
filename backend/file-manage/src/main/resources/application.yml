@@ -21,7 +21,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:2072/eureka/ #Eureka??
+      defaultZone: http://www.fivecheers.com:2072/eureka/ #Eureka??
 
 custom:
   save-file-path-dwg: simulate-files/dwg

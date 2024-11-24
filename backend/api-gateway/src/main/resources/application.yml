@@ -16,7 +16,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:2072/eureka/ #Eureka??
+      defaultZone: http://www.fivecheers.com:2072/eureka/ #Eureka??
 zuul:
   sensitive-headers: Access-Control-Allow-Origin
   ignored-headers: Access-Control-Allow-Origin,H-APP-Id,Token,APPToken
@@ -34,4 +34,7 @@ zuul:
     file-manage:
       path: /file-manage/**
       service-id: file-manage
+  ribbon:
+    eager-load:
+      enabled: true
 

@@ -7,7 +7,7 @@ spring:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: www.fivecheers.com
   client:
     register-with-eureka: false
     fetch-registry: false

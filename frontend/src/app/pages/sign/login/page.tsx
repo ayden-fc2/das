@@ -2,22 +2,17 @@
 
 // pages/login.tsx
 
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import Link from "next/link";
-import {get} from "@/app/utils/api";
-import { useAlert } from "@/app/components/AlertBanner";
-import { useRouter } from "next/navigation";
+import {get} from "@/app/utils/api"
+import {err, success} from "@/app/utils/alerter";
+import {navigateTo} from "@/app/utils/navigator";
 
 const LoginPage: React.FC = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const router = useRouter();
-    const { showAlert } = useAlert();
-    useEffect(()=>{
-        showAlert('The login and registration functionality is currently unavailable. Please use the test account "1234@test.com" with the password "1234".', 'warning')
-    }, [])
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -29,15 +24,15 @@ const LoginPage: React.FC = () => {
             );
             if (response.success === 1 && response.data) {
                 localStorage.setItem("jwt", response.data);
-                showAlert("Login successful, your login status will be saved。", "success");
-                router.push("/pages/homepage")
+                success("Login successful, your login status will be saved。")
+                navigateTo("/pages/homepage")
             } else {
                 console.error("Login failed:", response.message);
-                showAlert(response.message, "error");
+                err(response.message)
             }
         } catch (error) {
             console.error("Login Error:", error);
-            showAlert("An issue has occurred. Please try again.", "error");
+            err("An issue has occurred. Please try again.")
         }
     };
 
