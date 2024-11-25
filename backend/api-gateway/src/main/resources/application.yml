@@ -8,6 +8,12 @@ spring:
     multipart:
       max-file-size: 3GB
       max-request-size: 3GB
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: true
+      service-discovery:
+        timeout: 30000ms
 
 eureka:
   instance:
@@ -34,7 +40,20 @@ zuul:
     file-manage:
       path: /file-manage/**
       service-id: file-manage
-  retryable: true
+  host:
+    connect-timeout-millis: 30000
+    socket-timeout-millis: 30000
 ribbon:
   eureka:
     enabled: true
+  restclient:
+    enabled: true
+    connect-keep-alive: true
+    keep-alive-duration: 60000
+  ConnectTimeout: 5000       # 连接超时时间
+  ReadTimeout: 60000         # 请求处理超时时间
+  MaxAutoRetries: 2          # 最大重试次数
+  MaxAutoRetriesNextServer: 1  # 切换服务实例后的最大重试次数
+  OkToRetryOnAllOperations: true # 允许所有操作重试
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.AvailabilityFilteringRule # 优化服务实例选择
+  NFLoadBalancerPingClassName: com.netflix.loadbalancer.DummyPing # 确保服务实例健康检查

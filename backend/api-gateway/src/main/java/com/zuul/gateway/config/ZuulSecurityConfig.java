@@ -28,7 +28,7 @@ public class ZuulSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable();  // 禁用 CSRF，可能需要根据实际情况启用
 
         // 添加下面这行配置，以确保OAuth2认证状态被正确传递
-        //http.apply(new OAuth2Configurer());
+        // http.apply(new OAuth2Configurer());
     }
 
     /*private static class OAuth2Configurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {

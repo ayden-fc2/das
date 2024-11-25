@@ -6,8 +6,12 @@ spring:
     name: service-discovery
 
 eureka:
+  server:
+    renewal-percent-threshold: 0.5
   instance:
     hostname: www.fivecheers.com
+    lease-expiration-duration-in-seconds: 90
+    lease-renewal-interval-in-seconds: 30
   client:
     register-with-eureka: false
     fetch-registry: false
