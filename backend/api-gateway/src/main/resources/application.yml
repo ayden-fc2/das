@@ -34,7 +34,7 @@ zuul:
     file-manage:
       path: /file-manage/**
       service-id: file-manage
-  ribbon:
-    eager-load:
-      enabled: true
-
+  retryable: true
+ribbon:
+  eureka:
+    enabled: true
