@@ -23,3 +23,6 @@ eureka:
     service-url:
       defaultZone: http://www.fivecheers.com:2072/eureka/ #Eureka??
 
+custom:
+  save-file-path-dwg: simulate-files/dwg
+  back-file-path-dwg: http://www.fivecheers.com:2073/file-manage/dwg
