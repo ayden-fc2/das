@@ -19,6 +19,9 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/read").hasAnyAuthority(
                         UserType.Observer.getType()
                         )
+                .antMatchers("/cop").hasAnyAuthority(
+                        UserType.Controller.getType()
+                )
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

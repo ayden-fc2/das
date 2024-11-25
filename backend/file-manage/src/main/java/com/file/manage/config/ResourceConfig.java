@@ -16,11 +16,15 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/dwg").hasAnyAuthority(
+                .antMatchers("/dwg/upload").hasAuthority(
                         UserType.Controller.getType()
-                        )
+                )
+                .antMatchers("/dwg/**").hasAnyAuthority(
+                        UserType.Controller.getType(),
+                        UserType.Observer.getType()
+                )
                 .antMatchers("/common").hasAnyAuthority(
-                        UserType.Controller.getType()
+                        UserType.Manager.getType()
                 )
                 .anyRequest().authenticated()
                 .and()
