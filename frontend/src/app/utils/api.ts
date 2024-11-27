@@ -4,6 +4,7 @@ import axios from "axios";
 import jwt from 'jwt-simple';
 import {navigateTo} from "@/app/utils/navigator";
 import {warning} from "@/app/utils/alerter";
+import {MyResponse} from "@/app/types/common";
 
 // 创建 axios 实例
 const api = axios.create({
@@ -43,9 +44,9 @@ api.interceptors.response.use(
 );
 
 // 通用 GET 方法封装
-export const get = async <T>(url: string, params?: object): Promise<T> => {
+export const get = async (url: string, params?: object): Promise<MyResponse> => {
     try {
-        const response = await api.get<T>(url, { params });
+        const response = await api.get<MyResponse>(url, { params });
         return response.data;
     } catch (error) {
         throw error; // 将错误抛出给调用方处理
@@ -53,9 +54,9 @@ export const get = async <T>(url: string, params?: object): Promise<T> => {
 };
 
 // 通用 POST 方法封装
-export const post = async <T>(url: string, data: object): Promise<T> => {
+export const post = async (url: string, data: object): Promise<MyResponse> => {
     try {
-        const response = await api.post<T>(url, data);
+        const response = await api.post<MyResponse>(url, data);
         return response.data;
     } catch (error) {
         throw error; // 将错误抛出给调用方处理

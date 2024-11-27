@@ -17,6 +17,12 @@ const HomePage: React.FC = () => {
         }
     }, [])
 
+    // 退出登录
+    const handleLogout = () => {
+        localStorage.removeItem("jwt");
+        setIsLoggedIn(false);
+    }
+
     return (
         <Container maxWidth="md" className="flex flex-col items-center justify-center min-h-screen">
             {/* Project Title */}
@@ -34,11 +40,16 @@ const HomePage: React.FC = () => {
             {/* Login Button */}
             <Box className="mt-8 text-center">
                 {isLoggedIn ? (
-                    <Link href="/pages/homepage" passHref>
-                        <Button variant="contained" color="success" className="bg-green-500 hover:bg-green-600">
-                            Welcome Back
+                    <>
+                        <Link href="/pages/homepage" passHref>
+                            <Button variant="contained" color="success" className="bg-green-500 hover:bg-green-600 !mx-2">
+                                Welcome Back
+                            </Button>
+                        </Link>
+                        <Button onClick={handleLogout} variant="contained" color="primary" className="bg-blue-500 hover:bg-blue-600 !mx-2">
+                            Logout
                         </Button>
-                    </Link>
+                    </>
                 ) : (
                     <Link href="/pages/sign/login" passHref>
                         <Button variant="contained" color="primary" className="bg-blue-500 hover:bg-blue-600">
