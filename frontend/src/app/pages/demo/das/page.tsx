@@ -7,14 +7,8 @@ import {err, success} from "@/app/utils/alerter";
 import {get} from "@/app/utils/api";
 import {MyResponse} from "@/app/types/common";
 import {convertToChinaTime, handleDownload} from "@/app/utils/common";
-
-interface Project {
-    projectName: string;
-    createdTime?: string;
-    isPublic: boolean;
-    dwgPath: string;
-    jsonPath?: string;
-}
+import { Project } from '@/app/types/das'
+import {navigateTo} from "@/app/utils/navigator";
 
 export default function Page() {
     /**
@@ -30,7 +24,6 @@ export default function Page() {
             if (res.success){
                 for (let i = 0; i < res.data.length; i++) {
                     res.data[i].createdTime = convertToChinaTime(res.data[i].createdTime);
-                    delete res.data[i].id
                 }
                 setProjects(res.data);
             }else{
@@ -40,6 +33,12 @@ export default function Page() {
             console.error(e);
             err("Failed to get projects.");
         }
+    }
+    const analysisProject = (project: Project) => {
+        navigateTo('/pages/demo/das/analysis', {
+            jsonPath: project.jsonPath as string,
+            projectName: project.projectName,
+        })
     }
 
     /**
@@ -124,7 +123,7 @@ export default function Page() {
                                         <Button onClick={()=>handleDownload(project.dwgPath)}>download</Button>
                                     </TableCell>
                                     <TableCell>
-                                        <Button variant="contained">press to ANALYSIS</Button>
+                                        <Button variant="contained" onClick={()=>analysisProject(project)}>ANALYSIS</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
