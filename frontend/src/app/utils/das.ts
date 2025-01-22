@@ -1,5 +1,5 @@
 import { get } from './api'
-import mockData from '@/app/mock/ocean-sim-handled.json';
+import mockData from '@/app/mock/ccc-handled.json';
 
 
 export const getJsonObj = async (jsonPath: string)=>{

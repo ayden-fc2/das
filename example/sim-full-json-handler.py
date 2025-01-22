@@ -108,8 +108,8 @@ def categorize_by_entity(input_file, output_file):
         json.dump(final_data, f, indent=4, ensure_ascii=False)
 
 
-input_file = 'ocean-full-json.json'  # 输入JSON文件路径
-output_file = 'ocean-sim-handled.json'  # 输出JSON文件路径
+input_file = 'ccc.json'  # 输入JSON文件路径
+output_file = 'ccc-handled.json'  # 输出JSON文件路径
 
 
 # 调用函数
