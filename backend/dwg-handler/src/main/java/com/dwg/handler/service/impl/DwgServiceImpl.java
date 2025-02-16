@@ -25,6 +25,10 @@ public class DwgServiceImpl implements DwgService {
     @Autowired
     UploadDwgStMapper uploadDwgStMapper;
 
+    @Autowired
+    JsonProcessor jsonProcessor;
+
+    // 使用libreDWG生成JSON文件
     @Override
     public Boolean genAnalysis(int userId, String projectName, String dwgPath, int isPublic) {
         String file;
@@ -55,7 +59,10 @@ public class DwgServiceImpl implements DwgService {
             }
             int exitCode = process.waitFor();
             System.out.println("Command executed with exit code: " + exitCode);
-            String jsonPath = dwgReturnUrl + fileName + ".json";
+            String unhandledJson = dwgUploadFilePath + fileName + ".json";
+            String handledJson = dwgUploadFilePath + fileName + "_handled" + ".json";
+            jsonProcessor.processJsonFile(unhandledJson, handledJson);
+            String jsonPath = dwgReturnUrl + fileName + "_handled" + ".json";
             // 新增一条数据
             UploadDwgSt newDwgAna = new UploadDwgSt();
             newDwgAna.setProjectName(projectName);

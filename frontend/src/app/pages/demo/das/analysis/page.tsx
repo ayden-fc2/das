@@ -26,6 +26,7 @@ export default function AnalysisPage() {
 
     useEffect(() => {
         getJsonObj(basicInfo.jsonPath).then(res=>{
+            console.log(res);
             setProjectJson(res)
         })
     }, []);
@@ -34,7 +35,6 @@ export default function AnalysisPage() {
         if (canvas) {
             const ctx = canvas.getContext("2d");
             if (ctx) {
-
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 const width = canvas.clientWidth;
                 const height = canvas.clientHeight;
@@ -43,27 +43,67 @@ export default function AnalysisPage() {
                 ctx.fillStyle = "white";
                 ctx.fillRect(0, 0, width, height);
 
+                // === 坐标系修正 ===
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.scale(scale, scale);
-                ctx.translate(offset.x, offset.y);
-                ctx.translate(offset.x / scale, offset.y / scale);
 
-                for ( const line of projectJson?.TYPES?.LINE ?? []){
+                // 1. 将原点移至画布中心
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+
+                // 2. 垂直翻转Y轴方向
+                ctx.scale(scale, -scale);
+
+                // 3. 应用平移偏移
+                ctx.translate(offset.x, offset.y);
+
+                // === 修正后的可见区域计算 ===
+                const viewportWidth = (canvas.width / scale);
+                const viewportHeight = (canvas.height / scale);
+
+                const visibleLeft = -offset.x - viewportWidth / 2;
+                const visibleRight = -offset.x + viewportWidth / 2;
+                const visibleBottom = -offset.y - viewportHeight / 2; // Y轴已翻转
+                const visibleTop = -offset.y + viewportHeight / 2;
+
+                // === 坐标轴绘制 ===
+                // X轴（红色）
+                ctx.beginPath();
+                ctx.moveTo(visibleLeft, 0);
+                ctx.lineTo(visibleRight, 0);
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 0.5 / scale;
+                ctx.stroke();
+
+                // Y轴（蓝色）
+                ctx.beginPath();
+                ctx.moveTo(0, visibleBottom);
+                ctx.lineTo(0, visibleTop); // 注意方向已翻转
+                ctx.strokeStyle = "blue";
+                ctx.lineWidth = 0.5 / scale;
+                ctx.stroke();
+
+                // === 图形绘制 ===
+                // 绘制线段
+                for (const line of projectJson?.TYPES?.LINE ?? []) {
                     ctx.beginPath();
-                    ctx.moveTo(line.start[0], line.start[1]);  // 起点坐标
-                    ctx.lineTo(line.end[0], line.end[1]); // 终点坐标
-                    ctx.strokeStyle = "#" + line.color.rgb; // 线条颜色
-                    ctx.lineWidth = 2; // 线条宽度
+                    ctx.moveTo(line.start[0], line.start[1]);
+                    ctx.lineTo(line.end[0], line.end[1]);
+                    ctx.strokeStyle = "#" + line.color.rgb;
+                    ctx.lineWidth = 1 / scale;
                     ctx.stroke();
                 }
 
+                // 绘制圆形
                 for (const circle of projectJson?.TYPES?.CIRCLE ?? []) {
                     ctx.beginPath();
-                    ctx.arc(circle.center[0], circle.center[1], circle.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = "#" + circle.color.rgb; // 填充颜色
-                    ctx.strokeStyle = "#" + circle.color.rgb; // 边框颜色
-                    ctx.lineWidth = 2; // 边框宽度
+                    ctx.arc(
+                        circle.center[0],
+                        circle.center[1],
+                        circle.radius,
+                        0,
+                        Math.PI * 2
+                    );
+                    ctx.strokeStyle = "#" + circle.color.rgb;
+                    ctx.lineWidth = 1 / scale;
                     ctx.stroke();
                 }
             }
@@ -93,13 +133,15 @@ export default function AnalysisPage() {
             setDragStart({ x: e.clientX, y: e.clientY });
         }
     };
+    // === 修正后的拖拽处理 ===
     const handleMouseMove = (e: React.MouseEvent) => {
         if (isDragging && dragStart) {
-            const dx = e.clientX - dragStart.x;
-            const dy = e.clientY - dragStart.y;
+            const deltaX = (e.clientX - dragStart.x) / scale;
+            const deltaY = (dragStart.y - e.clientY) / scale; // Y方向取反
+
             setOffset((prevOffset) => ({
-                x: prevOffset.x + dx,
-                y: prevOffset.y + dy,
+                x: prevOffset.x + deltaX,
+                y: prevOffset.y + deltaY, // 注意这里是加法
             }));
             setDragStart({ x: e.clientX, y: e.clientY });
         }
@@ -109,7 +151,7 @@ export default function AnalysisPage() {
     };
     const handleWheel = (e: React.WheelEvent) => {
         const scaleChange = e.deltaY < 0 ? 1.1 : 0.9; // 上滚放大，下滚缩小
-        setScale((prevScale) => Math.max(0.01, Math.min(50, prevScale * scaleChange))); // 限制缩放范围
+        setScale((prevScale) => Math.max(0.0001, Math.min(50, prevScale * scaleChange))); // 限制缩放范围
     };
     useEffect(() => {
         if (canvasRef.current) {

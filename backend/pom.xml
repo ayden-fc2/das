@@ -16,11 +16,11 @@
         <module>auth-service</module>
         <!-- zuul port 2073 -->
         <module>api-gateway</module>
-        <!-- libreDWG caller 2075 -->
-        <module>dwg-handler</module>
         <!-- file-manage -->
         <module>file-manage</module>
         <module>example2060</module>
+        <!-- libreDWG caller 2075 -->
+        <module>dwg-handler</module>
     </modules>
 
     <properties>

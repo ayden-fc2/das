@@ -6,7 +6,7 @@ spring:
     name: dwg-handler
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://www.fivecheers.com:3306/das_database?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://mc.fivecheers.com:3306/das_database?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=CONVERT_TO_NULL&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
     username: das_manager
     password: 10708022
     hikari:
@@ -21,8 +21,8 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://www.fivecheers.com:2072/eureka/ #Eureka??
+      defaultZone: http://localhost:2072/eureka/ #Eureka??
 
 custom:
   save-file-path-dwg: simulate-files/dwg
-  back-file-path-dwg: http://www.fivecheers.com:2073/file-manage/dwg
+  back-file-path-dwg: http://localhost:2073/file-manage/dwg

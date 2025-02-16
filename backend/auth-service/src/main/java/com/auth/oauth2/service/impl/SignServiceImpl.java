@@ -76,13 +76,23 @@ public class SignServiceImpl implements SignService {
         for (RelationshipSt rs :
                 relationshipStList) {
             switch ((int) rs.getAuthorityId()){
-                case 1: isSuperManager = "1";
+                case 4:
+                    isSuperManager = "1";
+                    isManager = "1";
+                    isController = "1";
+                    isObserver = "1";
                     break;
-                case 2: isManager = "1";
+                case 3:
+                    isManager = "1";
+                    isController = "1";
+                    isObserver = "1";
                     break;
-                case 3: isController = "1";
+                case 2:
+                    isController = "1";
+                    isObserver = "1";
                     break;
-                case 4:isObserver = "1";
+                case 1:
+                    isObserver = "1";
                     break;
             }
         }

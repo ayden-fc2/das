@@ -8,7 +8,7 @@ import {MyResponse} from "@/app/types/common";
 
 // 创建 axios 实例
 const api = axios.create({
-    baseURL: "http://www.fivecheers.com:2073", // API 根路径
+    baseURL: "http://localhost:2073", // API 根路径
     timeout: 10000, // 请求超时时间
 });
 

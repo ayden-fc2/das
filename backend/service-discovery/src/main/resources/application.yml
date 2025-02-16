@@ -9,7 +9,7 @@ eureka:
   server:
     renewal-percent-threshold: 0.5
   instance:
-    hostname: www.fivecheers.com
+    hostname: localhost
     lease-expiration-duration-in-seconds: 90
     lease-renewal-interval-in-seconds: 30
   client:
