@@ -29,20 +29,20 @@ zuul:
   routes:
     example2060:
       path: /example2060/**
-      # service-id: example2060
-      url: http://localhost:2060
+      service-id: example2060
+      # url: http://localhost:2060
     auth-service:
       path: /auth-service/**
-      # service-id: auth-service
-      url: http://localhost:2074
+      service-id: auth-service
+      # url: http://localhost:2074
     dwg-handler:
       path: /dwg-handler/**
-      # service-id: dwg-handler
-      url: http://localhost:2075
+      service-id: dwg-handler
+      # url: http://localhost:2075
     file-manage:
       path: /file-manage/**
-      # service-id: file-manage
-      url: http://localhost:2076
+      service-id: file-manage
+      # url: http://localhost:2076
   host:
     connect-timeout-millis: 30000
     socket-timeout-millis: 30000

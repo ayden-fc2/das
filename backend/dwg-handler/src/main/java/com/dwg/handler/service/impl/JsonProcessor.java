@@ -367,8 +367,6 @@ public class JsonProcessor {
         }
         System.out.println("model_space处理完成！");
 
-        // 渲染paper_space TODO
-
         // 保存文件
         saveJsonToFile(resultData, outputFile);
     }
