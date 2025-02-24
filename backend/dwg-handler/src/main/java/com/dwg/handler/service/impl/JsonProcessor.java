@@ -349,6 +349,7 @@ public class JsonProcessor {
                 JSONArray inserts = findInsertsForBlock(allInserts, blockHandle);
 //                blockData.put("inserts", processInserts(jsonData, inserts, originalEntities));
                 blockData.put("inserts", inserts);
+                blockData.put("handle", blockHandle);
 
                 usedBlocks.add(blockData);
             }

@@ -160,7 +160,7 @@ export const drawArc = (ctx: CanvasRenderingContext2D, arcs: any, scale: number,
 // TODO: 绘制文字MTEXT
 export const drawMtext = (ctx: CanvasRenderingContext2D, mtexts: any, scale: number, insertInsPt?: number[], insertRotation?: number, insertScale?: number[]) => {
     let handledMtexts = JSON.parse(JSON.stringify(mtexts ? mtexts : []));
-    if (insertInsPt && insertRotation !== undefined && insertScale) {
+    if (insertInsPt && insertRotation && insertScale) {
         for (const mtext of handledMtexts) {
             // 处理插入点：平移、旋转、缩放（使用统一的 handleInsert 方法）
             [mtext.ins_pt[0], mtext.ins_pt[1]] = handleInsert(
@@ -172,6 +172,7 @@ export const drawMtext = (ctx: CanvasRenderingContext2D, mtexts: any, scale: num
             );
             // 处理文字高度（仅缩放）
             mtext.text_height = mtext.text_height * insertScale[0];
+            mtext.rotatation = insertRotation;
         }
     }
 
@@ -180,11 +181,15 @@ export const drawMtext = (ctx: CanvasRenderingContext2D, mtexts: any, scale: num
         ctx.save();
         // 将画布原点移动到文字的插入点
         ctx.translate(mtext.ins_pt[0], mtext.ins_pt[1]);
+        if (mtext.rotatation) {
+            ctx.rotate(mtext.rotatation); // 旋转角度，以弧度为单位
+        }
         ctx.scale(1, -1);
 
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(0, 0, mtext.extents_width, mtext.extents_height);
+        // 设置文本框线样式
+        // ctx.strokeStyle = "red";
+        // ctx.lineWidth = 1;
+        // ctx.strokeRect(0, 0, mtext.extents_height, mtext.extents_width);
 
         // 设置文本对齐方式（可根据需要调整）
         ctx.textBaseline = "top";
@@ -203,7 +208,7 @@ export const drawMtext = (ctx: CanvasRenderingContext2D, mtexts: any, scale: num
 
         // 简单处理 MTEXT 内部格式，提取纯文本
         // 本例采用正则，将类似 {\\fSimSun|b0|i0|c134|p2;测试} 替换为 "测试"
-        let plainText = mtext.text.replace(/\{\\[^\{]+\}/g, (match) => {
+        let plainText = mtext.text.replace(/\{\\[^\{]+\}/g, (match: any) => {
             const semicolonIndex = match.indexOf(";");
             if (semicolonIndex !== -1) {
                 // 去除结尾的 "}"

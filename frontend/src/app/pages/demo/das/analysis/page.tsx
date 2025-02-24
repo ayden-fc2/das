@@ -120,16 +120,35 @@ export default function AnalysisPage() {
     }
 
     // 绘制插入图形
-    const drawInserts = (ctx: CanvasRenderingContext2D, projectJson: any) => {
-        const inserts = projectJson?.TYPES?.INSERTS ?? []
+    const drawInserts = (ctx: CanvasRenderingContext2D, projectJson: any, inserts: any, currentInsertDetail: any, depth: number = 0) => {
+        // console.log('深度' + depth, inserts, currentInsertDetail);
         for (let i = 0; i < inserts.length; i++) {
             const blockEntities = projectJson.USED_BLOCKS[inserts[i].blockIndex].original_entities;
-            const insertDetail = projectJson.USED_BLOCKS[inserts[i].blockIndex].inserts[inserts[i].insertIndex]
+            let insertDetail = projectJson.USED_BLOCKS[inserts[i].blockIndex].inserts[inserts[i].insertIndex]
+            insertDetail.ins_pt = [insertDetail.ins_pt[0] + currentInsertDetail.ins_pt[0], insertDetail.ins_pt[1] + currentInsertDetail.ins_pt[1]]
+            insertDetail.rotation = (insertDetail.rotation + currentInsertDetail.rotation) % 360
+            insertDetail.scale = insertDetail.scale * currentInsertDetail.scale
+
             drawLine(ctx, blockEntities.TYPES.LINE, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawLwpolyLine(ctx, blockEntities.TYPES.LWPOLYLINE, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawCircle(ctx, blockEntities.TYPES.CIRCLE, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawArc(ctx, blockEntities.TYPES.ARC, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawMtext(ctx, blockEntities.TYPES.MTEXT, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
+
+            const nextInserts = blockEntities.filter(item => {
+                return item.$ref
+            })
+            // console.log(nextInserts, '下一层')
+            for (let i = 0; i < nextInserts.length; i++) {
+                const refPath = nextInserts[i].$ref.split('.')
+                const blockIndex = parseInt(refPath[1].match(/\d+/)[0]);  // 获取 USED_BLOCKS[0] 中的 0
+                const insertIndex = parseInt(refPath[2].match(/\d+/)[0]); // 获取 inserts[0] 中的 0
+                nextInserts[i].blockIndex = blockIndex;
+                nextInserts[i].insertIndex = insertIndex;
+            }
+            if (nextInserts.length > 0) {
+                drawInserts(ctx, projectJson, nextInserts, insertDetail, depth + 1)
+            }
         }
     }
 
@@ -160,7 +179,11 @@ export default function AnalysisPage() {
                 drawTiling(ctx, projectJson);
 
                 // 绘制插入图形
-                drawInserts(ctx, projectJson)
+                drawInserts(ctx, projectJson, projectJson?.TYPES?.INSERTS ?? [], {
+                    ins_pt: [0, 0],
+                    rotation: 0,
+                    scale: 1
+                })
             }
         }
     }
