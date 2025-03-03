@@ -6,10 +6,18 @@ import {navigateTo} from "@/app/utils/navigator";
 import {warning} from "@/app/utils/alerter";
 import {MyResponse} from "@/app/types/common";
 
+// TODO: 配合frp
+const getBaseURL = () => {
+    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+        return "http://localhost:2073";
+    }
+    return "http://www.fivecheers.com:2073";
+};
+
 // 创建 axios 实例
 const api = axios.create({
-    baseURL: "http://localhost:2073", // API 根路径
-    timeout: 10000, // 请求超时时间
+    baseURL: getBaseURL(), // API 根路径
+    timeout: 30000, // 请求超时时间
 });
 
 // 请求拦截器：在每次请求前设置 Authorization 头

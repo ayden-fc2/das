@@ -30,19 +30,19 @@ zuul:
     example2060:
       path: /example2060/**
       service-id: example2060
-      # url: http://localhost:2060
+      url: http://localhost:2060
     auth-service:
       path: /auth-service/**
-      service-id: auth-service
-      # url: http://localhost:2074
+      # service-id: auth-service
+      url: http://localhost:2074
     dwg-handler:
       path: /dwg-handler/**
-      service-id: dwg-handler
-      # url: http://localhost:2075
+      # service-id: dwg-handler
+      url: http://localhost:2075
     file-manage:
       path: /file-manage/**
-      service-id: file-manage
-      # url: http://localhost:2076
+      # service-id: file-manage
+      url: http://localhost:2076
   host:
     connect-timeout-millis: 30000
     socket-timeout-millis: 30000
@@ -52,7 +52,7 @@ ribbon:
   restclient:
     enabled: true
     connect-keep-alive: true
-    keep-alive-duration: 60000
+    keep-alive-duration: 600000
   ConnectTimeout: 5000       # 连接超时时间
   ReadTimeout: 60000         # 请求处理超时时间
   MaxAutoRetries: 2          # 最大重试次数

@@ -9,12 +9,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="file-manage" />
         <module name="auth-service" />
-        <module name="example2060" />
         <module name="dwg-handler" />
         <module name="common" />
         <module name="api-gateway" />
         <module name="service-discovery" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="example2060" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

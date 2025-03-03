@@ -31,10 +31,10 @@ const HomePage: React.FC = () => {
             </Typography>
 
             {/* Project Description */}
-            <Typography variant="body1" align="center" className="mt-4 text-gray-600">
+            <Typography variant="body1" align="center" className="mt-4 ">
                 This project leverages advanced algorithms to automatically parse and structure DWG files
                 based on DCS standards. It also visualizes logical relationships within DCS files, enabling
-                users to quickly analyze, modify, and write to DWG files with greater efficiency.
+                users to quickly analyze, modify DWG files with greater efficiency.
             </Typography>
 
             {/* Login Button */}
