@@ -1,4 +1,4 @@
-import { useAlert } from "@/app/components/AlertBanner";
+import { useAlert } from "@/app/context/AlertBanner";
 
 let alerter: ReturnType<typeof useAlert> | null = null;
 

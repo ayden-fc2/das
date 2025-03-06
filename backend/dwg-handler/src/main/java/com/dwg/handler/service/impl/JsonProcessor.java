@@ -311,6 +311,45 @@ public class JsonProcessor {
     }
 
     /**
+     * 简化实体的属性，只保留必要的属性
+     */
+    public JSONObject simplifyEntity(JSONObject entity) {
+        if (entity.containsKey("$ref")) {
+            System.out.println(entity.getString("$ref"));
+            return entity;
+        }
+        JSONObject result = new JSONObject();
+        result.put("entity", entity.getString("entity"));
+        copyIfExists(entity, result, "handle");
+        copyIfExists(entity, result, "ins_pt");
+        copyIfExists(entity, result, "layer");
+        copyIfExists(entity, result, "color");
+        copyIfExists(entity, result, "style");
+        copyIfExists(entity, result, "text_value");
+        copyIfExists(entity, result, "center");
+        copyIfExists(entity, result, "start_angle");
+        copyIfExists(entity, result, "end_angle");
+        copyIfExists(entity, result, "radius");
+        copyIfExists(entity, result, "block_header");
+        copyIfExists(entity, result, "rotation");
+        copyIfExists(entity, result, "scale");
+        copyIfExists(entity, result, "start");
+        copyIfExists(entity, result, "end");
+        copyIfExists(entity, result, "points");
+        copyIfExists(entity, result, "flag");
+        copyIfExists(entity, result, "text");
+        return result;
+
+    }
+
+    private void copyIfExists(JSONObject source, JSONObject target, String key) {
+        if (source.containsKey(key)) {
+            Object value = source.get(key);  // 保留原始类型
+            target.put(key, value);
+        }
+    }
+
+    /**
      * 运行所有处理步骤
      */
     public void processJsonFile(String inputFile, String outputFile) {
@@ -320,8 +359,8 @@ public class JsonProcessor {
         // 获取到所有的blockControl和所有blockHeaders
         JSONObject blockControl = getBlockControl(jsonData);
         JSONArray blockHeaders = collectBlockHeaders(jsonData);
-        System.out.println("Block Control: " + blockControl);
-        System.out.println("All Block Headers: " + blockHeaders);
+//        System.out.println("Block Control: " + blockControl);
+//        System.out.println("All Block Headers: " + blockHeaders);
 
         // 渲染有效的blockHeaders
         JSONArray usedBlocks = new JSONArray();
@@ -358,17 +397,36 @@ public class JsonProcessor {
 
 
         // 渲染model_space
-        System.out.println("开始处理model_space!");
+//        System.out.println("开始处理model_space!");
         JSONObject modelSpaceBlock = getModelSpaceBlock(jsonData);
-        System.out.println("获取到model_space!" + modelSpaceBlock);
+//        System.out.println("获取到model_space!" + modelSpaceBlock);
         if (modelSpaceBlock != null) {
             JSONArray modelSpaceEntities = collectEntitiesInBlock(jsonData, modelSpaceBlock);
             resultData.put("MODEL_SPACE", modelSpaceEntities);
-            System.out.println("model_space_entities: " + modelSpaceEntities);
+            // System.out.println("model_space_entities: " + modelSpaceEntities);
         }
-        System.out.println("model_space处理完成！");
-
+//        System.out.println("model_space处理完成！");
+        
+        
         // 保存文件
         saveJsonToFile(resultData, outputFile);
+//        saveJsonToFile(resultData, "tmp.json");
+//        JSONObject jsonDataToSim = readJsonFile("tmp.json");
+//        // 统一简化JSON数据
+//        for (int i = 0; i < jsonDataToSim.getJSONArray("MODEL_SPACE").size(); i++) {
+//            JSONObject entity = jsonDataToSim.getJSONArray("MODEL_SPACE").getJSONObject(i);
+//            jsonDataToSim.getJSONArray("MODEL_SPACE").set(i, simplifyEntity(entity));
+//        }
+//        for (int i = 0; i < jsonDataToSim.getJSONArray("USED_BLOCKS").size(); i++) {
+//            for (int j = 0; j < jsonDataToSim.getJSONArray("USED_BLOCKS").getJSONObject(i).getJSONArray("original_entities").size(); j++) {
+//                JSONObject entity = jsonDataToSim.getJSONArray("USED_BLOCKS").getJSONObject(i).getJSONArray("original_entities").getJSONObject(j);
+//                jsonDataToSim.getJSONArray("USED_BLOCKS").getJSONObject(i).getJSONArray("original_entities").set(j, simplifyEntity(entity));
+//            }
+//            for (int j = 0; j < jsonDataToSim.getJSONArray("USED_BLOCKS").getJSONObject(i).getJSONArray("inserts").size(); j++) {
+//                JSONObject insert = jsonDataToSim.getJSONArray("USED_BLOCKS").getJSONObject(i).getJSONArray("inserts").getJSONObject(j);
+//                jsonDataToSim.getJSONArray("USED_BLOCKS").getJSONObject(i).getJSONArray("inserts").set(j, simplifyEntity(insert));
+//            }
+//        }
+//        saveJsonToFile(jsonDataToSim, outputFile);
     }
 }

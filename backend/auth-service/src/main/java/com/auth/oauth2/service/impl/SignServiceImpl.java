@@ -247,4 +247,9 @@ public class SignServiceImpl implements SignService {
             throw new MyException("获取用户失败，请重新登录");
         }
     }
+
+    @Override
+    public ResponseBean getUserInfo(String token) {
+        return null;
+    }
 }

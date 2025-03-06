@@ -22,6 +22,9 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/cop").hasAnyAuthority(
                         UserType.Controller.getType()
                 )
+                .antMatchers("/cop/genAnalysis").hasAnyAuthority(
+                        UserType.SuperManager.getType()
+                )
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

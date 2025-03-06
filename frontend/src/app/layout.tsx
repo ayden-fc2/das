@@ -7,10 +7,11 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { AlertProvider } from "@/app/components/AlertBanner";
+import { AlertProvider } from "@/app/context/AlertBanner";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { setRouter } from "@/app/utils/navigator";
+import {AuthProvider} from "@/app/context/AuthContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,9 +44,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AlertProvider>
-          {children}
-        </AlertProvider>
+        <AuthProvider>
+          <AlertProvider>
+            {children}
+          </AlertProvider>
+        </AuthProvider>
       </body>
     </html>
   );

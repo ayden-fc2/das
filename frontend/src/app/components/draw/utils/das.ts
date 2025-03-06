@@ -51,6 +51,8 @@ const resolveSeries = (res:any):any => {
                 blockIndex: blockIndex,
                 insertIndex: insertIndex
             })
+        } else if (item.entity === 'INSERT') {
+            console.log('INSERT bot ref warning!')
         }
         // 筛选其他entity
         switch (item.entity) {

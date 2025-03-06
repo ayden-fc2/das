@@ -1,14 +1,29 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Table, TableHead, TableRow, TableCell, TableBody, TextField, Button, FormControlLabel, Checkbox } from "@mui/material";
+import {
+    Container,
+    Typography,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    TextField,
+    Button,
+    FormControlLabel,
+    Checkbox,
+    TableContainer
+} from "@mui/material";
 import InputFileUpload from "@/app/components/InputFileUpload";
 import {err, success} from "@/app/utils/alerter";
 import {get} from "@/app/utils/api";
-import {MyResponse} from "@/app/types/common";
+import {MyResponse, ROLE_TYPE} from "@/app/types/common";
 import {convertToChinaTime, handleDownload} from "@/app/utils/common";
 import { Project } from '@/app/types/das'
 import {navigateTo} from "@/app/utils/navigator";
+import {analysisPublicProject, getPublicList} from "@/app/api/das";
+import {useAuth} from "@/app/context/AuthContext";
 
 export default function Page() {
     /**
@@ -20,7 +35,7 @@ export default function Page() {
     const [projects, setProjects] = useState<Project[]>([]);
     const getProjects = async () => {
         try {
-            const res: MyResponse = await get('/dwg-handler/read/getPublicList')
+            const res: MyResponse = await getPublicList()
             if (res.success){
                 for (let i = 0; i < res.data.length; i++) {
                     res.data[i].createdTime = convertToChinaTime(res.data[i].createdTime);
@@ -50,6 +65,8 @@ export default function Page() {
         dwgPath: "",
     });
 
+    const roleContext = useAuth()
+
     const handleFileChange = (files: string[]) => {
         setNewProject({...newProject, dwgPath: files[0]});
     };
@@ -67,11 +84,11 @@ export default function Page() {
             err("Only public projects are allowed currently.");
             return;
         }
-        get('/dwg-handler/cop/genAnalysis', {
-            projectName: newProject.projectName,
-            dwgPath: newProject.dwgPath,
-            isPublic: newProject.isPublic ? 1 : 0,
-        }).then(res=>{
+        analysisPublicProject(
+            newProject.projectName,
+            newProject.dwgPath,
+            newProject.isPublic ? 1 : 0
+        ).then(res=>{
             if (res.success){
                 resetNewProject()
                 getProjects();
@@ -86,49 +103,53 @@ export default function Page() {
 
     };
 
+    const [uploadKey, setUploadKey] = useState(0);
     const resetNewProject = () => {
         setNewProject({
             projectName: "",
             isPublic: true,
             dwgPath: "",
         });
+        setUploadKey(uploadKey + 1);
     };
 
     return (
         <div className="bg-gray-100">
             <Container
                 maxWidth="md"
-                className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4"
+                className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 relative"
             >
                 {/* Public Projects List */}
                 <div className="w-full !mb-8">
                     <Typography variant="h5" className="text-center !mb-4 text-gray-700">
-                        Public Projects
+                        Public Demo Projects
                     </Typography>
-                    <Table className="bg-white shadow-md rounded-lg">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Project Name</TableCell>
-                                <TableCell>Created Time</TableCell>
-                                <TableCell>DWG Path</TableCell>
-                                <TableCell>DESIGN</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {projects.map((project, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{project.projectName}</TableCell>
-                                    <TableCell>{project.createdTime}</TableCell>
-                                    <TableCell>
-                                        <Button onClick={()=>handleDownload(project.dwgPath)}>download</Button>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button variant="contained" onClick={()=>analysisProject(project)}>ANALYSIS</Button>
-                                    </TableCell>
+                    <TableContainer className="w-full max-h-[50vh]">
+                        <Table stickyHeader className="bg-white shadow-md rounded-lg">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Project Name</TableCell>
+                                    <TableCell>Created Time</TableCell>
+                                    <TableCell>DWG Path</TableCell>
+                                    <TableCell>DESIGN</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHead>
+                            <TableBody>
+                                {projects.map((project, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{project.projectName}</TableCell>
+                                        <TableCell>{project.createdTime}</TableCell>
+                                        <TableCell>
+                                            <Button onClick={()=>handleDownload(project.dwgPath)}>download</Button>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button variant="contained" onClick={()=>analysisProject(project)}>ANALYSIS</Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </div>
 
                 {/* Add New Project */}
@@ -146,16 +167,22 @@ export default function Page() {
                         />
                         <div className="flex items-center justify-between">
                             <InputFileUpload
-                                apiUrl="/file-manage/dwg/upload"  // 上传API地址
-                                maxFiles={1}  // 限制最多上传3个文件
-                                acceptTypes=".dwg"  // 只允许上传图片文件
+                                disabled={!roleContext.role?.includes(ROLE_TYPE.S_MANAGER)}
+                                apiUrl="/file-manage/dwg/upload"
+                                maxFiles={1}
+                                acceptTypes=".dwg .DWG"
                                 onSuccess={handleFileChange}  // 上传成功后的回调函数
+                                key={uploadKey} // 提交后重置组件
                             />
                             <FormControlLabel
                                 control={
+                                    // <Checkbox
+                                    //     checked={newProject.isPublic}
+                                    //     onChange={(e) => setNewProject({...newProject, isPublic: e.target.checked })}
+                                    //     color="primary"
+                                    // />
                                     <Checkbox
-                                        checked={newProject.isPublic}
-                                        onChange={(e) => setNewProject({...newProject, isPublic: e.target.checked })}
+                                        checked={true}
                                         color="primary"
                                     />
                                 }
@@ -173,6 +200,7 @@ export default function Page() {
                         color="primary"
                         onClick={handleSubmit}
                         className="w-full"
+                        disabled={!roleContext.role?.includes(ROLE_TYPE.S_MANAGER)}
                     >
                         Submit
                     </Button>

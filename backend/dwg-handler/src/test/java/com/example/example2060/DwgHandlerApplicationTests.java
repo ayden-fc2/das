@@ -22,8 +22,8 @@ class DwgHandlerApplicationTests {
     @Test
     void contextLoads() {
         // 测试处理JSON文件
-        String inputFile = "../" + dwgUploadFilePath + "/820c80c1-b5b2-46ca-95b7-5ec2267cb2dc.json";
-        String outputFile = "../" + dwgUploadFilePath + "/820c80c1-b5b2-46ca-95b7-5ec2267cb2dc_handled.json";
+        String inputFile = "../" + dwgUploadFilePath + "/64cf67ca-1bec-441f-a20f-795b61dcbcad.json";
+        String outputFile = "../" + dwgUploadFilePath + "/test.json";
         jsonProcessor.processJsonFile(inputFile, outputFile);
     }
 

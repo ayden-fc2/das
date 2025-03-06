@@ -24,6 +24,7 @@ interface InputFileUploadProps {
     acceptTypes?: string;  // 接受的文件类型，默认为所有文件
     apiUrl: string;  // 上传 API 地址
     onSuccess?: (files: string[]) => void;  // 上传成功后的回调函数
+    disabled?: boolean;
 }
 
 export default function InputFileUpload({
@@ -31,6 +32,7 @@ export default function InputFileUpload({
                                             acceptTypes = '*',
                                             apiUrl,
                                             onSuccess,
+                                            disabled = false,
                                         }: InputFileUploadProps) {
     const [fileCount, setFileCount] = useState(0);
 
@@ -68,6 +70,7 @@ export default function InputFileUpload({
     return (
         <div>
             <Button
+                disabled={disabled}
                 component="label"
                 variant="contained"
                 startIcon={<CloudUploadIcon />}

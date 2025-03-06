@@ -1,6 +1,7 @@
 package com.auth.oauth2.controller;
 
 import com.auth.oauth2.service.SignService;
+import com.auth.oauth2.service.TokenService;
 import com.example.common.dto.ResponseBean;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ public class SignController {
 
     @Autowired
     SignService ss;
+
+    @Autowired
+    TokenService ts;
 
     //授权
     @GetMapping("/test")
@@ -47,7 +51,13 @@ public class SignController {
     //获取用户id
     @GetMapping("/getUserId")
     public ResponseBean getUserId(@RequestHeader("Authorization") String token){
-        return ss.getUserId(token);
+        return ResponseBean.success(ts.tokenToUserId(token));
+    }
+
+    // 获取用户信息
+    @GetMapping("/getRoles")
+    public ResponseBean getUserInfo(@RequestHeader("Authorization") String token){
+        return ResponseBean.success(ts.tokenToRoles(token));
     }
 
 }
