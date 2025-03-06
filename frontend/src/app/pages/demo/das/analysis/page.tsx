@@ -64,6 +64,19 @@ export default function AnalysisPage() {
         jsonPath: queryParams['jsonPath'] || "",
     }).current;
 
+    // 更改块的显示状态
+    const changeBlockMarkShow = (blockHandle: number[]) => {
+        console.log(blockHandle, '点击块');
+        const blocks = projectJson?.USED_BLOCKS
+        if (blocks) {
+            const block = blocks.find((item: any) => item.handle === blockHandle)
+            if (block) {
+                block.showMark = !block.showMark
+            }
+        }
+        setProjectJson({...projectJson})
+    }
+
     useEffect(() => {
         console.log(basicInfo, '载入项目-基础信息');
         getJsonObj(basicInfo.jsonPath).then(res=>{
@@ -92,7 +105,7 @@ export default function AnalysisPage() {
                 onClose={closePanel}
             >
                 {showStdCom && <StdCom/>}
-                {showCurCom && <CurCom usedBlocks={projectJson?.USED_BLOCKS}/>}
+                {showCurCom && <CurCom usedBlocks={projectJson?.USED_BLOCKS} changeShowMark={changeBlockMarkShow}/>}
                 {showRelay && <RelayCom/>}
             </ResizableDialog>
         </div>

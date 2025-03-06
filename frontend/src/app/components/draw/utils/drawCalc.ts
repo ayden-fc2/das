@@ -14,6 +14,14 @@ interface Box {
 }
 
 export const calcComBox = (typeProps: ComTypeProps) => {
+    if (typeProps.CIRCLE.length === 0 && typeProps.LINE.length === 0 && typeProps.LWPOLYLINE.length === 0 && typeProps.ARC.length === 0) {
+        return {
+            minX: 0,
+            minY: 0,
+            maxX: 0,
+            maxY: 0
+        }
+    }
     const boxs: Box[] = [];
     for (const lineElement of typeProps.LINE) {
         boxs.push(getLineBox(lineElement));

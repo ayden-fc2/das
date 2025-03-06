@@ -260,7 +260,7 @@ export const drawMtext = (ctx: CanvasRenderingContext2D, mtexts: any, scale: num
     }
 }
 
-export const drawText = (ctx: CanvasRenderingContext2D, texts: any, scale: number, insertInsPt?: number[], insertRotation?: number, insertScale?: number[]) => {
+export const drawText = (ctx: CanvasRenderingContext2D, texts: any, scale: number, insertInsPt?: number[], insertRotation?: number, insertScale?: number[], asMark:boolean = false) => {
     let handledTexts = JSON.parse(JSON.stringify(texts ? texts : []));
     if (insertInsPt && insertRotation !== undefined && insertScale) {
         for (const text of handledTexts) {
@@ -303,7 +303,14 @@ export const drawText = (ctx: CanvasRenderingContext2D, texts: any, scale: numbe
         // 本例采用正则，将类似 {\\fSimSun|b0|i0|c134|p2;测试} 替换为 "测试"
         let plainText = processText(text.text_value)
 
-        ctx.fillText(plainText, 0, 0);
+        // // 计算文本宽度
+        // let textWidth = ctx.measureText(plainText).width;
+        // let textHeight = text.height; // 假设 text.height 代表字体大小
+
+        let offsetX = 0, offsetY = 0;
+
+
+        ctx.fillText(plainText, offsetX, offsetY);
         ctx.restore();
     }
 }

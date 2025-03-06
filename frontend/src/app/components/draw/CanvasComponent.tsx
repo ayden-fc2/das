@@ -1,7 +1,7 @@
 // src/app/components/CanvasComponent.tsx
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, {useRef, useEffect, useState} from "react";
 import { Box } from "@mui/material";
 import {
     drawArc,
@@ -11,6 +11,7 @@ import {
     drawMtext,
     drawText
 } from "@/app/components/draw/utils/draw";
+import {calcComBox} from "@/app/components/draw/utils/drawCalc";
 
 interface CanvasComponentProps {
     projectJson: any;
@@ -19,6 +20,7 @@ interface CanvasComponentProps {
     onOffsetChange: (offset: { x: number; y: number }) => void;
     onScaleChange: (scale: number) => void;
 }
+
 
 export default function CanvasComponent({
                                             projectJson,
@@ -125,6 +127,39 @@ export default function CanvasComponent({
             drawMtext(ctx, blockEntities.TYPES.MTEXT, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawText(ctx, blockEntities.TYPES.TEXT, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
 
+            // 插入标注
+            if (projectJson.USED_BLOCKS[inserts[i].blockIndex].showMark) {
+                const insertBox = calcComBox(blockEntities.TYPES)
+                drawText(ctx, [
+                    {
+                        text_value: i.toString(),
+                        ins_pt: [
+                            insertBox.maxX,
+                            insertBox.minY,
+                        ],
+                        height: (insertBox.maxY - insertBox.minY) / 2,
+                        color: {
+                            rgb: randomRgb[inserts[i].blockIndex]
+                        }
+                    }
+                ], scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale, true)
+                drawLwpolyLine(ctx, [
+                    {
+                        points: [
+                            [insertBox.minX, insertBox.minY],
+                            [insertBox.minX, insertBox.maxY],
+                            [insertBox.maxX, insertBox.maxY],
+                            [insertBox.maxX, insertBox.minY],
+                        ],
+                        color: {
+                            rgb: randomRgb[inserts[i].blockIndex]
+                        },
+                        flag: 1
+                    }
+                ], scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
+            }
+
+            // 递归insert
             const nextInserts = blockEntities.filter((item: any) => {
                 return item.$ref
             })
@@ -178,6 +213,21 @@ export default function CanvasComponent({
     useEffect(() => {
         initCanvas();
     }, [offset, scale, projectJson]);
+
+    const [randomRgb, setRandomRgb] = useState<string[]>([]);
+    useEffect(() => {
+        var randomColor = require('randomcolor')
+        let result: string[] = []
+        for (let i = 0; i < projectJson?.USED_BLOCKS?.length; i++) {
+            result.push(randomColor(
+                {
+                    luminosity: 'dark',
+                    hue: 'random',
+                }
+            ).slice(1))
+        }
+        setRandomRgb(result);
+    }, [projectJson])
 
     return (
         <Box

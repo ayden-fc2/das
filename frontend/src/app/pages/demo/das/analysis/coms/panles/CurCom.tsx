@@ -1,7 +1,7 @@
 "use client"
 
 import {
-    Box,
+    Box, Checkbox,
     Collapse,
     IconButton,
     Paper,
@@ -20,10 +20,11 @@ import ComponentRender from "@/app/components/draw/ComponentRender";
 import {calcComBox} from "@/app/components/draw/utils/drawCalc";
 
 interface CurComProps {
-    usedBlocks: any[]
+    usedBlocks: any[],
+    changeShowMark: (handle: string) => void
 }
 
-const CurCom = ({usedBlocks}: CurComProps)=> {
+const CurCom = ({usedBlocks, changeShowMark}: CurComProps)=> {
 
     const getDynamicScale = (block: any) => {
         // 获取实体包围盒尺寸
@@ -75,7 +76,9 @@ const CurCom = ({usedBlocks}: CurComProps)=> {
                     {/*  Type Inference  */}
                     <TableCell align="center">TODO</TableCell>
                     {/*  Show Tags  */}
-                    <TableCell align="center">TODO</TableCell>
+                    <TableCell align="center">
+                        <Checkbox checked={block.showMark} onChange={() => changeShowMark(block.handle)} />
+                    </TableCell>
                 </TableRow>
                 {/*  展开内容  */}
                 <TableRow>
