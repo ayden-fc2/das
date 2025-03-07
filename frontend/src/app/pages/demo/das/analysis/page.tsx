@@ -66,7 +66,6 @@ export default function AnalysisPage() {
 
     // 更改块的显示状态
     const changeBlockMarkShow = (blockHandle: number[]) => {
-        console.log(blockHandle, '点击块');
         const blocks = projectJson?.USED_BLOCKS
         if (blocks) {
             const block = blocks.find((item: any) => item.handle === blockHandle)
@@ -75,6 +74,32 @@ export default function AnalysisPage() {
             }
         }
         setProjectJson({...projectJson})
+    }
+
+    const changeAllBlockMarks = (current: boolean) => {
+        const blocks = projectJson?.USED_BLOCKS
+        if (blocks) {
+            blocks.forEach((item: any) => {
+                item.showMark = !current
+            })
+        }
+        setProjectJson({...projectJson})
+    }
+
+    const canvasComRef = useRef(null);
+    const handleCanvasFocus = (centerPt: any, maxBoxSize: any) => {
+        const canvas = getComCanvas()
+        if (centerPt && maxBoxSize && canvas) {
+            const minCanvasSize = Math.min(canvas.width, canvas.height);
+            const scale = minCanvasSize / (maxBoxSize * 10)
+            console.log("focus", centerPt, maxBoxSize, scale)
+            setOffset({ x: -1 *centerPt[0], y: -1 * centerPt[1] });
+            setScale(scale);
+        }
+    }
+
+    const getComCanvas = () => {
+        return canvasComRef.current?.getCanvas()
     }
 
     useEffect(() => {
@@ -88,6 +113,7 @@ export default function AnalysisPage() {
     return (
         <div>
             <CanvasComponent
+                ref={canvasComRef}
                 projectJson={projectJson}
                 offset={offset}
                 scale={scale}
@@ -105,7 +131,12 @@ export default function AnalysisPage() {
                 onClose={closePanel}
             >
                 {showStdCom && <StdCom/>}
-                {showCurCom && <CurCom usedBlocks={projectJson?.USED_BLOCKS} changeShowMark={changeBlockMarkShow}/>}
+                {showCurCom && <CurCom
+                    usedBlocks={projectJson?.USED_BLOCKS}
+                    changeShowMark={changeBlockMarkShow}
+                    changeAllShowMark={changeAllBlockMarks}
+                    canvasFocus={handleCanvasFocus}
+                />}
                 {showRelay && <RelayCom/>}
             </ResizableDialog>
         </div>

@@ -1,4 +1,4 @@
-const handleInsert = (xPointIn: number, yPointIn: number, insertScale: number[], insertRotation: number, insertInsPt: number[], debug: boolean = false): number[] => {
+export const handleInsert = (xPointIn: number, yPointIn: number, insertScale: number[], insertRotation: number, insertInsPt: number[], debug: boolean = false): number[] => {
     let xPointOut = xPointIn
     let yPointOut = yPointIn
     // 处理缩放

@@ -88,6 +88,14 @@ const resolveSeries = (res:any):any => {
     // 处理USED_BLOCKS中entity分类
     for (let block of result.USED_BLOCKS) {
         block.showMark = true
+        var randomColor = require('randomcolor')
+        const color =randomColor(
+            {
+                luminosity: 'dark',
+                hue: 'random',
+            }
+        ).slice(1) + 'aa'
+        block.markColor = color
         block.original_entities.TYPES = {
             LINE: [],
             CIRCLE: [],

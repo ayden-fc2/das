@@ -8,11 +8,13 @@ import Link from "next/link";
 import {get} from "@/app/utils/api"
 import {err, success} from "@/app/utils/alerter";
 import {navigateTo} from "@/app/utils/navigator";
+import {useAuth} from "@/app/context/AuthContext";
 
 const LoginPage: React.FC = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const authContext = useAuth()
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,6 +26,7 @@ const LoginPage: React.FC = () => {
             );
             if (response.success === 1 && response.data) {
                 localStorage.setItem("jwt", response.data);
+                authContext.refreshRole()
                 success("Login successful, your login status will be saved。")
                 navigateTo("/pages/homepage")
             } else {

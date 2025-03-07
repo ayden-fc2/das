@@ -10,9 +10,9 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow, Typography
+    TableRow, TextField, Typography
 } from "@mui/material"
-import React from "react"
+import React, {useEffect, useMemo} from "react"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SvgRender from "@/app/components/draw/ComponentRender";
@@ -21,10 +21,16 @@ import {calcComBox} from "@/app/components/draw/utils/drawCalc";
 
 interface CurComProps {
     usedBlocks: any[],
-    changeShowMark: (handle: string) => void
+    changeShowMark: (handle: number[]) => void,
+    changeAllShowMark: (checked: boolean) => void,
+    canvasFocus: (centerPt: any, maxBoxSize: any) => () => void,
 }
 
-const CurCom = ({usedBlocks, changeShowMark}: CurComProps)=> {
+const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: CurComProps)=> {
+
+    const focusInnerClick = (centerPt: any, maxBoxSize: number) => {
+        canvasFocus(centerPt, maxBoxSize)
+    }
 
     const getDynamicScale = (block: any) => {
         // 获取实体包围盒尺寸
@@ -45,9 +51,41 @@ const CurCom = ({usedBlocks, changeShowMark}: CurComProps)=> {
         return Math.min(widthRatio, heightRatio);
     };
 
+    const allChecked: boolean = React.useMemo(() => {
+        return usedBlocks?.every(block => block.showMark) || false;
+    }, [usedBlocks]);
+
     function Row(props: any) {
         const { block } = props;
         const [open, setOpen] = React.useState(false);
+        const [filterInput, setFilterInput] = React.useState('');
+        const [filteredHandles, setFilteredHandles] = React.useState<number[] | null>(null);
+
+        const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const input = e.target.value;
+            setFilterInput(input);
+            // 解析输入为数字数组，过滤无效值
+            const handles = input
+                .split(' ')
+                .map(str => parseInt(str.trim(), 10))
+                .filter(num => !isNaN(num));
+            setFilteredHandles(handles.length > 0 ? handles : null);
+        };
+
+        // 生成过滤后的插入项列表
+        const filteredInserts = block.inserts
+            .map((insert: any, originalIndex: number) => ({ insert, originalIndex }))
+            .filter(({ insert }) =>
+                !filteredHandles || filteredHandles.includes(insert.handle[2])
+            );
+
+        //中心点
+        const getCenterPt = (centerPt: any) => {
+            if (centerPt) {
+                return `${centerPt[0].toFixed(2)}, ${centerPt[1].toFixed(2)}`;
+            }
+            return '未渲染!TODO'
+        }
 
         return (
             <React.Fragment>
@@ -62,7 +100,7 @@ const CurCom = ({usedBlocks, changeShowMark}: CurComProps)=> {
                         </IconButton>
                     </TableCell>
                     {/*  Name  */}
-                    <TableCell align="center">{block.name}</TableCell>
+                    <TableCell align="center" style={{color: '#' + block.markColor}}>{block.name}</TableCell>
                     {/*  Preview  */}
                     <TableCell align="center">
                         <Box className={`w-full flex justify-center items-center`}>
@@ -83,26 +121,33 @@ const CurCom = ({usedBlocks, changeShowMark}: CurComProps)=> {
                 {/*  展开内容  */}
                 <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Collapse in={open} unmountOnExit>
+                        {/*<Collapse in={true} unmountOnExit>*/}
                             <Box sx={{ margin: 1 }}>
-                                <Typography gutterBottom component="div">
-                                    Inserts:
-                                </Typography>
+                                <Box className={`w-full flex justify-center items-center relative m-4`}>
+                                    <TextField
+                                        className={`w-full`}
+                                        size="small"
+                                        id={`index-filter-${block.handle[2]}`}
+                                        label="Please input block handles, separated by space"
+                                        value={filterInput}
+                                        onChange={handleFilterChange}/>
+                                </Box>
                                 {/*  Inserts Table  */}
                                 <Table size="small" aria-label="purchases">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center">Index</TableCell>
+                                            <TableCell align="center">Handle</TableCell>
                                             <TableCell align="center">Center Position</TableCell>
                                             <TableCell align="center">Upstream</TableCell>
                                             <TableCell align="center">Downstream</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {block.inserts.map((insert: any, index: number) => (
-                                            <TableRow key={index}>
-                                                <TableCell align="center">{index}</TableCell>
-                                                <TableCell align="center">TODO</TableCell>
+                                        {filteredInserts.map(({ insert, originalIndex }) => (
+                                            <TableRow key={originalIndex}>
+                                                <TableCell align="center">{insert.handle[2]}</TableCell>
+                                                <TableCell onClick={() => focusInnerClick(insert.center_pt, insert.maxBoxSize)} align="center">{getCenterPt(insert.center_pt)}</TableCell>
                                                 <TableCell align="center">TODO</TableCell>
                                                 <TableCell align="center">TODO</TableCell>
                                             </TableRow>
@@ -163,7 +208,10 @@ const CurCom = ({usedBlocks, changeShowMark}: CurComProps)=> {
                             <TableCell align="center">Preview</TableCell>
                             <TableCell align="center">Inserts Number</TableCell>
                             <TableCell align="center">AI Recognition</TableCell>
-                            <TableCell align="center">Show Tags</TableCell>
+                            <TableCell align="center">
+                                Show Tags
+                                <Checkbox checked={allChecked} onClick={() => changeAllShowMark(allChecked)} />
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

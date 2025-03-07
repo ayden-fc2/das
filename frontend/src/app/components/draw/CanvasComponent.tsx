@@ -1,7 +1,7 @@
 // src/app/components/CanvasComponent.tsx
 "use client";
 
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, forwardRef, useImperativeHandle} from "react";
 import { Box } from "@mui/material";
 import {
     drawArc,
@@ -9,7 +9,7 @@ import {
     drawLine,
     drawLwpolyLine,
     drawMtext,
-    drawText
+    drawText, handleInsert
 } from "@/app/components/draw/utils/draw";
 import {calcComBox} from "@/app/components/draw/utils/drawCalc";
 
@@ -22,16 +22,24 @@ interface CanvasComponentProps {
 }
 
 
-export default function CanvasComponent({
+const CanvasComponent = forwardRef(({
                                             projectJson,
                                             offset,
                                             scale,
                                             onOffsetChange,
                                             onScaleChange
-                                        }: CanvasComponentProps) {
+                                            }: CanvasComponentProps, ref: any) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const isDragging = useRef(false);
     const dragStart = useRef<{ x: number; y: number } | null>(null);
+
+    /**
+     * 对外暴露方法
+     * @param e
+     */
+    useImperativeHandle(ref, ()=>({
+        getCanvas: () => canvasRef.current,
+    }))
 
     // 事件处理函数
     const handleMouseDown = (e: React.MouseEvent) => {
@@ -127,32 +135,35 @@ export default function CanvasComponent({
             drawMtext(ctx, blockEntities.TYPES.MTEXT, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawText(ctx, blockEntities.TYPES.TEXT, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
 
+            const insertBox = calcComBox(blockEntities.TYPES)
+            const originalCenterPt = [(insertBox.minX + insertBox.maxX) / 2, (insertBox.minY + insertBox.maxY) / 2]
+            insertDetail.center_pt = handleInsert(originalCenterPt[0], originalCenterPt[1], insertDetail.scale, insertDetail.rotation, insertDetail.ins_pt)
+            insertDetail.maxBoxSize = Math.max((insertBox.maxX - insertBox.minX), (insertBox.maxY - insertBox.minY))
             // 插入标注
             if (projectJson.USED_BLOCKS[inserts[i].blockIndex].showMark) {
-                const insertBox = calcComBox(blockEntities.TYPES)
                 drawText(ctx, [
                     {
-                        text_value: i.toString(),
+                        text_value: `${insertDetail.handle[2]}`,
                         ins_pt: [
                             insertBox.maxX,
                             insertBox.minY,
                         ],
-                        height: (insertBox.maxY - insertBox.minY) / 2,
+                        height: Math.min((insertBox.maxY - insertBox.minY) / 2, insertBox.maxX - insertBox.minX),
                         color: {
-                            rgb: randomRgb[inserts[i].blockIndex]
+                            rgb: projectJson.USED_BLOCKS[inserts[i].blockIndex].markColor
                         }
                     }
                 ], scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale, true)
                 drawLwpolyLine(ctx, [
                     {
                         points: [
-                            [insertBox.minX, insertBox.minY],
-                            [insertBox.minX, insertBox.maxY],
-                            [insertBox.maxX, insertBox.maxY],
-                            [insertBox.maxX, insertBox.minY],
+                            [insertBox.minX - 1, insertBox.minY - 1],
+                            [insertBox.minX - 1, insertBox.maxY + 1],
+                            [insertBox.maxX + 1, insertBox.maxY + 1],
+                            [insertBox.maxX + 1, insertBox.minY - 1],
                         ],
                         color: {
-                            rgb: randomRgb[inserts[i].blockIndex]
+                            rgb: projectJson.USED_BLOCKS[inserts[i].blockIndex].markColor
                         },
                         flag: 1
                     }
@@ -214,21 +225,6 @@ export default function CanvasComponent({
         initCanvas();
     }, [offset, scale, projectJson]);
 
-    const [randomRgb, setRandomRgb] = useState<string[]>([]);
-    useEffect(() => {
-        var randomColor = require('randomcolor')
-        let result: string[] = []
-        for (let i = 0; i < projectJson?.USED_BLOCKS?.length; i++) {
-            result.push(randomColor(
-                {
-                    luminosity: 'dark',
-                    hue: 'random',
-                }
-            ).slice(1))
-        }
-        setRandomRgb(result);
-    }, [projectJson])
-
     return (
         <Box
             sx={{
@@ -248,4 +244,6 @@ export default function CanvasComponent({
             />
         </Box>
     );
-}
+})
+
+export default CanvasComponent;
