@@ -12,21 +12,21 @@ import {
     TableHead,
     TableRow, TextField, Typography
 } from "@mui/material"
-import React, {useEffect, useMemo} from "react"
+import React, {useEffect, useMemo, useRef, useState} from "react"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import SvgRender from "@/app/components/draw/ComponentRender";
-import ComponentRender from "@/app/components/draw/ComponentRender";
-import {calcComBox} from "@/app/components/draw/utils/drawCalc";
+
+import {calcComBox, checkValidBlock} from "@/app/components/draw/utils/drawCalc";
+import SvgRender from "@/app/components/draw/SvgRender";
 
 interface CurComProps {
     usedBlocks: any[],
     changeShowMark: (handle: number[]) => void,
     changeAllShowMark: (checked: boolean) => void,
-    canvasFocus: (centerPt: any, maxBoxSize: any) => () => void,
+    canvasFocus: (centerPt: any, maxBoxSize: any) => void,
 }
 
-const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: CurComProps)=> {
+const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: CurComProps)=> {
 
     const focusInnerClick = (centerPt: any, maxBoxSize: number) => {
         canvasFocus(centerPt, maxBoxSize)
@@ -51,13 +51,55 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
         return Math.min(widthRatio, heightRatio);
     };
 
-    const allChecked: boolean = React.useMemo(() => {
-        return usedBlocks?.every(block => block.showMark) || false;
-    }, [usedBlocks]);
+    /**
+     * 子组件管理
+     */
+    const [expandedBlocks, setExpandedBlocks] = useState<number[]>([])
+    const [allChecked, setAllChecked] = useState<boolean | undefined>(false)
+    const [checked, setChecked] = useState<Map<number, boolean>>(new Map())
+    const toggleExpand = (blockHandle: number) => {
+        let newArray = [...expandedBlocks];
+        if (newArray.includes(blockHandle)) {
+            newArray = newArray.filter((bh: number) => bh !== blockHandle);
+        } else {
+            newArray.push(blockHandle);
+        }
+        setExpandedBlocks(newArray);
+    };
+    const handleChangeAllShowMark = (checked: boolean) => {
+        changeAllShowMark(checked);
+        const target = !checked
+        setAllChecked(target)
+        setChecked(new Map(usedBlocks.map((block) => [block.handle1, target])))
+    }
+    const handleChangeShowMark = (handle0: number, handle1: number) => {
+        changeShowMark([handle0, handle1])
+        const newMap = new Map(usedBlocks.map((block) => {
+            const currentChecked: boolean = checked.get(block.handle1) || false
+            if (handle1 === block.handle1) {
+                return [block.handle1, !currentChecked]
+            }
+            return [block.handle1, currentChecked]
+        }))
+        setChecked(newMap)
+        let allCheckedValue = true
+        newMap.forEach((block) => {
+            if (!block) {
+                allCheckedValue = false
+            }
+        })
+        if (checked.size !== usedBlocks.length) {
+            allCheckedValue = false
+        }
+        setAllChecked(allCheckedValue)
+    }
 
-    function Row(props: any) {
-        const { block } = props;
-        const [open, setOpen] = React.useState(false);
+    /**
+     * 子组件
+     */
+
+    const Row = React.memo((props: { block: any; expanded: boolean; onToggle: () => void }) => {
+        const { block, expanded, onToggle } = props;
         const [filterInput, setFilterInput] = React.useState('');
         const [filteredHandles, setFilteredHandles] = React.useState<number[] | null>(null);
 
@@ -75,16 +117,15 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
         // 生成过滤后的插入项列表
         const filteredInserts = block.inserts
             .map((insert: any, originalIndex: number) => ({ insert, originalIndex }))
-            .filter(({ insert }) =>
-                !filteredHandles || filteredHandles.includes(insert.handle[2])
+            .filter(({ insert }: any) =>
+                {
+                    return !filteredHandles || filteredHandles.includes(insert.handle1)
+                }
             );
 
         //中心点
-        const getCenterPt = (centerPt: any) => {
-            if (centerPt) {
-                return `${centerPt[0].toFixed(2)}, ${centerPt[1].toFixed(2)}`;
-            }
-            return '未渲染!TODO'
+        const getCenterPt = (centerX: number, centerY: number) => {
+            return `${centerX.toFixed(2)}, ${centerY.toFixed(2)}`;
         }
 
         return (
@@ -95,17 +136,17 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
                         <IconButton
                             aria-label="expand row"
                             size="small"
-                            onClick={() => setOpen(!open)}>
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                            onClick={() => toggleExpand(block.handle1)}>
+                            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                         </IconButton>
                     </TableCell>
                     {/*  Name  */}
-                    <TableCell align="center" style={{color: '#' + block.markColor}}>{block.name}</TableCell>
+                    <TableCell align="center" style={{color: '#' + block.markColor}}>{block.blockName}</TableCell>
                     {/*  Preview  */}
                     <TableCell align="center">
                         <Box className={`w-full flex justify-center items-center`}>
                             <Box className={`w-28 h-24 overflow-hidden flex justify-center items-center relative`}>
-                                <ComponentRender {...block.original_entities.TYPES} />
+                                <SvgRender svgString={block.svg} />
                             </Box>
                         </Box>
                     </TableCell>
@@ -115,20 +156,20 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
                     <TableCell align="center">TODO</TableCell>
                     {/*  Show Tags  */}
                     <TableCell align="center">
-                        <Checkbox checked={block.showMark} onChange={() => changeShowMark(block.handle)} />
+                        <Checkbox checked={checked.get(block.handle1)} onChange={() => handleChangeShowMark(block.handle0, block.handle1)} />
                     </TableCell>
                 </TableRow>
                 {/*  展开内容  */}
                 <TableRow>
                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                        <Collapse in={open} unmountOnExit>
+                        <Collapse in={expanded} unmountOnExit>
                         {/*<Collapse in={true} unmountOnExit>*/}
                             <Box sx={{ margin: 1 }}>
                                 <Box className={`w-full flex justify-center items-center relative m-4`}>
                                     <TextField
                                         className={`w-full`}
                                         size="small"
-                                        id={`index-filter-${block.handle[2]}`}
+                                        id={`index-filter-${block.handle1}`}
                                         label="Please input block handles, separated by space"
                                         value={filterInput}
                                         onChange={handleFilterChange}/>
@@ -144,10 +185,11 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {filteredInserts.map(({ insert, originalIndex }) => (
+                                        {filteredInserts.map(({ insert, originalIndex }: {insert: any, originalIndex: any}) => (
+                                            getCenterPt(insert.centerX, insert.centerY) &&
                                             <TableRow key={originalIndex}>
-                                                <TableCell align="center">{insert.handle[2]}</TableCell>
-                                                <TableCell onClick={() => focusInnerClick(insert.center_pt, insert.maxBoxSize)} align="center">{getCenterPt(insert.center_pt)}</TableCell>
+                                                <TableCell align="center">{insert.handle1}</TableCell>
+                                                <TableCell onClick={() => focusInnerClick([insert.centerX, insert.centerY], Math.max(insert.boxWidth, insert.boxHeight))} align="center">{getCenterPt(insert.centerX, insert.centerY)}</TableCell>
                                                 <TableCell align="center">TODO</TableCell>
                                                 <TableCell align="center">TODO</TableCell>
                                             </TableRow>
@@ -160,7 +202,7 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
                 </TableRow>
             </React.Fragment>
         )
-    }
+    })
 
     return (
         <Box className={`w-full h-full text-black overscroll-y-auto overflow-x-hidden`}>
@@ -168,36 +210,6 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
                 <h1 className="text-blue-500 font-bold text-xl">Current DCS Components</h1>
                 <span className="ml-2 text-gray-500">( total: {usedBlocks?.length} )</span>
             </Box>
-            {/*<Table sx={{ minWidth: 650 }} aria-label="simple table">*/}
-            {/*    <TableHead>*/}
-            {/*        <TableRow>*/}
-            {/*            <TableCell>Name</TableCell>*/}
-            {/*            <TableCell>Preview</TableCell>*/}
-            {/*            <TableCell>Inserts Number</TableCell>*/}
-            {/*            <TableCell>Type Inference</TableCell>*/}
-            {/*            <TableCell>Show Tags</TableCell>*/}
-            {/*        </TableRow>*/}
-            {/*    </TableHead>*/}
-            {/*    <TableBody>*/}
-            {/*        {usedBlocks?.map((block) => (*/}
-            {/*            <TableRow*/}
-            {/*                key={block.handle}*/}
-            {/*            >*/}
-            {/*                <TableCell>*/}
-            {/*                    <span className="font-bold">{block.name}</span>*/}
-            {/*                </TableCell>*/}
-            {/*                <TableCell>*/}
-            {/*                    <div className={`w-20 h-20 -my-2 bg-gray-200`}>*/}
-
-            {/*                    </div>*/}
-            {/*                </TableCell>*/}
-            {/*                <TableCell>{block.inserts.length}</TableCell>*/}
-            {/*                <TableCell>TODO</TableCell>*/}
-            {/*                <TableCell>TODO</TableCell>*/}
-            {/*            </TableRow>*/}
-            {/*        ))}*/}
-            {/*    </TableBody>*/}
-            {/*</Table>*/}
 
             <TableContainer component={Paper}>
                 <Table aria-label="collapsible table">
@@ -210,19 +222,24 @@ const CurCom = ({usedBlocks, changeShowMark, changeAllShowMark, canvasFocus}: Cu
                             <TableCell align="center">AI Recognition</TableCell>
                             <TableCell align="center">
                                 Show Tags
-                                <Checkbox checked={allChecked} onClick={() => changeAllShowMark(allChecked)} />
+                                <Checkbox checked={allChecked} onClick={() => handleChangeAllShowMark(!!allChecked)} />
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {usedBlocks?.map((block) => (
-                            <Row key={block.handle} block={block} />
+                            <Row
+                                key={block.handle1}
+                                block={block}
+                                expanded={expandedBlocks.includes(block.handle1)}
+                                onToggle={() => toggleExpand(block.handle1)}
+                            />
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
         </Box>
     )
-}
+})
 
 export default CurCom

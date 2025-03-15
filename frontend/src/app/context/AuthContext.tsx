@@ -20,7 +20,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         // 获取 Token
-        const storedToken = localStorage.getItem("token");
+        const storedToken = localStorage.getItem("jwt");
         if (storedToken) {
             setToken(storedToken);
         }

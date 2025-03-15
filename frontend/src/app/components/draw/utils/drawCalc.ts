@@ -1,4 +1,6 @@
-// 计算图形包围盒 minX, minY, maxX, maxY
+/**
+ * 计算图形包围盒 minX, minY, maxX, maxY
+ */
 
 export interface ComTypeProps {
     LINE: any[];
@@ -14,7 +16,11 @@ interface Box {
 }
 
 export const calcComBox = (typeProps: ComTypeProps) => {
-    if (typeProps.CIRCLE.length === 0 && typeProps.LINE.length === 0 && typeProps.LWPOLYLINE.length === 0 && typeProps.ARC.length === 0) {
+    const CIRCLE = typeProps?.CIRCLE || [];
+    const LINE = typeProps?.LINE || [];
+    const LWPOLYLINE = typeProps?.LWPOLYLINE || [];
+    const ARC = typeProps?.ARC || [];
+    if (CIRCLE.length === 0 && LINE.length === 0 && LWPOLYLINE.length === 0 && ARC.length === 0) {
         return {
             minX: 0,
             minY: 0,
@@ -23,16 +29,16 @@ export const calcComBox = (typeProps: ComTypeProps) => {
         }
     }
     const boxs: Box[] = [];
-    for (const lineElement of typeProps.LINE) {
+    for (const lineElement of LINE) {
         boxs.push(getLineBox(lineElement));
     }
-    for (const circleElement of typeProps.CIRCLE) {
+    for (const circleElement of CIRCLE) {
         boxs.push(getCircleBox(circleElement));
     }
-    for (const lwpolylineElement of typeProps.LWPOLYLINE) {
+    for (const lwpolylineElement of LWPOLYLINE) {
         boxs.push(getLwpolylineBox(lwpolylineElement));
     }
-    for (const arcElement of typeProps.ARC) {
+    for (const arcElement of ARC) {
         boxs.push(getArcBox(arcElement));
     }
     const result = boxs.reduce((acc, box) => ({
@@ -138,3 +144,12 @@ const getArcBox = (arc: any): Box => {
         maxY: candidatePoints[0].y
     });
 };
+
+// 过滤无效的块
+export const checkValidBlock = (block: any) => {
+    const boxResult = calcComBox(block.original_entities.TYPES);
+    if (boxResult.minX === 0 && boxResult.maxX === 0 && boxResult.minY === 0 && boxResult.maxY === 0) {
+        return false
+    }
+    return true
+}

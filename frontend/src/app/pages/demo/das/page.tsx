@@ -53,6 +53,8 @@ export default function Page() {
         navigateTo('/pages/demo/das/analysis', {
             jsonPath: project.jsonPath as string,
             projectName: project.projectName,
+            analysised: project.analysised || 0,
+            projectId: project.id
         })
     }
 
@@ -63,6 +65,8 @@ export default function Page() {
         projectName: "",
         isPublic: true,
         dwgPath: "",
+        id: 0,
+        analysised: 0
     });
 
     const roleContext = useAuth()
@@ -109,6 +113,8 @@ export default function Page() {
             projectName: "",
             isPublic: true,
             dwgPath: "",
+            id: 0,
+            analysised: 0
         });
         setUploadKey(uploadKey + 1);
     };

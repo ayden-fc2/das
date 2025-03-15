@@ -87,7 +87,7 @@ const resolveSeries = (res:any):any => {
     }
     // 处理USED_BLOCKS中entity分类
     for (let block of result.USED_BLOCKS) {
-        block.showMark = true
+        block.showMark = false
         var randomColor = require('randomcolor')
         const color =randomColor(
             {

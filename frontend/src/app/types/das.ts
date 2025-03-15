@@ -4,4 +4,6 @@ export interface Project {
     isPublic: boolean;
     dwgPath: string;
     jsonPath?: string;
+    analysised: number;
+    id: number;
 }

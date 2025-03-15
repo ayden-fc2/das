@@ -17,13 +17,10 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/read").hasAnyAuthority(
-                        UserType.Observer.getType()
+                        UserType.Observer.getType() // 观察者可以访问 /read 接口
                         )
-                .antMatchers("/cop").hasAnyAuthority(
-                        UserType.Controller.getType()
-                )
-                .antMatchers("/cop/genAnalysis").hasAnyAuthority(
-                        UserType.SuperManager.getType()
+                .antMatchers("/cop/genAnalysis", "/cop/genAnalysisOverview").hasAnyAuthority(
+                        UserType.SuperManager.getType() // 超级管理员才可以操作
                 )
                 .anyRequest().authenticated()
                 .and()

@@ -1,15 +1,10 @@
 package com.example.example2060;
 
 import com.dwg.handler.DwgHandlerApplication;
-import com.dwg.handler.service.impl.JsonProcessor;
+import com.dwg.handler.utils.JsonProcessor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @SpringBootTest(classes = DwgHandlerApplication.class)
 class DwgHandlerApplicationTests {

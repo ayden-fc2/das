@@ -1,56 +1,54 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useEffect} from 'react';
 import {calcComBox, ComTypeProps} from "@/app/components/draw/utils/drawCalc";
 
-const ComponentRender = React.memo((comTypeProps: ComTypeProps) => {
+export interface SvgProps {
+    svgString: string;
+    svgWidth?: number;
+    svgHeight?: number;
+}
+
+interface SvgGetterProps {
+    comTypeProps: ComTypeProps;
+    onSvgStringGenerated?: (svgProps: SvgProps) => void;
+}
+
+/**
+ * 元器件渲染器，传入 comTypeProps 直接渲染，回调获取svg属性
+ * @param comTypeProps
+ * @param onSvgStringGenerated
+ * @constructor
+ */
+const SvgGetter: React.FC<SvgGetterProps> = ({ comTypeProps, onSvgStringGenerated }) => {
     const svgRef = React.useRef<SVGSVGElement>(null);
 
-    const { minX, maxX, minY, maxY } = useMemo(
-        () => calcComBox(comTypeProps),
-        [comTypeProps]
-    );
+    const getSvgWidth = (comTypeProps: ComTypeProps) => {
+        const { minX, maxX } = calcComBox(comTypeProps)
+        return isFinite(maxX - minX + 2) ? maxX - minX + 2 : 2
+    }
 
-    const svgWidth = useMemo(
-        () => isFinite(maxX - minX + 2) ? maxX - minX + 2 : 2,
-        [maxX, minX]
-    );
+    const getSvgHeight = (comTypeProps: ComTypeProps) => {
+        const { minY, maxY } = calcComBox(comTypeProps)
+        return isFinite(maxY - minY + 2) ? maxY - minY + 2 : 2
+    }
 
-    const svgHeight = useMemo(
-        () => isFinite(maxY - minY + 2) ? maxY - minY + 2 : 2,
-        [maxY, minY]
-    );
+    const getSvgElements = (comTypeProps: ComTypeProps) => {
 
-    // 缓存坐标转换函数
-    const correctPoint = useCallback(
-        (x: number, y: number, yReverse = true) => {
+        const { minX, maxX, minY, maxY } = calcComBox(comTypeProps)
+        const svgWidth = getSvgWidth(comTypeProps)
+        const svgHeight = getSvgHeight(comTypeProps)
+        const getLineWidth = (svgWidth: number, svgHeight: number)=> {
+            return Math.max(svgWidth, svgHeight) / 60;
+        }
+
+        // 辅助坐标转换函数
+        const correctPoint = (x: number, y: number, yReverse = true) => {
             if (yReverse) {
                 return [x - minX + 1, svgHeight - (y - minY) - 1]
             }
             return [x - minX, y - minY];
-        },
-        [minX, minY, svgHeight]
-    );
+        }
 
-    const handleSave = () => {
-        if (!svgRef.current) return;
 
-        const svgString = new XMLSerializer().serializeToString(svgRef.current);
-        const blob = new Blob([svgString], { type: 'image/svg+xml' });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'drawing.svg';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    };
-
-    const getLineWidth = (svgWidth: number, svgHeight: number)=> {
-        return Math.max(svgWidth, svgHeight) / 60;
-    }
-
-    function getSvgElements(comTypeProps: ComTypeProps) {
         let svgElements = [];
         for (const circle of comTypeProps.CIRCLE) {
             svgElements.push(
@@ -136,6 +134,18 @@ const ComponentRender = React.memo((comTypeProps: ComTypeProps) => {
         return svgElements;
     }
 
+    // 渲染后将生成的 svg 字符串传递给外部（例如存储到后端）
+    useEffect(() => {
+        if (svgRef.current && onSvgStringGenerated) {
+            const generatedSvgString = new XMLSerializer().serializeToString(svgRef.current);
+            onSvgStringGenerated({
+                svgString: generatedSvgString,
+                svgWidth: getSvgWidth(comTypeProps),
+                svgHeight: getSvgHeight(comTypeProps)
+            });
+        }
+    }, [comTypeProps, onSvgStringGenerated]);
+
     return (
         <div className="w-full h-full relative flex justify-center items-center">
             <svg
@@ -143,18 +153,13 @@ const ComponentRender = React.memo((comTypeProps: ComTypeProps) => {
                 xmlns="http://www.w3.org/2000/svg"
                 width="100%"
                 height="100%"
-                viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                viewBox={`0 0 ${getSvgWidth(comTypeProps)} ${getSvgHeight(comTypeProps)}`}
             >
-                {getSvgElements(comTypeProps)}
+                { getSvgElements(comTypeProps) }
             </svg>
             {/*<button onClick={handleSave}>保存</button>*/}
         </div>
     );
-}, (prevProps, nextProps) => {
-    return prevProps.CIRCLE === nextProps.CIRCLE &&
-        prevProps.LINE === nextProps.LINE &&
-        prevProps.LWPOLYLINE === nextProps.LWPOLYLINE &&
-        prevProps.ARC === nextProps.ARC;
-});
+}
 
-export default ComponentRender;
+export default SvgGetter;

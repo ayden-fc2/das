@@ -1,7 +1,10 @@
 package com.dwg.handler.entity;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
 public class UploadDwgSt {
 
     private Integer id;
@@ -11,6 +14,7 @@ public class UploadDwgSt {
     private String jsonPath;
     private Integer isPublic;
     private LocalDateTime createdTime;
+    private Integer analysised;
 
     // Getter 和 Setter 方法
 
@@ -68,5 +72,13 @@ public class UploadDwgSt {
 
     public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Integer getAnalysised() {
+        return analysised;
+    }
+
+    public void setAnalysised(Integer analysised) {
+        this.analysised = analysised;
     }
 }

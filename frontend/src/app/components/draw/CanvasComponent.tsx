@@ -19,6 +19,7 @@ interface CanvasComponentProps {
     scale: number;
     onOffsetChange: (offset: { x: number; y: number }) => void;
     onScaleChange: (scale: number) => void;
+    onFirstDrawComplete?: () => void;
 }
 
 
@@ -27,7 +28,8 @@ const CanvasComponent = forwardRef(({
                                             offset,
                                             scale,
                                             onOffsetChange,
-                                            onScaleChange
+                                            onScaleChange,
+                                            onFirstDrawComplete,
                                             }: CanvasComponentProps, ref: any) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const isDragging = useRef(false);
@@ -39,6 +41,8 @@ const CanvasComponent = forwardRef(({
      */
     useImperativeHandle(ref, ()=>({
         getCanvas: () => canvasRef.current,
+        getInserts: () => insertsRef.current,
+        getPipeline: () => tilingRef.current,
     }))
 
     // 事件处理函数
@@ -99,6 +103,8 @@ const CanvasComponent = forwardRef(({
         ctx.stroke();
     }
 
+    const tilingRef = useRef<any[]>([]);
+
     // 绘制平铺图形
     const drawTiling = (ctx: CanvasRenderingContext2D, projectJson: any) => {
         // 绘制线段
@@ -112,7 +118,31 @@ const CanvasComponent = forwardRef(({
         // 绘制文字
         drawMtext(ctx, projectJson?.TYPES?.MTEXT, scale)
         drawText(ctx, projectJson?.TYPES?.TEXT, scale)
+        // 记录预选管道
+        if (firstDraw) {
+            for (const lineElement of projectJson?.TYPES?.LINE) {
+                tilingRef.current.push({
+                    startX: lineElement.start[0],
+                    startY: lineElement.start[1],
+                    endX: lineElement.end[0],
+                    endY: lineElement.end[1],
+                });
+            }
+            for (const lwpolylineElement of projectJson?.TYPES?.LWPOLYLINE) {
+                for (let i = 0; i < lwpolylineElement.points.length - 1; i++) {
+                    tilingRef.current.push({
+                        startX: lwpolylineElement.points[i][0],
+                        startY: lwpolylineElement.points[i][1],
+                        endX: lwpolylineElement.points[i + 1][0],
+                        endY: lwpolylineElement.points[i + 1][1],
+                    })
+                }
+            }
+        }
     }
+
+    const insertsRef = useRef<any[]>([]);
+    const [firstDraw, setFirstDraw] = useState<boolean>(true);
 
     // 绘制插入图形
     const drawInserts = (ctx: CanvasRenderingContext2D, projectJson: any, inserts: any, currentInsertDetail: any, depth: number = 0) => {
@@ -140,7 +170,8 @@ const CanvasComponent = forwardRef(({
             insertDetail.center_pt = handleInsert(originalCenterPt[0], originalCenterPt[1], insertDetail.scale, insertDetail.rotation, insertDetail.ins_pt)
             insertDetail.maxBoxSize = Math.max((insertBox.maxX - insertBox.minX), (insertBox.maxY - insertBox.minY))
             // 插入标注
-            if (projectJson.USED_BLOCKS[inserts[i].blockIndex].showMark) {
+            const invalid = insertBox.maxY === 0 && insertBox.minY === 0 && insertBox.maxX === 0 && insertBox.minX === 0
+            if (projectJson.USED_BLOCKS[inserts[i].blockIndex].showMark && !invalid) {
                 drawText(ctx, [
                     {
                         text_value: `${insertDetail.handle[2]}`,
@@ -168,6 +199,26 @@ const CanvasComponent = forwardRef(({
                         flag: 1
                     }
                 ], scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
+            }
+
+            if (firstDraw) {
+                // 汇总inserts
+                const centerPtX: number = (insertBox.minX + insertBox.maxX) / 2
+                const centerPtY: number = (insertBox.minY + insertBox.maxY) / 2
+                const [handledX, handledY] = handleInsert(centerPtX, centerPtY, insertDetail.scale, insertDetail.rotation, insertDetail.ins_pt)
+                const boxWidth = insertBox.maxX - insertBox.minX
+                const boxHeight = insertBox.maxY - insertBox.minY
+                if (boxWidth > 0 && boxHeight > 0) {
+                    insertsRef.current.push({
+                        handle0: insertDetail.handle[1],
+                        handle1: insertDetail.handle[2],
+                        centerPt: [handledX, handledY],
+                        boxWidth: boxWidth,
+                        boxHeight: boxHeight,
+                        blockHandle0: projectJson.USED_BLOCKS[inserts[i].blockIndex].handle[1],
+                        blockHandle1: projectJson.USED_BLOCKS[inserts[i].blockIndex].handle[2],
+                    })
+                }
             }
 
             // 递归insert
@@ -219,6 +270,12 @@ const CanvasComponent = forwardRef(({
             rotation: 0,
             scale: [1, 1, 1]
         });
+        if (firstDraw) {
+            setFirstDraw(false)
+            if (onFirstDrawComplete) {
+                onFirstDrawComplete(); // 触发回调
+            }
+        }
     };
 
     useEffect(() => {
