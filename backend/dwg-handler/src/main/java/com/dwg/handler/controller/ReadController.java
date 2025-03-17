@@ -1,6 +1,7 @@
 package com.dwg.handler.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.dwg.handler.entity.GraphDto;
 import com.dwg.handler.entity.UploadDwgSt;
 import com.dwg.handler.service.ReadService;
 import com.example.common.dto.ResponseBean;
@@ -34,13 +35,24 @@ public class ReadController {
         }
     }
 
-    // 获取project graph分析结果
+    // 获取project components分析结果
     @GetMapping("/getProjectGraph")
     public ResponseBean<JSONArray> getProjectGraph(@Param("projectId") long projectId) {
         try {
             JSONArray result = readService.getProjectGraph(projectId);
             return ResponseBean.success(result);
         }catch (Exception e){
+            throw new MyException(e.getMessage());
+        }
+    }
+
+    // 获取project 图结构
+    @GetMapping("/getProjectGraphStructure")
+    public ResponseBean<List<GraphDto>> getProjectGraphStructure(@Param("projectId") long projectId) {
+        try {
+            List<GraphDto> result = readService.getProjectGraphStructure(projectId);
+            return ResponseBean.success(result);
+        }catch (Exception e) {
             throw new MyException(e.getMessage());
         }
     }

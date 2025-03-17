@@ -1,8 +1,10 @@
 package com.example.example2060;
 
 import com.dwg.handler.DwgHandlerApplication;
+import com.dwg.handler.dao.InsertStMapper;
 import com.dwg.handler.utils.JsonProcessor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,6 +15,9 @@ class DwgHandlerApplicationTests {
     private String dwgUploadFilePath;
 
     private JsonProcessor jsonProcessor = new JsonProcessor();
+
+    @Autowired
+    InsertStMapper insertStMapper;
 
     @Test
     void contextLoads() {

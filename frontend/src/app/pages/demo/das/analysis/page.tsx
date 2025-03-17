@@ -8,12 +8,13 @@ import TotalControlPanel from "@/app/pages/demo/das/analysis/coms/TotalControlPa
 import ResizableDialog from "@/app/components/ResizableDialog";
 import StdCom from "@/app/pages/demo/das/analysis/coms/panles/StdCom";
 import CurCom from "@/app/pages/demo/das/analysis/coms/panles/CurCom";
-import RelayCom from "@/app/pages/demo/das/analysis/coms/panles/RelayCom";
+import RelayCom, {CytoscapeElement} from "@/app/pages/demo/das/analysis/coms/panles/RelayCom";
 import SvgGetter from "@/app/components/draw/SvgGetter";
 import {createRoot} from "react-dom/client";
 import {err} from "@/app/utils/alerter";
-import {analysisPublicProjectGraphML, getProjectGraph} from "@/app/api/das";
+import {analysisPublicProjectGraphML, getProjectComponents, getProjectGraph} from "@/app/api/das";
 import {checkValidBlock} from "@/app/components/draw/utils/drawCalc";
+import {MyResponse} from "@/app/types/common";
 
 interface AnalysisPageProps {
     projectName: string;
@@ -38,9 +39,9 @@ export default function AnalysisPage() {
     const [scale, setScale] = useState(1);
 
     // 展示Modal TODO all false
+    const [showRelay, setShowRelay] = useState(true);
     const [showStdCom, setShowStd] = useState(false);
-    const [showCurCom, setShowCurCom] = useState(true);
-    const [showRelay, setShowRelay] = useState(false);
+    const [showCurCom, setShowCurCom] = useState(false);
 
     const handleShowStdChange = () => {
         setShowStd(true);
@@ -214,22 +215,71 @@ export default function AnalysisPage() {
     /**
      * 获取解析结果
      */
-    const [currentBlocks, setCurrentBlocks] = useState<any[]>([]);
-    const getAnalysisResult = () => {
+    // 获取解析结果
+    const getAnalysisResults = () => {
+        Promise.all([getAnalysisResultComponents(), getAnalysisResultGraph()]).then(()=>{
+            console.log('获取全部解析结果成功')
+            setLoading(false);
+        }).catch(e => {
+            handleAnalysisFail(e)
+        })
+    }
+    // TODO 获取图解析结果
+    const [currentGraph, setCurrentGraph] = useState<CytoscapeElement[]>([])
+    const any2CytoscapeElement = (data: any) => {
+        const { id, label, type, position, source, target, node, box } = data
+        if (position) {
+            position.y = -position.y
+        }
+        return {
+            data: {
+                id,
+                label,
+                type,
+                source,
+                target,
+            },
+            position,
+            node,
+            box
+        }
+    }
+    const getAnalysisResultGraph = () => {
         const getRes = getProjectGraph(basicInfo.projectId)
-        getRes.then(res => {
-            console.log(res, '获取解析结果')
+        return getRes.then((res: MyResponse) => {
+            if (res.success) {
+                const filteredData = JSON.parse(
+                    JSON.stringify(
+                        res.data.map(any2CytoscapeElement
+                        ), (key, value) => {
+                    return value === null ? undefined : value;
+                }));
+                console.log(filteredData, '获取图解析结果')
+                setCurrentGraph(filteredData)
+                return
+            }
+            throw new Error('获取图结构解析结果失败');
+        }).catch((e:any)=>{
+            throw e
+        })
+    }
+    // 获取块解析结果
+    const [currentBlocks, setCurrentBlocks] = useState<any[]>([]);
+    const getAnalysisResultComponents = () => {
+        const getRes = getProjectComponents(basicInfo.projectId)
+        return getRes.then((res:MyResponse) => {
+            console.log(res, '获取组件解析结果')
             if (res?.success) {
                 setCurrentBlocks(res.data)
                 setLoading(false);
                 return
             }
-            handleAnalysisFail(res.message)
+            throw new Error('获取组件解析结果失败');
         }).catch(e => {
-            handleAnalysisFail(e)
+            throw e;
         })
-
     }
+
 
     /**
      * 全局
@@ -252,14 +302,13 @@ export default function AnalysisPage() {
                 // 提取出块和初筛管道等传递给后端处理
                 const postRes = await analysisBlockAndPipes(projectJson)
                 if (postRes?.success) {
-                    getAnalysisResult()
+                    getAnalysisResults()
                     return
                 }
                 handleAnalysisFail(postRes?.message)
             } else {
                 console.log('已分析，直接展示')
-                // 获取解析结果
-                getAnalysisResult()
+                getAnalysisResults()
             }
         } catch (e) {
             handleAnalysisFail(e)
@@ -295,7 +344,7 @@ export default function AnalysisPage() {
                     changeAllShowMark={changeAllBlockMarks}
                     canvasFocus={handleCanvasFocus}
                 />}
-                {showRelay && <RelayCom/>}
+                {showRelay && <RelayCom sourceElements={currentGraph}/>}
             </ResizableDialog>
         </div>
     );

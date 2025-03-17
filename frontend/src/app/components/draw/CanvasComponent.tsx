@@ -174,7 +174,7 @@ const CanvasComponent = forwardRef(({
             if (projectJson.USED_BLOCKS[inserts[i].blockIndex].showMark && !invalid) {
                 drawText(ctx, [
                     {
-                        text_value: `${insertDetail.handle[2]}`,
+                        text_value: `${projectJson.USED_BLOCKS[inserts[i].blockIndex].name} ${insertDetail.handle[1]}-${insertDetail.handle[2]}`,
                         ins_pt: [
                             insertBox.maxX,
                             insertBox.minY,

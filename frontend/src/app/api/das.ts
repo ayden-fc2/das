@@ -4,8 +4,9 @@ const urls = {
     GET_PUBLIC_PROJECTS: '/dwg-handler/read/getPublicList', // demo获取所有公共项目
     GET_AUTH_ROLE: '/auth-service/getRoles', // 获取用户角色
     GEN_PUBLIC_PROJECT: '/dwg-handler/cop/genAnalysis', // 获取公共项目分析结果 - LibreDWG
-    GEN_PUBLIC_PROJECT_GRAPHML: '/dwg-handler/cop/genAnalysisOverview', // 获取公共项目分析结果 - GraphML
-    GET_PUBLIC_PROJECT_GRAPHML: '/dwg-handler/read/getProjectGraph'
+    GEN_PUBLIC_PROJECT_GRAPHML: '/dwg-handler/cop/genAnalysisOverview', // 二次分析 - GraphML
+    GET_PUBLIC_PROJECT_COMPONENTS: '/dwg-handler/read/getProjectGraph', // 获取分析结果-组件
+    GET_PUBLIC_PROJECT_GRAPH: '/dwg-handler/read/getProjectGraphStructure' // 获取分析结果-图结构
 }
 
 export const getPublicList = ()=> {
@@ -34,11 +35,17 @@ export const analysisPublicProjectGraphML = (postData: any) => {
     return post(urls.GEN_PUBLIC_PROJECT_GRAPHML, postData)
 }
 
-// 获取公共项目分析结果 - GraphML
-export const getProjectGraph = (projectId: number) => {
-    return get(urls.GET_PUBLIC_PROJECT_GRAPHML, {
+// 获取项目分析结果 - 组件
+export const getProjectComponents = (projectId: number) => {
+    return get(urls.GET_PUBLIC_PROJECT_COMPONENTS, {
         projectId,
     })
 }
 
+// 获取项目分析结果 - 图结构
+export const getProjectGraph = (projectId: number) => {
+    return get(urls.GET_PUBLIC_PROJECT_GRAPH, {
+        projectId,
+    })
+}
 
