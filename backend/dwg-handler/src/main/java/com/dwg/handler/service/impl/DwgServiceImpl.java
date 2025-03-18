@@ -16,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class DwgServiceImpl implements DwgService {
@@ -221,35 +219,154 @@ public class DwgServiceImpl implements DwgService {
             }
 
             // Step 2: 迭代遍历vNodes
-            List<VirtualNodeSt> nextRound = new ArrayList<>();
+            List<VirtualNodeSt> addListV = new ArrayList<>();
+            List<VirtualNodeSt> deleteListV = new ArrayList<>();
             while (graphProcessor.checkVirtualNodes(virtualNodeStList)) {
+                addListV.clear();
                 // 先处理所有的虚拟节点，如果在关键节点内，则更新相关管道，删除虚拟节点，最后对管道去重
-                List<VirtualNodeSt> deleteList = new ArrayList<>();
                 for (VirtualNodeSt v : virtualNodeStList) {
-                    for (InsertSt keyNode : keyNodes) {
-                        if (graphProcessor.ponitInNodeBox(keyNode, v)) {
-                            graphProcessor.updateV2Key(v, keyNode, candidatePipes, virtualNodeStList);
-                            deleteList.add(v);
+                    if (v.getFinished() == 0) {
+                        for (InsertSt keyNode : keyNodes) {
+                            if (graphProcessor.ponitInNodeBox(keyNode, v)) {
+                                graphProcessor.updateV2Key(v, keyNode, candidatePipes, virtualNodeStList);
+                                deleteListV.add(v);
+                            }
                         }
                     }
                 }
-                virtualNodeStList.removeAll(deleteList);
+                virtualNodeStList.removeAll(deleteListV);
                 candidatePipes = graphProcessor.uniquePipes(candidatePipes);
-                // 对剩下的虚拟节点去寻找候选边，如果在候选边的端点上，则增加管道，分情况讨论
-                // 如果候选边的另一个端点是已有的虚拟节点，则处理管道，去重
-                // 如果候选边的另一个端点是未知节点，则创建新的虚拟节点以及新的管道
+                // 对剩下的虚拟节点去寻找候选边，如果在候选边的端点上，则分情况讨论
+                for (VirtualNodeSt v : virtualNodeStList) {
+                    if (v.getFinished() == 0) {
+                        for (KeyPipeSt pipe : pipes) {
+                            int ifVNodeInPipe = graphProcessor.vNodeInLine(v, pipe);
+                            if (ifVNodeInPipe >= 0) {
+                                VirtualNodeSt v1 = graphProcessor.getAnotherVNode(pipe, ifVNodeInPipe, virtualNodeStList);
+                                if (v1 != null) {
+                                    // 如果候选边的另一个端点是已有的虚拟节点，则处理管道后添加进管道列表，去重
+                                    KeyPipeSt newPipe = new KeyPipeSt();
+                                    newPipe.setDwgId(projectId);
+                                    newPipe.setKeyPipeId(-1);
+                                    newPipe.setStartX(pipe.getStartX());
+                                    newPipe.setStartY(pipe.getStartY());
+                                    newPipe.setEndX(pipe.getEndX());
+                                    newPipe.setEndY(pipe.getEndY());
+                                    newPipe.setVStartUUID(ifVNodeInPipe == 0 ? v.getUuid() : v1.getUuid());
+                                    newPipe.setVEndUUID(ifVNodeInPipe == 1 ? v.getUuid() : v1.getUuid());
+                                    candidatePipes.add(newPipe);
+                                } else if (graphProcessor.isAnotherNodeDeleted(pipe, ifVNodeInPipe, deleteListV)) {
+                                    // 如果另一个端点是已删除的虚拟节点(key节点)，则不处理管道
+                                } else {
+                                    // 如果候选边的另一个端点是未知节点，则创建新的虚拟节点以及新的管道
+                                    VirtualNodeSt newV = new VirtualNodeSt();
+                                    newV.setDwgId(projectId);
+                                    newV.setUuid(UUID.randomUUID().toString());
+                                    newV.setX(ifVNodeInPipe == 0 ? pipe.getEndX() : pipe.getStartX());
+                                    newV.setY(ifVNodeInPipe == 0 ? pipe.getEndY() : pipe.getStartY());
+                                    newV.setDwgId(projectId);
+                                    newV.setVNodeId(-1);
+                                    addListV.add(newV);
+
+                                    KeyPipeSt newPipe = new KeyPipeSt();
+                                    newPipe.setDwgId(projectId);
+                                    newPipe.setKeyPipeId(-1);
+                                    newPipe.setStartX(pipe.getStartX());
+                                    newPipe.setStartY(pipe.getStartY());
+                                    newPipe.setEndX(pipe.getEndX());
+                                    newPipe.setEndY(pipe.getEndY());
+                                    newPipe.setVStartUUID(ifVNodeInPipe == 0 ? v.getUuid() : newV.getUuid());
+                                    newPipe.setVEndUUID(ifVNodeInPipe == 1 ? v.getUuid() : newV.getUuid());
+                                    candidatePipes.add(newPipe);
+                                }
+                            }
+                        }
+                    }
+                }
+                candidatePipes = graphProcessor.uniquePipes(candidatePipes);
 
                 // 对剩下的虚拟节点，查看它是否在候选边的路径上，如果在，则分情况讨论
-                // 如果该候选边已经在管道库里，继承该管道的属性，拆成两个管道更新管道库，连同候选边库一同更新，对节点进行进一步处理
-                // 如果该候选边不在管道库里，将该候选边拆成两个管道入库，连同候选边库一同更新，增加两个新的虚拟节点
+                ListIterator<VirtualNodeSt> iterator = virtualNodeStList.listIterator();
+                ListIterator<KeyPipeSt> iterator2 = pipes.listIterator();
+                while (iterator.hasNext()) {
+                    VirtualNodeSt v = iterator.next();
+                    if (v.getFinished() == 0) {
+                        while (iterator2.hasNext()) {
+                            KeyPipeSt pipe = iterator2.next();
+                            if (graphProcessor.vNodeOnLineRoad(v, pipe)) {
+                                KeyPipeSt keyPipe = graphProcessor.isPipeListHasPipe(candidatePipes, pipe);
+                                if (keyPipe != null) {
+                                    // 如果该候选边已经在管道库里，继承该管道的属性，拆成两个管道更新管道库，对节点进行进一步处理
+                                    KeyPipeSt newCandidatePipe1 = keyPipe.clone();
+                                    KeyPipeSt newCandidatePipe2 = keyPipe.clone();
+                                    newCandidatePipe1.setVEndUUID(v.getUuid());
+                                    newCandidatePipe1.setEndKeyHandle0(-1);
+                                    newCandidatePipe1.setEndKeyHandle1(-1);
+                                    newCandidatePipe1.setEndX(v.getX());
+                                    newCandidatePipe1.setEndY(v.getY());
+
+                                    newCandidatePipe2.setVStartUUID(v.getUuid());
+                                    newCandidatePipe2.setStartKeyHandle0(-1);
+                                    newCandidatePipe2.setStartKeyHandle1(-1);
+                                    newCandidatePipe2.setStartX(v.getX());
+                                    newCandidatePipe2.setStartY(v.getY());
+
+                                    candidatePipes.remove(keyPipe);
+                                    candidatePipes.add(newCandidatePipe1);
+                                    candidatePipes.add(newCandidatePipe2);
+                                } else {
+                                    // 如果该候选边不在管道库里(端点不可能是删除的keyNode)，增加两个新的虚拟节点（下一轮处理）
+                                    // 增加两个新的虚拟节点
+                                    VirtualNodeSt newV1 = new VirtualNodeSt();
+                                    VirtualNodeSt newV2 = new VirtualNodeSt();
+                                    newV1.setDwgId(projectId);
+                                    newV1.setUuid(UUID.randomUUID().toString());
+                                    newV1.setX(pipe.getStartX());
+                                    newV1.setY(pipe.getStartY());
+                                    newV2.setDwgId(projectId);
+                                    newV2.setUuid(UUID.randomUUID().toString());
+                                    newV2.setX(pipe.getEndX());
+                                    newV2.setY(pipe.getEndY());
+                                    addListV.add(newV1);
+                                    addListV.add(newV2);
+                                }
+
+                                // 处理候选边库更新
+                                KeyPipeSt newPipe1 = pipe.clone();
+                                KeyPipeSt newPipe2 = pipe.clone();
+                                newPipe1.setEndX(v.getX());
+                                newPipe1.setEndY(v.getY());
+
+                                newPipe2.setStartX(v.getX());
+                                newPipe2.setStartY(v.getY());
+
+                                iterator2.remove();
+                                iterator2.add(newPipe1);
+                                iterator2.add(newPipe2);
+                            }
+                        }
+                    }
+                }
+
 
                 // 标记剩下的虚拟节点为最终节点，下次不再处理
                 graphProcessor.markFinalNodes(virtualNodeStList);
                 // 处理完毕，开始下一轮迭代
-                virtualNodeStList.addAll(nextRound);
+                virtualNodeStList.addAll(addListV);
             }
 
             // Step 3: 剪枝，去除无用的虚拟节点和管道
+            while (graphProcessor.checkAloneVirtualNodes(virtualNodeStList, candidatePipes)) {
+                ListIterator<VirtualNodeSt> iterator = virtualNodeStList.listIterator();
+                while (iterator.hasNext()) {
+                    VirtualNodeSt v = iterator.next();
+                    List<KeyPipeSt> relatedPipes = graphProcessor.getNodeRelatedPipes(v, candidatePipes);
+                    if (relatedPipes.size() == 1) {
+                        iterator.remove();
+                        candidatePipes.remove(relatedPipes.get(0));
+                    }
+                }
+            }
 
 
             // Step 4: 入库虚拟节点和管道
@@ -261,7 +378,7 @@ public class DwgServiceImpl implements DwgService {
                 keyPipeStMapper.insertKeyPipeSt(pipe);
             }
 
-            // uploadDwgStMapper.setAnalysed(projectId);
+            uploadDwgStMapper.setAnalysed(projectId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

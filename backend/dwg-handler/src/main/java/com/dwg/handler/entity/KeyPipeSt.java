@@ -1,10 +1,9 @@
 package com.dwg.handler.entity;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class KeyPipeSt {
+public class KeyPipeSt implements Cloneable {
     private long keyPipeId;
     private double startX;
     private double startY;
@@ -19,4 +18,13 @@ public class KeyPipeSt {
 
     private String vStartUUID;
     private String vEndUUID;
+
+    @Override
+    public KeyPipeSt clone() {
+        try {
+            return (KeyPipeSt) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
+    }
 }
