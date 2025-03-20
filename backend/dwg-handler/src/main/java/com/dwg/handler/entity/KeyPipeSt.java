@@ -19,6 +19,102 @@ public class KeyPipeSt implements Cloneable {
     private String vStartUUID;
     private String vEndUUID;
 
+    public long getKeyPipeId() {
+        return keyPipeId;
+    }
+
+    public void setKeyPipeId(long keyPipeId) {
+        this.keyPipeId = keyPipeId;
+    }
+
+    public double getStartX() {
+        return startX;
+    }
+
+    public void setStartX(double startX) {
+        this.startX = startX;
+    }
+
+    public double getStartY() {
+        return startY;
+    }
+
+    public void setStartY(double startY) {
+        this.startY = startY;
+    }
+
+    public double getEndX() {
+        return endX;
+    }
+
+    public void setEndX(double endX) {
+        this.endX = endX;
+    }
+
+    public double getEndY() {
+        return endY;
+    }
+
+    public void setEndY(double endY) {
+        this.endY = endY;
+    }
+
+    public long getDwgId() {
+        return dwgId;
+    }
+
+    public void setDwgId(long dwgId) {
+        this.dwgId = dwgId;
+    }
+
+    public long getStartKeyHandle0() {
+        return startKeyHandle0;
+    }
+
+    public void setStartKeyHandle0(long startKeyHandle0) {
+        this.startKeyHandle0 = startKeyHandle0;
+    }
+
+    public long getStartKeyHandle1() {
+        return startKeyHandle1;
+    }
+
+    public void setStartKeyHandle1(long startKeyHandle1) {
+        this.startKeyHandle1 = startKeyHandle1;
+    }
+
+    public long getEndKeyHandle0() {
+        return endKeyHandle0;
+    }
+
+    public void setEndKeyHandle0(long endKeyHandle0) {
+        this.endKeyHandle0 = endKeyHandle0;
+    }
+
+    public long getEndKeyHandle1() {
+        return endKeyHandle1;
+    }
+
+    public void setEndKeyHandle1(long endKeyHandle1) {
+        this.endKeyHandle1 = endKeyHandle1;
+    }
+
+    public String getVStartUUID() {
+        return vStartUUID;
+    }
+
+    public void setVStartUUID(String vStartUUID) {
+        this.vStartUUID = vStartUUID;
+    }
+
+    public String getVEndUUID() {
+        return vEndUUID;
+    }
+
+    public void setVEndUUID(String vEndUUID) {
+        this.vEndUUID = vEndUUID;
+    }
+
     @Override
     public KeyPipeSt clone() {
         try {
@@ -27,4 +123,5 @@ public class KeyPipeSt implements Cloneable {
             throw new AssertionError(e);
         }
     }
+
 }
