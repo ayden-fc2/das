@@ -15,6 +15,7 @@ import {err} from "@/app/utils/alerter";
 import {analysisPublicProjectGraphML, getProjectComponents, getProjectGraph} from "@/app/api/das";
 import {checkValidBlock} from "@/app/components/draw/utils/drawCalc";
 import {MyResponse} from "@/app/types/common";
+import {Box} from "@mui/material";
 
 interface AnalysisPageProps {
     projectName: string;
@@ -115,12 +116,39 @@ export default function AnalysisPage() {
         const canvas = getComCanvas()
         if (centerPt && maxBoxSize && canvas) {
             const minCanvasSize = Math.min(canvas.width, canvas.height);
-            const scale = minCanvasSize / (maxBoxSize * 10)
-            console.log("focus", centerPt, maxBoxSize, scale)
-            setOffset({ x: -1 *centerPt[0], y: -1 * centerPt[1] });
-            setScale(scale);
+            const newScale = minCanvasSize / (maxBoxSize * 10);
+            const newOffset = { x: -1 * centerPt[0], y: -1 * centerPt[1] };
+
+            let progress = 0;
+            const duration = 500; // 过渡时间（ms）
+            const startTime = performance.now();
+
+            const animate = (time: number) => {
+                progress = Math.min((time - startTime) / duration, 1);
+                setOffset(prev => ({
+                    x: prev.x + (newOffset.x - prev.x) * progress,
+                    y: prev.y + (newOffset.y - prev.y) * progress
+                }));
+                setScale(prev => prev + (newScale - prev) * progress);
+
+                if (progress < 1) requestAnimationFrame(animate);
+            };
+
+            requestAnimationFrame(animate);
+            showFocusRound();
         }
     }, [])
+    const [roundShow, setRoundShow] = useState(false);
+    const timeout = useRef<any>();
+    const showFocusRound = () => {
+        setRoundShow(true);
+        if (timeout.current) {
+            clearTimeout(timeout.current);
+        }
+        timeout.current = setTimeout(() => {
+            setRoundShow(false);
+        }, 1000)
+    }
 
     /**
      * 子组件方法
@@ -224,13 +252,10 @@ export default function AnalysisPage() {
             handleAnalysisFail(e)
         })
     }
-    // TODO 获取图解析结果
+    // 获取图解析结果
     const [currentGraph, setCurrentGraph] = useState<CytoscapeElement[]>([])
     const any2CytoscapeElement = (data: any) => {
-        const { id, label, type, position, source, target, node, box } = data
-        if (position) {
-            position.y = -position.y
-        }
+        const { id, label, type, position, source, target, node, box, stream } = data
         return {
             data: {
                 id,
@@ -241,7 +266,8 @@ export default function AnalysisPage() {
             },
             position,
             node,
-            box
+            box,
+            stream
         }
     }
     const getAnalysisResultGraph = () => {
@@ -271,7 +297,6 @@ export default function AnalysisPage() {
             console.log(res, '获取组件解析结果')
             if (res?.success) {
                 setCurrentBlocks(res.data)
-                setLoading(false);
                 return
             }
             throw new Error('获取组件解析结果失败');
@@ -316,7 +341,7 @@ export default function AnalysisPage() {
     }
 
     return (
-        <div>
+        <Box>
             <CanvasComponent
                 ref={canvasComRef}
                 projectJson={projectJson}
@@ -326,6 +351,11 @@ export default function AnalysisPage() {
                 onScaleChange={setScale}
                 onFirstDrawComplete={firstDrawComplete}
             />
+            {
+                roundShow && (
+                    <Box className={`w-32 h-32 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full border-red-500 border-4 animate-pulse`}></Box>
+                )
+            }
             <TotalControlPanel
                 projectName={basicInfo.projectName}
                 handleShowCurComChange={handleShowCurComChange}
@@ -344,8 +374,11 @@ export default function AnalysisPage() {
                     changeAllShowMark={changeAllBlockMarks}
                     canvasFocus={handleCanvasFocus}
                 />}
-                {showRelay && <RelayCom sourceElements={currentGraph}/>}
+                {showRelay && <RelayCom
+                    sourceElements={currentGraph}
+                    canvasFocus={handleCanvasFocus}
+                />}
             </ResizableDialog>
-        </div>
+        </Box>
     );
 }

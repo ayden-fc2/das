@@ -14,10 +14,10 @@ public interface InsertStMapper {
 
     // 插入一条数据
     @Insert("INSERT INTO insert_st (block_handle0, block_handle1, insert_handle0, " +
-            "insert_handle1, box_width, box_height, center_pt_x, center_pt_y, dwg_id) " +
+            "insert_handle1, box_width, box_height, center_pt_x, center_pt_y, dwg_id, upstream, downstream) " +
             "VALUES (#{insert.blockHandle0}, #{insert.blockHandle1}, " +
             "#{insert.insertHandle0}, #{insert.insertHandle1}, #{insert.boxWidth}, " +
-            "#{insert.boxHeight}, #{insert.centerPtX}, #{insert.centerPtY}, #{insert.dwgId})")
+            "#{insert.boxHeight}, #{insert.centerPtX}, #{insert.centerPtY}, #{insert.dwgId}, #{insert.upstream}, #{insert.downstream})")
     int insertInsertSt(@Param("insert") InsertSt insertSt);
 
     @Select("SELECT * FROM insert_st WHERE dwg_id = #{projectId}")
@@ -31,7 +31,9 @@ public interface InsertStMapper {
             @Result(property = "boxHeight", column = "box_height"),
             @Result(property = "centerPtX", column = "center_pt_x"),
             @Result(property = "centerPtY", column = "center_pt_y"),
-            @Result(property = "dwgId", column = "dwg_id")
+            @Result(property = "dwgId", column = "dwg_id"),
+            @Result(property = "upstream", column = "upstream"),
+            @Result(property = "downstream", column = "downstream")
     })
     List<InsertSt> getInsertStListByDwgId(@Param("projectId") long projectId);
 }

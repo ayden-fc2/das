@@ -55,6 +55,8 @@ public class ReadServiceImpl implements ReadService {
                     insertObj.put("centerY", insertSt.getCenterPtY());
                     insertObj.put("boxWidth", insertSt.getBoxWidth());
                     insertObj.put("boxHeight", insertSt.getBoxHeight());
+                    insertObj.put("upstream", insertSt.getUpstream());
+                    insertObj.put("downstream", insertSt.getDownstream());
                     inserts.add(insertObj);
                 }
             }
@@ -84,10 +86,13 @@ public class ReadServiceImpl implements ReadService {
             GraphDto graphDto = new GraphDto();
             JSONObject position = new JSONObject();
             JSONObject box = new JSONObject();
+            JSONObject stream = new JSONObject();
             position.put("x", insertSt.getCenterPtX());
             position.put("y", insertSt.getCenterPtY());
             box.put("width", insertSt.getBoxWidth());
             box.put("height", insertSt.getBoxHeight());
+            stream.put("upstream", insertSt.getUpstream());
+            stream.put("downstream", insertSt.getDownstream());
             graphDto.setId(insertSt.getInsertHandle0() + "-" + insertSt.getInsertHandle1());
             graphDto.setNode(blockSt);
             assert blockSt != null;
@@ -95,6 +100,7 @@ public class ReadServiceImpl implements ReadService {
             graphDto.setType("key");
             graphDto.setPosition(position);
             graphDto.setBox(box);
+            graphDto.setStream(stream);
             graphDtoList.add(graphDto);
         }
         // 获取所有虚拟节点，处理并添加进集合

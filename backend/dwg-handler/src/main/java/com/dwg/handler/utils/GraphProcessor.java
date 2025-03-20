@@ -374,4 +374,114 @@ public class GraphProcessor {
         }
         return relatedPipes;
     }
+
+    /**
+     * 获取某节点的上游节点（直接）
+     * @param keyNode
+     * @param candidatePipes
+     * @param keyNodes
+     * @return
+     */
+    public List<InsertSt> getUpStreamNodes(InsertSt keyNode, List<KeyPipeSt> candidatePipes, List<InsertSt> keyNodes) {
+        List<InsertSt> result = new ArrayList<>();
+        for (KeyPipeSt candidatePipe : candidatePipes) {
+            if (candidatePipe.getEndKeyHandle0()==keyNode.getInsertHandle0() && candidatePipe.getEndKeyHandle1()==keyNode.getInsertHandle1()) {
+                // 定位相关管道
+                if (candidatePipe.getVStartUUID() == null) {
+                    // 找到了一条key节点
+                    for (InsertSt keyNode1 : keyNodes) {
+                        if (keyNode1.getInsertHandle0() == candidatePipe.getStartKeyHandle0() && keyNode1.getInsertHandle1() == candidatePipe.getStartKeyHandle1()) {
+                            result.add(keyNode1);
+                            break;
+                        }
+                    }
+                } else {
+                    // 找到了一条虚拟节点
+                    List<InsertSt> upStreamNodes = getUpStreamNodesFromVNode(candidatePipe.getVStartUUID(), candidatePipes, keyNodes);
+                    result.addAll(upStreamNodes);
+                }
+            }
+        }
+        return result;
+    }
+
+    List<InsertSt> getUpStreamNodesFromVNode(String uuid, List<KeyPipeSt> candidatePipes, List<InsertSt> keyNodes) {
+        List<InsertSt> result = new ArrayList<>();
+        for (KeyPipeSt candidatePipe : candidatePipes) {
+            String pUUID = candidatePipe.getVEndUUID() == null ? "" : candidatePipe.getVEndUUID();
+            if (pUUID.equals(uuid)) {
+                // 定位相关管道
+                if (candidatePipe.getVStartUUID() == null) {
+                    // 找到了一条key节点
+                    for (InsertSt keyNode1 : keyNodes) {
+                        if (keyNode1.getInsertHandle0() == candidatePipe.getStartKeyHandle0() && keyNode1.getInsertHandle1() == candidatePipe.getStartKeyHandle1()) {
+                            result.add(keyNode1);
+                            break;
+                        }
+                    }
+                } else {
+                    // 找到了一条虚拟节点
+                    List<InsertSt> upStreamNodes = getUpStreamNodesFromVNode(candidatePipe.getVStartUUID(), candidatePipes, keyNodes);
+                    result.addAll(upStreamNodes);
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+    /**
+     * 获取某节点的下游节点（直接）
+     * @param keyNode
+     * @param candidatePipes
+     * @param keyNodes
+     * @return
+     */
+    public List<InsertSt> getDownStreamNodes(InsertSt keyNode, List<KeyPipeSt> candidatePipes, List<InsertSt> keyNodes) {
+        List<InsertSt> result = new ArrayList<>();
+        for (KeyPipeSt candidatePipe : candidatePipes) {
+            if (candidatePipe.getStartKeyHandle0()==keyNode.getInsertHandle0() && candidatePipe.getStartKeyHandle1()==keyNode.getInsertHandle1()) {
+                // 定位相关管道
+                if (candidatePipe.getVEndUUID() == null) {
+                    // 找到了一条key节点
+                    for (InsertSt keyNode1 : keyNodes) {
+                        if (keyNode1.getInsertHandle0() == candidatePipe.getEndKeyHandle0() && keyNode1.getInsertHandle1() == candidatePipe.getEndKeyHandle1()) {
+                            result.add(keyNode1);
+                            break;
+                        }
+                    }
+                } else {
+                    // 找到了一条虚拟节点
+                    List<InsertSt> downStreamNodes = getDownStreamNodesFromVNode(candidatePipe.getVEndUUID(), candidatePipes, keyNodes);
+                    result.addAll(downStreamNodes);
+                }
+            }
+        }
+        return result;
+    }
+
+    List<InsertSt> getDownStreamNodesFromVNode(String uuid, List<KeyPipeSt> candidatePipes, List<InsertSt> keyNodes) {
+        List<InsertSt> result = new ArrayList<>();
+        for (KeyPipeSt candidatePipe : candidatePipes) {
+            String pUUID = candidatePipe.getVStartUUID() == null ? "" : candidatePipe.getVStartUUID();
+            if (pUUID.equals(uuid)) {
+                // 定位相关管道
+                if (candidatePipe.getVEndUUID() == null) {
+                    // 找到了一条key节点
+                    for (InsertSt keyNode1 : keyNodes) {
+                        if (keyNode1.getInsertHandle0() == candidatePipe.getEndKeyHandle0() && keyNode1.getInsertHandle1() == candidatePipe.getEndKeyHandle1()) {
+                            result.add(keyNode1);
+                            break;
+                        }
+                    }
+                } else {
+                    // 找到了一条虚拟节点
+                    List<InsertSt> downStreamNodes = getDownStreamNodesFromVNode(candidatePipe.getVEndUUID(), candidatePipes, keyNodes);
+                    result.addAll(downStreamNodes);
+                }
+            }
+        }
+        return result;
+    }
 }

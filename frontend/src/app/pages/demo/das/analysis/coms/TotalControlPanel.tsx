@@ -35,9 +35,9 @@ const TotalControlPanel: React.FC<TotalControlPanelProps> = ({
             {expanded && (
                 <>
                     <h2 className="text-lg font-bold text-blue-600 mx-2 my-auto w-36 text-center overflow-hidden whitespace-nowrap text-ellipsis">{projectName}</h2>
-                    <Button variant="contained" color="success" onClick={handleShowRelayChange}>Graphical Structure</Button>
-                    <Button variant="contained" color="primary" onClick={handleShowCurComChange}>Current Components</Button>
-                    <Button variant="contained" color="secondary" onClick={handleShowStdChange}>Standard Components</Button>
+                    <Button variant="contained" color="primary" onClick={handleShowCurComChange}>Blocks Overview</Button>
+                    <Button variant="contained" color="success" onClick={handleShowRelayChange}>Graphical Structure Analysis</Button>
+                    {/*<Button variant="contained" color="secondary" onClick={handleShowStdChange}>Standard Components</Button>*/}
                 </>
             )}
         </div>

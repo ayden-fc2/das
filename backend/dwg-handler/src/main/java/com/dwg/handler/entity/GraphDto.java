@@ -13,5 +13,6 @@ public class GraphDto {
     private String target;
     private BlockSt node;
     private JSONObject box;
+    private JSONObject stream;
 }
 

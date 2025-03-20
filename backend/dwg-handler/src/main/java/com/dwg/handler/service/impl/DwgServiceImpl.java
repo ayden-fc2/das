@@ -109,11 +109,12 @@ public class DwgServiceImpl implements DwgService {
     public boolean genGrahpML(int userId, JSONArray blockData, JSONArray insertsData, JSONArray pipesData, Long projectId) {
         try {
             List<InsertSt> keyNodes = new ArrayList<>();
-            // 分别入库 blockData, insertsData
+            // 入库 blockData
             blockStMapper.deleteByDwgId(projectId);
             insertStMapper.deleteByDwgId(projectId);
             keyPipeStMapper.deleteByDwgId(projectId);
             virtualNodeStMapper.deleteByDwgId(projectId);
+            // TODO: 通过LLM获取节点类型
             for (int i = 0; i < blockData.size(); i++) {
                 JSONObject block = blockData.getJSONObject(i);
                 BlockSt blockSt = new BlockSt();
@@ -139,10 +140,9 @@ public class DwgServiceImpl implements DwgService {
                 insertSt.setBoxHeight(insert.getDouble("boxHeight"));
                 insertSt.setCenterPtX(insert.getJSONArray("centerPt").getDouble(0));
                 insertSt.setCenterPtY(insert.getJSONArray("centerPt").getDouble(1));
-                insertStMapper.insertInsertSt(insertSt);
                 keyNodes.add(insertSt);
             }
-            // TODO: 图算法处理pipesData，得到graph结构，以及insert间的上下游关系
+            // 图算法处理pipesData，得到graph结构，以及insert间的上下游关系
             // Step 0: 获取全部候选边
             List<KeyPipeSt> pipes = new ArrayList<>();
             List<KeyPipeSt> candidatePipes = new ArrayList<>();
@@ -287,10 +287,10 @@ public class DwgServiceImpl implements DwgService {
 
                 // 对剩下的虚拟节点，查看它是否在候选边的路径上，如果在，则分情况讨论
                 ListIterator<VirtualNodeSt> iterator = virtualNodeStList.listIterator();
-                ListIterator<KeyPipeSt> iterator2 = pipes.listIterator();
                 while (iterator.hasNext()) {
                     VirtualNodeSt v = iterator.next();
                     if (v.getFinished() == 0) {
+                        ListIterator<KeyPipeSt> iterator2 = pipes.listIterator();
                         while (iterator2.hasNext()) {
                             KeyPipeSt pipe = iterator2.next();
                             if (graphProcessor.vNodeOnLineRoad(v, pipe)) {
@@ -368,10 +368,29 @@ public class DwgServiceImpl implements DwgService {
                 }
             }
 
+            // Step 4: 获得Key节点的邻接矩阵结构
+            for (InsertSt keyNode : keyNodes) {
+                List<InsertSt> upStreamNodes = graphProcessor.getUpStreamNodes(keyNode, candidatePipes, keyNodes);
+                List<InsertSt> downStreamNodes = graphProcessor.getDownStreamNodes(keyNode, candidatePipes, keyNodes);
+                String upStreamStr = "";
+                String downStreamStr = "";
+                for (InsertSt node : upStreamNodes) {
+                    upStreamStr += node.getInsertHandle0() + "-" + node.getInsertHandle1() + ",";
+                }
+                for (InsertSt node : downStreamNodes) {
+                    downStreamStr += node.getInsertHandle0() + "-" + node.getInsertHandle1() + ",";
+                }
+                keyNode.setUpstream(upStreamStr);
+                keyNode.setDownstream(downStreamStr);
+            }
 
-            // Step 4: 入库虚拟节点和管道
+            // Step 5: 入库虚拟节点，关键节点和管道
             for (VirtualNodeSt v : virtualNodeStList) {
                 virtualNodeStMapper.insertVirtualNodeSt(v);
+            }
+
+            for (InsertSt keyNode : keyNodes) {
+                insertStMapper.insertInsertSt(keyNode);
             }
 
             for (KeyPipeSt pipe : candidatePipes) {

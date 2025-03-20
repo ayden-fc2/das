@@ -1,9 +1,10 @@
 "use client"
 
 import {
-    Box, Checkbox,
+    Box, Button, Checkbox,
     Collapse,
     IconButton,
+    List, ListItem, ListItemText,
     Paper,
     Table,
     TableBody,
@@ -18,6 +19,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import {calcComBox, checkValidBlock} from "@/app/components/draw/utils/drawCalc";
 import SvgRender from "@/app/components/draw/SvgRender";
+import {block} from "sharp";
 
 interface CurComProps {
     usedBlocks: any[],
@@ -97,11 +99,10 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
     /**
      * 子组件
      */
-
     const Row = React.memo((props: { block: any; expanded: boolean; onToggle: () => void }) => {
         const { block, expanded, onToggle } = props;
         const [filterInput, setFilterInput] = React.useState('');
-        const [filteredHandles, setFilteredHandles] = React.useState<number[] | null>(null);
+        const [filteredHandles, setFilteredHandles] = React.useState<string[] | null>(null);
 
         const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             const input = e.target.value;
@@ -109,19 +110,33 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
             // 解析输入为数字数组，过滤无效值
             const handles = input
                 .split(' ')
-                .map(str => parseInt(str.trim(), 10))
-                .filter(num => !isNaN(num));
             setFilteredHandles(handles.length > 0 ? handles : null);
         };
 
         // 生成过滤后的插入项列表
-        const filteredInserts = block.inserts
+        const { filteredInserts, remainingInserts } = block.inserts
             .map((insert: any, originalIndex: number) => ({ insert, originalIndex }))
-            .filter(({ insert }: any) =>
-                {
-                    return !filteredHandles || filteredHandles.includes(insert.handle1)
+            .reduce(
+                (acc:any, { insert, originalIndex }: any) => {
+                    if (!filteredHandles) {
+                        acc.remainingInserts.push({ insert, originalIndex });
+                    } else {
+                        const h = insert.handle0 + '-' + insert.handle1;
+                        if (filteredHandles.includes(h)) {
+                            acc.filteredInserts.push({ insert, originalIndex });
+                        } else {
+                            acc.remainingInserts.push({ insert, originalIndex });
+                        }
+                    }
+                    return acc;
+                },
+                { filteredInserts: [], remainingInserts: [] } as {
+                    filteredInserts: { insert: any; originalIndex: number }[];
+                    remainingInserts: { insert: any; originalIndex: number }[];
                 }
             );
+
+
 
         //中心点
         const getCenterPt = (centerX: number, centerY: number) => {
@@ -180,6 +195,7 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
                                         <TableRow>
                                             <TableCell align="center">Handle</TableCell>
                                             <TableCell align="center">Center Position</TableCell>
+                                            <TableCell align="center">Operation</TableCell>
                                             <TableCell align="center">Upstream</TableCell>
                                             <TableCell align="center">Downstream</TableCell>
                                         </TableRow>
@@ -187,11 +203,52 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
                                     <TableBody>
                                         {filteredInserts.map(({ insert, originalIndex }: {insert: any, originalIndex: any}) => (
                                             getCenterPt(insert.centerX, insert.centerY) &&
+                                            <TableRow key={originalIndex} className={`bg-red-100`}>
+                                                <TableCell align="center">{insert.handle0}-{insert.handle1}</TableCell>
+                                                <TableCell align="center">{getCenterPt(insert.centerX, insert.centerY)}</TableCell>
+                                                <TableCell align="center">
+                                                    <Button
+                                                        className="w-full"
+                                                        onClick={() => focusInnerClick([insert.centerX, insert.centerY], Math.max(insert.boxWidth, insert.boxHeight))}
+                                                        size="small">
+                                                        focus
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <List dense={true}>
+                                                        {generateStream(insert.upstream)}
+                                                    </List>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <List dense={true}>
+                                                        {generateStream(insert.downstream)}
+                                                    </List>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                        {remainingInserts.map(({ insert, originalIndex }: {insert: any, originalIndex: any}) => (
+                                            getCenterPt(insert.centerX, insert.centerY) &&
                                             <TableRow key={originalIndex}>
-                                                <TableCell align="center">{insert.handle1}</TableCell>
-                                                <TableCell onClick={() => focusInnerClick([insert.centerX, insert.centerY], Math.max(insert.boxWidth, insert.boxHeight))} align="center">{getCenterPt(insert.centerX, insert.centerY)}</TableCell>
-                                                <TableCell align="center">TODO</TableCell>
-                                                <TableCell align="center">TODO</TableCell>
+                                                <TableCell align="center">{insert.handle0}-{insert.handle1}</TableCell>
+                                                <TableCell align="center">{getCenterPt(insert.centerX, insert.centerY)}</TableCell>
+                                                <TableCell align="center">
+                                                    <Button
+                                                        className="w-full"
+                                                        onClick={() => focusInnerClick([insert.centerX, insert.centerY], Math.max(insert.boxWidth, insert.boxHeight))}
+                                                        size="small">
+                                                        focus
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <List dense={true}>
+                                                        {generateStream(insert.upstream)}
+                                                    </List>
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <List dense={true}>
+                                                        {generateStream(insert.downstream)}
+                                                    </List>
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -203,6 +260,33 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
             </React.Fragment>
         )
     })
+
+    // 生成List
+    function generateStream(upstream: any) {
+        const items = upstream.split(',');
+        return items.map((item: any, index: number) => {
+            if(item) {
+                const blockHandle0 = item.split('-')[0]
+                const blockHandle1 = item.split('-')[1]
+                let blockName = ''
+                let insert = null
+                for (const b of usedBlocks) {
+                    for (const i of b.inserts) {
+                        if (i.handle0 === parseInt(blockHandle0) && i.handle1 === parseInt(blockHandle1)) {
+                            blockName = b.blockName
+                            insert = i
+                            break
+                        }
+                    }
+                }
+                return (
+                    <ListItem key={index}>
+                        <Button className="w-full" size="small" onClick={() => focusInnerClick([insert.centerX, insert.centerY], Math.max(insert.boxWidth, insert.boxHeight))}>{blockName} {item}</Button>
+                    </ListItem>
+                )
+            }
+        })
+    }
 
     return (
         <Box className={`w-full h-full text-black overscroll-y-auto overflow-x-hidden`}>
@@ -219,7 +303,7 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
                             <TableCell align="center">Name</TableCell>
                             <TableCell align="center">Preview</TableCell>
                             <TableCell align="center">Inserts Number</TableCell>
-                            <TableCell align="center">AI Recognition</TableCell>
+                            <TableCell align="center">Type Inference</TableCell>
                             <TableCell align="center">
                                 Show Tags
                                 <Checkbox checked={allChecked} onClick={() => handleChangeAllShowMark(!!allChecked)} />
