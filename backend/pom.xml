@@ -12,10 +12,10 @@
     <modules>
         <!-- eureka port 2072 -->
         <module>service-discovery</module>
-        <!-- auth port 2074 -->
-        <module>auth-service</module>
         <!-- zuul port 2073 -->
         <module>api-gateway</module>
+        <!-- auth port 2074 -->
+        <module>auth-service</module>
         <!-- file-manage -->
         <module>file-manage</module>
 <!--        <module>example2060</module>-->
