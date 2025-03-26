@@ -164,8 +164,11 @@ const CanvasComponent = forwardRef(({
             drawArc(ctx, blockEntities.TYPES.ARC, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawMtext(ctx, blockEntities.TYPES.MTEXT, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
             drawText(ctx, blockEntities.TYPES.TEXT, scale, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
-
-            const insertBox = calcComBox(blockEntities.TYPES)
+            let debug = false
+            if (insertDetail.handle[2] === 556166) {
+                debug = true
+            }
+            const insertBox = calcComBox(blockEntities.TYPES, insertDetail.rotation, insertDetail.scale, debug)
             const originalCenterPt = [(insertBox.minX + insertBox.maxX) / 2, (insertBox.minY + insertBox.maxY) / 2]
             insertDetail.center_pt = handleInsert(originalCenterPt[0], originalCenterPt[1], insertDetail.scale, insertDetail.rotation, insertDetail.ins_pt)
             insertDetail.maxBoxSize = Math.max((insertBox.maxX - insertBox.minX), (insertBox.maxY - insertBox.minY))

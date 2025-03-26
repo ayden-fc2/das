@@ -176,7 +176,7 @@ export default function Page() {
                                 disabled={!roleContext.role?.includes(ROLE_TYPE.S_MANAGER)}
                                 apiUrl="/file-manage/dwg/upload"
                                 maxFiles={1}
-                                acceptTypes=".dwg .DWG"
+                                acceptTypes=".dwg"
                                 onSuccess={handleFileChange}  // 上传成功后的回调函数
                                 key={uploadKey} // 提交后重置组件
                             />
