@@ -10,7 +10,6 @@ import com.dwg.handler.utils.JsonProcessor;
 import com.example.common.exception.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +46,7 @@ public class DwgServiceImpl implements DwgService {
 
     @Autowired
     VirtualNodeStMapper virtualNodeStMapper;
-    @Autowired
-    private KeyProperties keyProperties;
+
 
     // 使用libreDWG生成JSON文件
     @Override
@@ -114,7 +112,6 @@ public class DwgServiceImpl implements DwgService {
             insertStMapper.deleteByDwgId(projectId);
             keyPipeStMapper.deleteByDwgId(projectId);
             virtualNodeStMapper.deleteByDwgId(projectId);
-            // TODO: 通过LLM获取节点类型
             for (int i = 0; i < blockData.size(); i++) {
                 JSONObject block = blockData.getJSONObject(i);
                 BlockSt blockSt = new BlockSt();
@@ -143,6 +140,12 @@ public class DwgServiceImpl implements DwgService {
                 keyNodes.add(insertSt);
             }
             // 图算法处理pipesData，得到graph结构，以及insert间的上下游关系
+            double errorBase = 0;
+            for (InsertSt insertSt : keyNodes) {
+                errorBase += insertSt.getBoxWidth() + insertSt.getBoxHeight();
+            }
+            errorBase = errorBase / keyNodes.size();
+            System.out.println("errorBase: " + errorBase);
             // Step 0: 获取全部候选边
             List<KeyPipeSt> pipes = new ArrayList<>();
             List<KeyPipeSt> candidatePipes = new ArrayList<>();
@@ -161,7 +164,7 @@ public class DwgServiceImpl implements DwgService {
             // Step 1: 首次遍历keyNodes，得到第一层虚拟节点
             for (InsertSt keyNode : keyNodes) {
                 for (KeyPipeSt pipe : pipes) {
-                    int result = graphProcessor.inNodeBox(keyNode, pipe);
+                    int result = graphProcessor.inNodeBox(keyNode, pipe, errorBase);
                     if (result == 0) {
                         // 起点在关键节点内
                         // 入库虚拟节点
@@ -171,7 +174,7 @@ public class DwgServiceImpl implements DwgService {
                         v.setUuid(UUID.randomUUID().toString());
                         v.setX(pipe.getEndX());
                         v.setY(pipe.getEndY());
-                        String vUUID = graphProcessor.hasVNode(v, virtualNodeStList);
+                        String vUUID = graphProcessor.hasVNode(v, virtualNodeStList, errorBase);
                         if (vUUID == null || vUUID.isEmpty()) {
                             virtualNodeStList.add(v);
                             vUUID = v.getUuid();
@@ -197,7 +200,7 @@ public class DwgServiceImpl implements DwgService {
                         v1.setUuid(UUID.randomUUID().toString());
                         v1.setX(pipe.getStartX());
                         v1.setY(pipe.getStartY());
-                        String v1UUID = graphProcessor.hasVNode(v1, virtualNodeStList);
+                        String v1UUID = graphProcessor.hasVNode(v1, virtualNodeStList, errorBase);
                         if (v1UUID == null || v1UUID.isEmpty()) {
                             virtualNodeStList.add(v1);
                             v1UUID = v1.getUuid();
@@ -227,7 +230,7 @@ public class DwgServiceImpl implements DwgService {
                 for (VirtualNodeSt v : virtualNodeStList) {
                     if (v.getFinished() == 0) {
                         for (InsertSt keyNode : keyNodes) {
-                            if (graphProcessor.ponitInNodeBox(keyNode, v)) {
+                            if (graphProcessor.ponitInNodeBox(keyNode, v, errorBase)) {
                                 graphProcessor.updateV2Key(v, keyNode, candidatePipes, virtualNodeStList);
                                 deleteListV.add(v);
                             }
@@ -240,9 +243,9 @@ public class DwgServiceImpl implements DwgService {
                 for (VirtualNodeSt v : virtualNodeStList) {
                     if (v.getFinished() == 0) {
                         for (KeyPipeSt pipe : pipes) {
-                            int ifVNodeInPipe = graphProcessor.vNodeInLine(v, pipe);
+                            int ifVNodeInPipe = graphProcessor.vNodeInLine(v, pipe, errorBase);
                             if (ifVNodeInPipe >= 0) {
-                                VirtualNodeSt v1 = graphProcessor.getAnotherVNode(pipe, ifVNodeInPipe, virtualNodeStList);
+                                VirtualNodeSt v1 = graphProcessor.getAnotherVNode(pipe, ifVNodeInPipe, virtualNodeStList, errorBase);
                                 if (v1 != null) {
                                     // 如果候选边的另一个端点是已有的虚拟节点，则处理管道后添加进管道列表，去重
                                     KeyPipeSt newPipe = new KeyPipeSt();
@@ -255,7 +258,7 @@ public class DwgServiceImpl implements DwgService {
                                     newPipe.setVStartUUID(ifVNodeInPipe == 0 ? v.getUuid() : v1.getUuid());
                                     newPipe.setVEndUUID(ifVNodeInPipe == 1 ? v.getUuid() : v1.getUuid());
                                     candidatePipes.add(newPipe);
-                                } else if (graphProcessor.isAnotherNodeDeleted(pipe, ifVNodeInPipe, deleteListV)) {
+                                } else if (graphProcessor.isAnotherNodeDeleted(pipe, ifVNodeInPipe, deleteListV, errorBase)) {
                                     // 如果另一个端点是已删除的虚拟节点(key节点)，则不处理管道
                                 } else {
                                     // 如果候选边的另一个端点是未知节点，则创建新的虚拟节点以及新的管道
@@ -293,8 +296,8 @@ public class DwgServiceImpl implements DwgService {
                         ListIterator<KeyPipeSt> iterator2 = pipes.listIterator();
                         while (iterator2.hasNext()) {
                             KeyPipeSt pipe = iterator2.next();
-                            if (graphProcessor.vNodeOnLineRoad(v, pipe)) {
-                                KeyPipeSt keyPipe = graphProcessor.isPipeListHasPipe(candidatePipes, pipe);
+                            if (graphProcessor.vNodeOnLineRoad(v, pipe, errorBase)) {
+                                KeyPipeSt keyPipe = graphProcessor.isPipeListHasPipe(candidatePipes, pipe, errorBase);
                                 if (keyPipe != null) {
                                     // 如果该候选边已经在管道库里，继承该管道的属性，拆成两个管道更新管道库，对节点进行进一步处理
                                     KeyPipeSt newCandidatePipe1 = keyPipe.clone();
@@ -347,6 +350,7 @@ public class DwgServiceImpl implements DwgService {
                         }
                     }
                 }
+                candidatePipes = graphProcessor.uniquePipes(candidatePipes);
 
 
                 // 标记剩下的虚拟节点为最终节点，下次不再处理
@@ -369,9 +373,13 @@ public class DwgServiceImpl implements DwgService {
             }
 
             // Step 4: 获得Key节点的邻接矩阵结构
+            Map<String, InsertSt> keyNodeMap = new HashMap<>();
+            for (InsertSt node : keyNodes) {
+                keyNodeMap.put(node.getInsertHandle0() + "-" + node.getInsertHandle1(), node);
+            }
             for (InsertSt keyNode : keyNodes) {
-                List<InsertSt> upStreamNodes = graphProcessor.getUpStreamNodes(keyNode, candidatePipes, keyNodes);
-                List<InsertSt> downStreamNodes = graphProcessor.getDownStreamNodes(keyNode, candidatePipes, keyNodes);
+                List<InsertSt> upStreamNodes = graphProcessor.getUpStreamNodes(keyNode, candidatePipes, keyNodes, keyNodeMap);
+                List<InsertSt> downStreamNodes = graphProcessor.getDownStreamNodes(keyNode, candidatePipes, keyNodes, keyNodeMap);
                 String upStreamStr = "";
                 String downStreamStr = "";
                 for (InsertSt node : upStreamNodes) {
@@ -397,7 +405,8 @@ public class DwgServiceImpl implements DwgService {
                 keyPipeStMapper.insertKeyPipeSt(pipe);
             }
 
-            uploadDwgStMapper.setAnalysed(projectId);
+            // TODO: 入库分析结果
+//            uploadDwgStMapper.setAnalysed(projectId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

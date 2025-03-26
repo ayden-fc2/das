@@ -34,25 +34,6 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
         canvasFocus(centerPt, maxBoxSize)
     }
 
-    const getDynamicScale = (block: any) => {
-        // 获取实体包围盒尺寸
-        const entities = block.original_entities.TYPES;
-        const { minX, maxX, minY, maxY } = calcComBox(entities);
-        const contentWidth = maxX - minX;
-        const contentHeight = maxY - minY;
-
-        // 容器可用尺寸（144x128 对应 tailwind 的 w-36 h-32）
-        const containerWidth = 144;
-        const containerHeight = 128;
-
-        // 计算缩放比例（保留5%边距）
-        const widthRatio = (containerWidth * 0.95) / contentWidth;
-        const heightRatio = (containerHeight * 0.95) / contentHeight;
-
-        // 取最小比例确保完整显示
-        return Math.min(widthRatio, heightRatio);
-    };
-
     /**
      * 子组件管理
      */
@@ -295,7 +276,7 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
                 <span className="ml-2 text-gray-500">( total: {usedBlocks?.length} )</span>
             </Box>
 
-            <TableContainer component={Paper}>
+            <Box>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow>
@@ -321,7 +302,7 @@ const CurCom = React.memo(({usedBlocks, changeShowMark, changeAllShowMark, canva
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </Box>
         </Box>
     )
 })

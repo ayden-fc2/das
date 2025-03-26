@@ -85,6 +85,20 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
         }
         return colors.current.get(label);
     }
+    // 初始化图形尺寸
+    const errorBase = useRef<number>(200);
+    const initErrorBase = (elements: CytoscapeElement[]) => {
+        let eb = 0
+        let boxNumber = 0
+        for(let i = 0; i < elements.length; i++) {
+            if (elements[i]?.box) {
+                eb += elements[i].box.width + elements[i].box.height
+                boxNumber++
+            }
+        }
+        eb = eb / boxNumber
+        errorBase.current = eb
+    }
 
     // 节点和连线样式
     const stylesheet = [
@@ -94,10 +108,13 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
                 selector: `node[id='${element.data.id}']`, // 根据 id 选择节点
                 style: {
                     "background-color": getNodeColorByLabel(element.data.label), // 使用 data.color
+                    // "label": element.data.label + ' ' + element.data.id, // 显示 label
                     "shape": "ellipse", // 节点形状为圆形
-                    "label": element.data.label + ' ' + element.data.id, // 显示 label
                     "width": Math.min(element.box.width, element.box.height),
                     "height": Math.min(element.box.height, element.box.width),
+                    // "shape": "round-rectangle", // 节点形状为圆形
+                    // "width": element.box.width,
+                    // "height": element.box.height,
                     "font-size": (Math.min(element.box.width, element.box.height) / 2),
                 },
             })),
@@ -107,25 +124,26 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
                 "background-color": "#666",
                 "shape": "ellipse",
                 "label": "data(label)",
-                "width": 10,
-                "height": 10,
+                "width": errorBase.current * 0.05,
+                "height": errorBase.current * 0.05,
             },
         },
         {
             selector: "edge", // 边
             style: {
-                "width": 2,
+                "width": errorBase.current * 0.01,
                 "line-color": "#6b9aff88",
                 "curve-style": "bezier",
                 "target-arrow-shape": "triangle",
+                "arrow-scale": errorBase.current * 0.01
             },
         },
         {
             selector: 'node.focused', // 选中节点样式
             style: {
-                'border-width': 3,
+                'border-width': errorBase.current * 0.02,
                 'border-color': '#f3f4f6',
-                'outline-width': 4,
+                'outline-width': errorBase.current * 0.02,
                 'outline-color': 'red',
             },
         },
@@ -205,9 +223,10 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
     /**
      * 全局方法
      */
-    const [currentMode, setCurrentMode] = useState("fault");
+    const [currentMode, setCurrentMode] = useState("info");
     useEffect(() => {
         initElementsColor(sourceElements)
+        initErrorBase(sourceElements)
         setElements(sourceElements);
     }, [sourceElements])
 
