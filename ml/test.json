@@ -1,0 +1,163 @@
+{
+    "graph_name": "graph_27",
+    "nodes": [
+      {
+        "id": 0,
+        "x": -0.08149178293885952,
+        "y": 0.021821759335869478,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0,
+        "in_degree": 0,
+        "betweenness": 0.0,
+        "closeness": 0.0
+      },
+      {
+        "id": 1,
+        "x": -0.006811003736676727,
+        "y": 0.39860030598901547,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0,
+        "in_degree": 1,
+        "betweenness": 0.0278,
+        "closeness": 0.1111
+      },
+      {
+        "id": 2,
+        "x": -0.1952976183705236,
+        "y": 0.23439647868438065,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0.0,
+        "in_degree": 1,
+        "betweenness": 0.0694,
+        "closeness": 0.1481
+      },
+      {
+        "id": 3,
+        "x": 0.2548279170317299,
+        "y": 1.0,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0.0,
+        "in_degree": 1,
+        "betweenness": 0.0556,
+        "closeness": 0.1667
+      },
+      {
+        "id": 4,
+        "x": 0.34994931108839994,
+        "y": 0.48137252981529843,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0.0,
+        "in_degree": 2,
+        "betweenness": 0.0833,
+        "closeness": 0.254
+      },
+      {
+        "id": 5,
+        "x": 0.1771098098783442,
+        "y": 0.08670841894867358,
+        "is_anomalous_node": true,
+        "is_fault_confidence": 0.0,
+        "in_degree": 3,
+        "betweenness": 0.1389,
+        "closeness": 0.3472
+      },
+      {
+        "id": 6,
+        "x": 0.11584160150695537,
+        "y": -0.4956778561312097,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0.0,
+        "in_degree": 1,
+        "betweenness": 0.0972,
+        "closeness": 0.2857
+      },
+      {
+        "id": 7,
+        "x": -0.4934876177901444,
+        "y": -0.6183494862928105,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0.0,
+        "in_degree": 2,
+        "betweenness": 0.0694,
+        "closeness": 0.25
+      },
+      {
+        "id": 8,
+        "x": -0.18356940583351897,
+        "y": -0.4473793820180872,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0.0,
+        "in_degree": 2,
+        "betweenness": 0.1111,
+        "closeness": 0.3951
+      },
+      {
+        "id": 9,
+        "x": 0.06292878916429304,
+        "y": -0.6614927683311307,
+        "is_anomalous_node": false,
+        "is_fault_confidence": 0.0,
+        "in_degree": 1,
+        "betweenness": 0.0,
+        "closeness": 0.3333
+      }
+    ],
+    "edges": [
+      {
+        "source": 0,
+        "target": 1
+      },
+      {
+        "source": 0,
+        "target": 5
+      },
+      {
+        "source": 0,
+        "target": 7
+      },
+      {
+        "source": 0,
+        "target": 4
+      },
+      {
+        "source": 1,
+        "target": 2
+      },
+      {
+        "source": 1,
+        "target": 5
+      },
+      {
+        "source": 2,
+        "target": 3
+      },
+      {
+        "source": 2,
+        "target": 7
+      },
+      {
+        "source": 3,
+        "target": 4
+      },
+      {
+        "source": 4,
+        "target": 5
+      },
+      {
+        "source": 5,
+        "target": 6
+      },
+      {
+        "source": 6,
+        "target": 8
+      },
+      {
+        "source": 7,
+        "target": 8
+      },
+      {
+        "source": 8,
+        "target": 9
+      }
+    ]
+  }

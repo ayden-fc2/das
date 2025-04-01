@@ -7,7 +7,7 @@ public interface SignService {
 
     ResponseBean getPhoneCode(String phoneNum, int mode);
 
-    ResponseBean signUp(String phoneNum, int mode, String code, String password);
+    ResponseBean signUp(String phoneNum, int mode, String code, String password, String name);
 
     ResponseBean resetPassword(String phoneNum, int mode, String code, String newPassword);
 

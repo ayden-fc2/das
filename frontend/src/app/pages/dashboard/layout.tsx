@@ -8,19 +8,19 @@ import {
     Menu,
     Home,
     People,
-    AddCircle, AlignHorizontalRight, CloudQueue, CrisisAlert, DoneAll, Logout,
+    AddCircle, AlignHorizontalRight, CloudQueue, CrisisAlert, DoneAll, Logout, AddCircleOutlined, AddCircleOutline,
 } from '@mui/icons-material';
 import {Box, Typography} from "@mui/material";
 
 const spaceNavData = [
-    { icon: <CloudQueue />, label: 'Joined Spaces', path: '/spaces' }, // 增删改自己管理的space， 查自己管理的/自己加入的
-    { icon: <AddCircle />, label: 'New Space', path: '/new-space' }, // 查所有的Space并申请加入，可以根据Org筛选
-    { icon: <DoneAll />, label: 'Requests', path: '/join-request' }, //批准/拒绝加入请求，查看自己的所有请求
+    { icon: <CloudQueue />, label: 'My Spaces', path: '/spaces' }, // 增删改自己管理的space， 查自己管理的/自己加入的
+    { icon: <AddCircleOutline />, label: 'New Space', path: '/new-space' }, // 查所有的Space并申请加入，可以根据Org筛选
+    // { icon: <DoneAll />, label: 'Requests', path: '/join-request' }, //批准/拒绝加入请求，查看自己的所有请求
 ];
 
 const projectNavData = [
     { icon: <AlignHorizontalRight />, label: 'Analysis', path: '/project-analysis' }, // 核心分析
-    { icon: <CrisisAlert />, label: 'Faults Tracing', path: '/faults-tracing' }, // 故障记录
+    // { icon: <CrisisAlert />, label: 'Faults Tracing', path: '/faults-tracing' }, // 故障记录
 ];
 
 const personalNavData = [
@@ -80,7 +80,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </Link>
 
                         {/* 管理空间 */}
-                        <Box className={` ${open ? 'bg-white/5' : ''} pt-2 pb-4`}>
+                        <Box className={` ${open ? 'bg-white/5' : ''} py-2`}>
                             {open && (
                                 <Box className="px-3 pt-2 pb-4">
                                     <h3 className="text-sm font-semibold text-gray-400 mb-1">Manage Spaces</h3>
@@ -115,7 +115,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </Box>
 
                         {/* 项目分析 */}
-                        <Box className={` ${open ? 'bg-white/5' : ''} pt-2 pb-4`}>
+                        <Box className={` ${open ? 'bg-white/5' : ''} py-2`}>
                             {open && (
                                 <div className="px-3 pt-2 pb-4">
                                     <h3 className="text-sm font-semibold text-gray-400 mb-1">Project Analysis</h3>
@@ -150,7 +150,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </Box>
 
                         {/* 个人中心 */}
-                        <Box className={` ${open ? 'bg-white/5' : ''} pt-2 pb-4`}>
+                        <Box className={` ${open ? 'bg-white/5' : ''} py-2`}>
                             {open && (
                                 <div className="px-3 pt-2 pb-4">
                                     <h3 className="text-sm font-semibold text-gray-400 mb-1">Personal Center</h3>

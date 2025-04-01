@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.32
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 10708022
+      MYSQL_DATABASE: das_database
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: >
+      bash -c "
+      docker-entrypoint.sh mysqld &
+      sleep 10 &&
+      mysql -uroot -p10708022 -e \"ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '10708022'; FLUSH PRIVILEGES;\"
+      wait
+      "
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  # Eureka 注册中心 (service-discovery)
+  service-discovery:
+    build: ./service-discovery  # 指向包含Dockerfile的目录
+    container_name: service-discovery
+    hostname: service-discovery  # 固定主机名
+    ports:
+      - "3072:2072"
+    environment:
+      - EUREKA_HOST=service-discovery  # 覆盖application.yml中的localhost
+
+  # Auth 认证授权
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    hostname: auth-service
+    ports:
+      - "3074:2074"
+    environment:
+      - EUREKA_SERVER=http://service-discovery:2072
+      - DB_HOST=mysql
+    depends_on:
+      - service-discovery
+      - redis
+
+  # DWG 核心服务
+  dwg-handler:
+    build: ./dwg-handler
+    container_name: dwg-handler
+    hostname: dwg-handler
+    ports:
+      - "3075:2075"
+    environment:
+      - EUREKA_SERVER=http://service-discovery:2072
+      - DB_HOST=mysql
+    depends_on:
+      - service-discovery
+
+  # 文件管理
+  file-manage:
+    build: ./file-manage
+    container_name: file-manage
+    hostname: file-manage
+    ports:
+      - "3076:2076"
+    environment:
+      - EUREKA_SERVER=http://service-discovery:2072
+    depends_on:
+      - service-discovery
+
+  # Zuul 网关 (api-gateway)
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    hostname: api-gateway
+    ports:
+      - "3073:2073"
+    environment:
+      - EUREKA_SERVER=http://service-discovery:2072
+      - AUTH_SERVICE_URL=http://auth-service:2074
+      - DWG_SERVICE_URL=http://dwg-handler:2075
+      - FILE_SERVICE_URL=http://file-manage:2076
+    depends_on:
+      - service-discovery
+      - auth-service
+      - dwg-handler
+      - file-manage
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql_data:
+
+networks:
+  default:
+    name: spring-cloud-net  # 所有服务默认加入同一网络

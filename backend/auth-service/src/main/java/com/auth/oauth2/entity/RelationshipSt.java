@@ -8,6 +8,15 @@ public class RelationshipSt {
   private long relationshipId;
   private long accountId;
   private long authorityId;
+  private long orgId;
+
+  public long getOrgId() {
+    return orgId;
+  }
+
+  public void setOrgId(long orgId) {
+    this.orgId = orgId;
+  }
 
   // Getter and Setter for relationshipId
   public long getRelationshipId() {

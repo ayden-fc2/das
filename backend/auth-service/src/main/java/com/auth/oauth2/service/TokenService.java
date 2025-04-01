@@ -6,6 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 public interface TokenService {
     int tokenToUserId(String token);
 
-    JSONArray tokenToRoles(String token);
+    JSONObject tokenToRoles(String token);
 }
 

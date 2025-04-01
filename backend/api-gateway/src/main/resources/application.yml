@@ -22,27 +22,31 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:2072/eureka/ #Eureka??
+      defaultZone: ${EUREKA_SERVER:http://localhost:2072}/eureka/
+      # defaultZone: http://localhost:2072/eureka/ #Eureka??
 zuul:
   sensitive-headers: Access-Control-Allow-Origin
   ignored-headers: Access-Control-Allow-Origin,H-APP-Id,Token,APPToken
   routes:
-    example2060:
-      path: /example2060/**
-      service-id: example2060
-      url: http://localhost:2060
+#    example2060:
+#      path: /example2060/**
+#      service-id: example2060
+#      url: http://localhost:2060
     auth-service:
       path: /auth-service/**
       # service-id: auth-service
-      url: http://localhost:2074
+      # url: http://localhost:2074
+      url: ${AUTH_SERVICE_URL:http://localhost:2074}
     dwg-handler:
       path: /dwg-handler/**
       # service-id: dwg-handler
-      url: http://localhost:2075
+      # url: http://localhost:2075
+      url: ${DWG_SERVICE_URL:http://localhost:2075}
     file-manage:
       path: /file-manage/**
       # service-id: file-manage
-      url: http://localhost:2076
+      # url: http://localhost:2076
+      url: ${FILE_SERVICE_URL:http://localhost:2076}
   host:
     connect-timeout-millis: 30000
     socket-timeout-millis: 30000

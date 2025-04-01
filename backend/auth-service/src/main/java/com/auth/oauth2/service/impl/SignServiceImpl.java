@@ -78,18 +78,18 @@ public class SignServiceImpl implements SignService {
             switch ((int) rs.getAuthorityId()){
                 case 4:
                     isSuperManager = "1";
-                    isManager = "1";
-                    isController = "1";
-                    isObserver = "1";
+//                    isManager = "1";
+//                    isController = "1";
+//                    isObserver = "1";
                     break;
                 case 3:
                     isManager = "1";
-                    isController = "1";
-                    isObserver = "1";
+//                    isController = "1";
+//                    isObserver = "1";
                     break;
                 case 2:
                     isController = "1";
-                    isObserver = "1";
+//                    isObserver = "1";
                     break;
                 case 1:
                     isObserver = "1";
@@ -108,6 +108,19 @@ public class SignServiceImpl implements SignService {
         return codeValue;
     }
 
+    public static Jedis getJedisConnection() {
+        String redisHost = "redis"; // Docker 内部默认使用服务名
+        int redisPort = 6379;
+
+        try {
+            Jedis jedis = new Jedis(redisHost, redisPort);
+            jedis.ping(); // 发送 Ping 确保 Redis 可用
+            return jedis;
+        } catch (Exception e) {
+            System.out.println("连接 Docker Redis 失败，尝试 localhost...");
+            return new Jedis("localhost", redisPort); // 本地环境使用 localhost
+        }
+    }
     //api 获取验证码
     @Override
     public ResponseBean getPhoneCode(String phoneNum, int mode) {
@@ -115,18 +128,22 @@ public class SignServiceImpl implements SignService {
         String verificationCode = generateVerificationCode(6);
         // 创建一个 VerificationInfo 对象并设置账号、验证码和模式
         TmpInfo info = new TmpInfo();
-        info.setPhoneNumber(phoneNum);
+        info.setAccountNumber(phoneNum);
         info.setVerificationCode(verificationCode);
         info.setMode(phoneNum+mode);
         // 将 VerificationInfo 对象转换为 JSON 字符串
         String jsonInfo = JSON.toJSONString(info);
 
-        if (sendCode(phoneNum,verificationCode)){
+        // 暂时不发送验证码 TODO
+        // if (sendCode(phoneNum,verificationCode)){
+        if (true){
             try {
                 // 连接 Redis
-                Jedis jedis = new Jedis("localhost", 6379);
+                // Jedis jedis = new Jedis("localhost", 6379);
+                Jedis jedis = getJedisConnection();
                 // 将信息存储到 Redis 中，使用mode作为键
                 jedis.setex(info.getMode(), 120, jsonInfo);
+                System.out.println(jsonInfo);
                 // 关闭 Redis 连接
                 jedis.close();
                 return ResponseBean.success();
@@ -197,7 +214,7 @@ public class SignServiceImpl implements SignService {
     //api 注册
     @Override
     @Transactional
-    public ResponseBean signUp(String phoneNum, int mode, String code, String password) {
+    public ResponseBean signUp(String phoneNum, int mode, String code, String password, String name) {
         try{
             List<AccountSt> accountList = um.selectAccounts(phoneNum);
             if (accountList.size()>0){
@@ -210,8 +227,9 @@ public class SignServiceImpl implements SignService {
                 AccountSt newAccountSt = new AccountSt();
                 newAccountSt.setPhoneNum(phoneNum);
                 newAccountSt.setPasswordDetail(password);
+                newAccountSt.setNickName(name);
                 um.insertNewUser(newAccountSt);
-                um.insertRelationship(newAccountSt.getAccountId(),4L);
+//                um.insertRelationship(newAccountSt.getAccountId(),4L);
                 return ResponseBean.success();
             }
         }catch (Exception e){

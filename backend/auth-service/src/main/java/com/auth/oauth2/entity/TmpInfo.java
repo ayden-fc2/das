@@ -5,17 +5,17 @@ import lombok.Data;
 @Data
 public class TmpInfo {
 
-    private String phoneNumber;
+    private String accountNumber;
     private String verificationCode;
     private String mode;
 
     // Getter and Setter for phoneNumber
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.accountNumber = phoneNumber;
     }
 
     // Getter and Setter for verificationCode

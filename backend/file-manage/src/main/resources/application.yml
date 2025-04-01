@@ -24,7 +24,8 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:2072/eureka/ #Eureka??
+      defaultZone: ${EUREKA_SERVER:http://localhost:2072}/eureka/
+      # defaultZone: http://localhost:2072/eureka/ #Eureka
 
 custom:
   save-file-path-dwg: simulate-files/dwg

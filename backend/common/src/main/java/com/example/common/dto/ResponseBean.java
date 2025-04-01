@@ -1,11 +1,7 @@
 package com.example.common.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 public class ResponseBean<T> {
     /**
      * 实现功能:是否成功
@@ -29,6 +25,34 @@ public class ResponseBean<T> {
     public ResponseBean(Integer success, String message, T data) {
         this.success = success;
         this.message = message;
+        this.data = data;
+    }
+
+    // 无参构造方法
+    public ResponseBean() {}
+
+    // Getter 和 Setter
+    public Integer getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Integer success) {
+        this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
         this.data = data;
     }
 
