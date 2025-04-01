@@ -5,9 +5,7 @@
 import React, {useState} from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import Link from "next/link";
-import {get} from "@/app/utils/api"
-import {err, success} from "@/app/utils/alerter";
-import {navigateTo} from "@/app/utils/navigator";
+import {handleLoginProcess} from "@/app/pages/sign/utils";
 import {useAuth} from "@/app/context/AuthContext";
 
 const LoginPage: React.FC = () => {
@@ -18,25 +16,7 @@ const LoginPage: React.FC = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Logging in with:", { email, password });
-        try {
-            const response = await get<{ success: number; message: string; data: any }>(
-                "/auth-service/sign/signInCheck",
-                { email, password }
-            );
-            if (response.success === 1 && response.data) {
-                localStorage.setItem("jwt", response.data);
-                authContext.refreshRole()
-                success("Login successful, your login status will be saved。")
-                navigateTo("/pages/homepage")
-            } else {
-                console.error("Login failed:", response.message);
-                err(response.message)
-            }
-        } catch (error) {
-            console.error("Login Error:", error);
-            err("An issue has occurred. Please try again.")
-        }
+        await handleLoginProcess(email, password, authContext)
     };
 
     return (
@@ -77,6 +57,7 @@ const LoginPage: React.FC = () => {
                             type="submit"
                             variant="contained"
                             color="primary"
+                            size={`large`}
                             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                         >
                             Login
@@ -88,6 +69,12 @@ const LoginPage: React.FC = () => {
                         Don&#39;t have an account?{" "}
                         <Link href="/pages/sign/register" legacyBehavior>
                             <a className="text-blue-500 hover:underline">Sign Up</a>
+                        </Link>
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600">
+                        Forget your password?{" "}
+                        <Link href="/pages/sign/update" legacyBehavior>
+                            <a className="text-blue-500 hover:underline">Update Password</a>
                         </Link>
                     </Typography>
                 </Box>

@@ -1,5 +1,6 @@
 import {get} from "@/app/utils/api";
 
+// 矫正时间
 export function convertToChinaTime(utcDateStr: string): string {
     // 创建一个 UTC 时间对象
     const utcDate = new Date(utcDateStr);
@@ -18,6 +19,7 @@ export function convertToChinaTime(utcDateStr: string): string {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+// 处理下载
 export async function handleDownload(url: string){
     const result = await get(url) as any;
     const name: string = url.split('/').pop() || 'unknown.dwg'
@@ -32,3 +34,9 @@ export async function handleDownload(url: string){
     // 模拟点击下载链接
     link.click();
 }
+
+// 判断邮箱是否符合格式
+export const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};

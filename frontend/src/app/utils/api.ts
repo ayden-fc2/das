@@ -6,12 +6,13 @@ import {navigateTo} from "@/app/utils/navigator";
 import {warning} from "@/app/utils/alerter";
 import {MyResponse} from "@/app/types/common";
 
-// TODO: 配合frp
+// 获取地址
 const getBaseURL = () => {
-    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-        return "http://localhost:2073";
+    const env = process.env.NODE_ENV || 'development';
+    if (env === 'production') {
+        return "http://localhost:3073"; // TODO
     }
-    return "http://www.fivecheers.com:2073";
+    return "http://localhost:2073";
 };
 
 // 创建 axios 实例

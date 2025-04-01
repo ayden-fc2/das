@@ -1,5 +1,5 @@
 export interface MyResponse {
-    success: boolean;
+    success: boolean | number;
     message: string;
     data?: any;
 }

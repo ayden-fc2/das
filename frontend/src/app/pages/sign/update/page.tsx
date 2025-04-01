@@ -5,7 +5,7 @@
 import React, {useEffect, useState} from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import Link from "next/link";
-import {getCode, registerApi} from "@/app/api/account";
+import {getCode, registerApi, resetPasswordApi} from "@/app/api/account";
 import {err, info} from "@/app/utils/alerter";
 import {validateEmail} from "@/app/utils/common";
 import {handleLoginProcess} from "@/app/pages/sign/utils";
@@ -43,7 +43,7 @@ const RegisterPage: React.FC = () => {
             return
         }
         setIsSending(true);
-        getCode(email, 0).then(res => {
+        getCode(email, 1).then(res => {
             if (res.success) {
                 setTimer(60);
                 info('code sent to ' + email)
@@ -61,7 +61,6 @@ const RegisterPage: React.FC = () => {
     /**
      * 注册
      */
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -74,9 +73,8 @@ const RegisterPage: React.FC = () => {
             alert("Passwords do not match");
             return;
         }
-        console.log("Registering with:", { username, email, password });
         // Add registration logic here
-        registerApi(email, password, verificationCode, username).then(async res => {
+        resetPasswordApi(email, password, verificationCode).then(async res => {
             if (res.success) {
                 await handleLoginProcess(email, password, authContext)
                 return
@@ -100,18 +98,9 @@ const RegisterPage: React.FC = () => {
                     gutterBottom
                     className="font-bold text-gray-800"
                 >
-                    Create an Account
+                    Update Password
                 </Typography>
                 <form onSubmit={handleRegister} className="space-y-4">
-                    <TextField
-                        fullWidth
-                        label="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        variant="outlined"
-                        required
-                        size={`small`}
-                    />
                     <TextField
                         fullWidth
                         label="Email Address"
@@ -124,7 +113,7 @@ const RegisterPage: React.FC = () => {
                     />
                     <TextField
                         fullWidth
-                        label="Password"
+                        label="New Password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -134,7 +123,7 @@ const RegisterPage: React.FC = () => {
                     />
                     <TextField
                         fullWidth
-                        label="Confirm Password"
+                        label="Confirm New Password"
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -170,7 +159,7 @@ const RegisterPage: React.FC = () => {
                             size="large"
                             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                         >
-                            Register
+                            Update
                         </Button>
                     </Box>
                 </form>
@@ -182,9 +171,9 @@ const RegisterPage: React.FC = () => {
                         </Link>
                     </Typography>
                     <Typography variant="body2" className="text-gray-600">
-                        Forget your password?{" "}
-                        <Link href="/pages/sign/update" legacyBehavior>
-                            <a className="text-blue-500 hover:underline">Update Password</a>
+                        Don&#39;t have an account?{" "}
+                        <Link href="/pages/sign/register" legacyBehavior>
+                            <a className="text-blue-500 hover:underline">Sign Up</a>
                         </Link>
                     </Typography>
                 </Box>

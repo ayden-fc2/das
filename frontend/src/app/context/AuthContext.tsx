@@ -1,11 +1,12 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import {getAuthRole} from "@/app/api/das";
+import {getAuthRole} from "@/app/api/account";
 
 // 定义类型
 interface AuthContextType {
     role: string | null;
+    nickname: string | null;
     setRole: (role: string | null) => void;
     refreshRole: () => void;
 }
@@ -15,7 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [role, setRole] = useState<string | null>(null);
-
+    const [nickname, setNickname] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null); // 监听 Token
 
     useEffect(() => {
@@ -30,7 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (token) {
             getAuthRole().then(res=>{
-                setRole(res.data)
+                setRole(res.data.roles)
+                setNickname(res.data.nickname)
             }).catch(err=>{
                 console.log(err, '获取用户角色失败')
             })
@@ -41,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         getAuthRole()
             .then((res) => {
                 setRole(res.data);
+                setNickname(res.data.nickname)
             })
             .catch((err) => {
                 console.log(err, "刷新用户角色失败");
@@ -49,7 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 
     return (
-        <AuthContext.Provider value={{ role, setRole, refreshRole }}>
+        <AuthContext.Provider value={{ role, nickname, setRole, refreshRole }}>
             {children}
         </AuthContext.Provider>
     );
