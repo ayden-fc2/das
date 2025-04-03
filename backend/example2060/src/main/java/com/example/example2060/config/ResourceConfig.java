@@ -17,13 +17,7 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/allTest").permitAll()
-                .antMatchers("/userTest").hasAnyAuthority(
-                        UserType.Observer.getType(),
-                        UserType.Controller.getType(),
-                        UserType.Manager.getType(),
-                        UserType.SuperManager.getType()
-                        )
-                .anyRequest().authenticated()
+                .antMatchers("/**").authenticated()
                 .and()
                 .formLogin().disable()
                 .csrf().disable(); // 禁用 CSRF，可能需要根据实际情况启用

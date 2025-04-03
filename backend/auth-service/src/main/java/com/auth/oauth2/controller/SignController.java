@@ -6,6 +6,7 @@ import com.auth.oauth2.service.TokenService;
 import com.example.common.dto.ResponseBean;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +20,8 @@ public class SignController {
 
     //授权
     @GetMapping("/test")
-    public ResponseBean<String> testFuc(){return ResponseBean.success("hello");}
+    @PreAuthorize("@orgRoleService.hasSuperManagerRole(authentication, #orgId)")
+    public ResponseBean<String> testFuc(@Param("orgId") Integer orgId){return ResponseBean.success("hello");}
 
     //检查是否有控制者用户权限
     @GetMapping("/controller/test")

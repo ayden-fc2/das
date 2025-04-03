@@ -3,13 +3,11 @@ package com.auth.oauth2.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.auth.oauth2.entity.TmpInfo;
-import com.auth.oauth2.service.FeignService;
-import com.auth.oauth2.service.SignService;
-import com.auth.oauth2.service.TokenFeignService;
-import com.auth.oauth2.service.TokenService;
+import com.auth.oauth2.service.*;
 import com.example.common.dto.ResponseBean;
 import com.auth.oauth2.entity.AccountSt;
 import com.auth.oauth2.entity.RelationshipSt;
+import com.example.common.enums.UserType;
 import com.example.common.exception.MyException;
 import com.auth.oauth2.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +26,27 @@ public class SignServiceImpl implements SignService {
     FeignService fs;
 
     @Autowired
-    TokenFeignService tfs;
-
-    @Autowired
     TokenService ts;
 
     @Autowired
     UserMapper um;
+
+    @Autowired
+    private TokenFeignServiceDocker dockerService;
+
+    @Autowired
+    private TokenFeignServiceLocal localService;
+
+    public String getToken(Map<String, String> request) {
+        try {
+            // 尝试使用 Docker 内部地址调用
+            return dockerService.getToken(request);
+        } catch (Exception e) {
+            System.out.println("连接 Docker auth-service 失败，尝试 localhost...");
+            // 调用失败后，使用本地地址调用
+            return localService.getToken(request);
+        }
+    }
 
     //api 登录
     @Override
@@ -69,43 +81,66 @@ public class SignServiceImpl implements SignService {
         long userId = accountSt.getAccountId();
         List<RelationshipSt> relationshipStList = um.selectRelations(userId);
 
-        String isSuperManager = "0";
-        String isManager = "0";
-        String isController = "0";
-        String isObserver = "0";
-        for (RelationshipSt rs :
-                relationshipStList) {
-            switch ((int) rs.getAuthorityId()){
-                case 4:
-                    isSuperManager = "1";
+//        String isSuperManager = "0";
+//        String isManager = "0";
+//        String isController = "0";
+//        String isObserver = "0";
+//        for (RelationshipSt rs :
+//                relationshipStList) {
+//            switch ((int) rs.getAuthorityId()){
+//                case 4:
+//                    isSuperManager = "1";
+//                    break;
+//                case 3:
 //                    isManager = "1";
+//                    break;
+//                case 2:
 //                    isController = "1";
+//                    break;
+//                case 1:
 //                    isObserver = "1";
+//                    break;
+//            }
+//        }
+//        //
+//        querys.put("isSuperManager", isSuperManager);
+//        querys.put("isManager", isManager);
+//        querys.put("isController", isController);
+//        querys.put("isObserver", isObserver);
+
+        // 构建组织-权限映射
+        // key：组织ID；value：角色名称（如 observer, controller, manager, superManager）
+        Map<String, String> orgRoleMap = new HashMap<>();
+
+        for (RelationshipSt rs : relationshipStList) {
+            String orgId = String.valueOf(rs.getOrgId());
+            String role = "";
+            switch ((int) rs.getAuthorityId()) {
+                case 4:
+                    role = UserType.SuperManager.getType();
                     break;
                 case 3:
-                    isManager = "1";
-//                    isController = "1";
-//                    isObserver = "1";
+                    role = UserType.Manager.getType();
                     break;
                 case 2:
-                    isController = "1";
-//                    isObserver = "1";
+                    role = UserType.Controller.getType();
                     break;
                 case 1:
-                    isObserver = "1";
+                    role = UserType.Observer.getType();
                     break;
+                default:
+                    role = null;
             }
+            orgRoleMap.put(orgId, role);
         }
-        //
-        querys.put("isSuperManager", isSuperManager);
-        querys.put("isManager", isManager);
-        querys.put("isController", isController);
-        querys.put("isObserver", isObserver);
+
+        // 将组织-权限映射转换为JSON字符串，并加入请求参数
+        querys.put("orgRoles", JSONObject.toJSONString(orgRoleMap));
+
         querys.put("userId", String.valueOf(userId));
-        String response = tfs.getToken(querys);
+        String response = getToken(querys);
         JSONObject jsonObject = JSONObject.parseObject(response);
-        String codeValue = jsonObject.getString("access_token");
-        return codeValue;
+        return jsonObject.getString("access_token");
     }
 
     public static Jedis getJedisConnection() {

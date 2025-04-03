@@ -1,5 +1,6 @@
 package com.auth.oauth2.config;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.common.enums.UserType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,51 +50,53 @@ public class TokenConfig {
         @Override
         public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 
-            // 获取原本的 authorities
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
-            // 将 authorities 转换为字符串数组
-            String[] authorityArray = authorities.stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toArray(String[]::new);
+//            // 获取原本的 authorities
+//            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//
+//            // 将 authorities 转换为字符串数组
+//            String[] authorityArray = authorities.stream()
+//                    .map(GrantedAuthority::getAuthority)
+//                    .toArray(String[]::new);
 
             // 获取参数
             Map<String, String> requestParameters = authentication.getOAuth2Request().getRequestParameters();
-            String isSuperManager = requestParameters.get("isSuperManager");
-            String isManager = requestParameters.get("isManager");
-            String isController = requestParameters.get("isController");
-            String isObserver = requestParameters.get("isObserver");
+//            String isSuperManager = requestParameters.get("isSuperManager");
+//            String isManager = requestParameters.get("isManager");
+//            String isController = requestParameters.get("isController");
+//            String isObserver = requestParameters.get("isObserver");
             String userId = requestParameters.get("userId");
+            String orgRolesJson = requestParameters.get("orgRoles");
 
 
-            // 根据参数删除不需要的权限
-            if ("0".equals(isSuperManager)) {
-                authorityArray = Arrays.stream(authorityArray)
-                        .filter(authority -> !UserType.SuperManager.getType().equals(authority))
-                        .toArray(String[]::new);
-            }
-            if ("0".equals(isManager)) {
-                authorityArray = Arrays.stream(authorityArray)
-                        .filter(authority -> !UserType.Manager.getType().equals(authority))
-                        .toArray(String[]::new);
-            }
-            if ("0".equals(isController)) {
-                authorityArray = Arrays.stream(authorityArray)
-                        .filter(authority -> !UserType.Controller.getType().equals(authority))
-                        .toArray(String[]::new);
-            }
-            if ("0".equals(isObserver)) {
-                authorityArray = Arrays.stream(authorityArray)
-                        .filter(authority -> !UserType.Observer.getType().equals(authority))
-                        .toArray(String[]::new);
-            }
+//            // 根据参数删除不需要的权限
+//            if ("0".equals(isSuperManager)) {
+//                authorityArray = Arrays.stream(authorityArray)
+//                        .filter(authority -> !UserType.SuperManager.getType().equals(authority))
+//                        .toArray(String[]::new);
+//            }
+//            if ("0".equals(isManager)) {
+//                authorityArray = Arrays.stream(authorityArray)
+//                        .filter(authority -> !UserType.Manager.getType().equals(authority))
+//                        .toArray(String[]::new);
+//            }
+//            if ("0".equals(isController)) {
+//                authorityArray = Arrays.stream(authorityArray)
+//                        .filter(authority -> !UserType.Controller.getType().equals(authority))
+//                        .toArray(String[]::new);
+//            }
+//            if ("0".equals(isObserver)) {
+//                authorityArray = Arrays.stream(authorityArray)
+//                        .filter(authority -> !UserType.Observer.getType().equals(authority))
+//                        .toArray(String[]::new);
+//            }
 
             // 创建一个新的 token 对象
             DefaultOAuth2AccessToken updatedToken = new DefaultOAuth2AccessToken(accessToken);
 
             // 设置新的 authorities
-            updatedToken.getAdditionalInformation().put("authorities", authorityArray);
+//            updatedToken.getAdditionalInformation().put("authorities", authorityArray);
             updatedToken.getAdditionalInformation().put("userId", userId);
+            updatedToken.getAdditionalInformation().put("orgRoles", JSONObject.parse(orgRolesJson));
 
             // 返回更新后的 token
             return updatedToken;

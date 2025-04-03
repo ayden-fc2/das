@@ -1,4 +1,4 @@
-package com.example.example2060.config;
+package com.example.common.config;
 
 import com.example.common.dto.ResponseBean;
 import com.example.common.exception.MyException;
@@ -12,7 +12,7 @@ import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 @Slf4j
-public class outExceptionControllerAdvice {
+public class OutExceptionControllerAdvice {
     @ExceptionHandler(MyException.class)
     public ResponseBean handleServiceException(MyException e) {
         return e.getFailResponse();

@@ -1,13 +1,13 @@
-package com.example.example2060.service.impl;
+package com.example.common.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.example2060.service.TokenService;
+import com.example.common.service.MyTokenService;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TokenServiceImpl implements TokenService {
+public class MyTokenServiceImpl implements MyTokenService {
     public int tokenToUserId(String token) {
         // 去掉 "Bearer " 前缀
         if (token.startsWith("Bearer ")) {

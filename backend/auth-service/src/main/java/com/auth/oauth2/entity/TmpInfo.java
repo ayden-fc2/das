@@ -14,7 +14,7 @@ public class TmpInfo {
         return accountNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setAccountNumber(String phoneNumber) {
         this.accountNumber = phoneNumber;
     }
 
