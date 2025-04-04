@@ -16,12 +16,7 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/read").hasAnyAuthority(
-                        UserType.Observer.getType() // 观察者可以访问 /read 接口
-                        )
-                .antMatchers("/cop/genAnalysis", "/cop/genAnalysisOverview").hasAnyAuthority(
-                        UserType.SuperManager.getType() // 超级管理员才可以操作
-                )
+                .antMatchers("/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

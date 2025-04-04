@@ -11,7 +11,4 @@ public interface SignService {
 
     ResponseBean resetPassword(String phoneNum, int mode, String code, String newPassword);
 
-    ResponseBean getUserId(String token);
-
-    ResponseBean getUserInfo(String token);
 }

@@ -12,7 +12,7 @@ import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.example.common", "com.auth.oauth2"})
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.auth.oauth2.service")
 @MapperScan("com.auth.oauth2.mapper")

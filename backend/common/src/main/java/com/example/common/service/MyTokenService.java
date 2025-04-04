@@ -7,4 +7,5 @@ public interface MyTokenService {
     int tokenToUserId(String token);
 
     Map<String, List<String>> tokenToClaims(String token);
+
 }

@@ -10,7 +10,7 @@ public class AccountSt {
   private String passwordDetail;
   private long accountPer;
   private String nickName;
-  private String empty;
+  private String avatar;
 
   // Getter and Setter for accountId
   public long getAccountId() {
@@ -58,12 +58,12 @@ public class AccountSt {
   }
 
   // Getter and Setter for empty
-  public String getEmpty() {
-    return empty;
+  public String getAvatar() {
+    return avatar;
   }
 
-  public void setEmpty(String empty) {
-    this.empty = empty;
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
   }
 }
 

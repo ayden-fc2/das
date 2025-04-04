@@ -26,9 +26,6 @@ public class SignServiceImpl implements SignService {
     FeignService fs;
 
     @Autowired
-    TokenService ts;
-
-    @Autowired
     UserMapper um;
 
     @Autowired
@@ -110,7 +107,7 @@ public class SignServiceImpl implements SignService {
 
         // 构建组织-权限映射
         // key：组织ID；value：角色名称（如 observer, controller, manager, superManager）
-        Map<String, String> orgRoleMap = new HashMap<>();
+        Map<String, List<String>> orgRoleMap = new HashMap<>();
 
         for (RelationshipSt rs : relationshipStList) {
             String orgId = String.valueOf(rs.getOrgId());
@@ -131,7 +128,12 @@ public class SignServiceImpl implements SignService {
                 default:
                     role = null;
             }
-            orgRoleMap.put(orgId, role);
+            if (!orgRoleMap.containsKey(orgId)) {
+                orgRoleMap.put(orgId, new ArrayList<String>());
+                orgRoleMap.get(orgId).add(role);
+            } else {
+                orgRoleMap.get(orgId).add(role);
+            }
         }
 
         // 将组织-权限映射转换为JSON字符串，并加入请求参数
@@ -289,20 +291,5 @@ public class SignServiceImpl implements SignService {
         }catch (Exception e){
             throw new MyException("重设密码失败，错误："+e);
         }
-    }
-
-    @Override
-    public ResponseBean getUserId(String token) {
-        try{
-            int userId = ts.tokenToUserId(token);
-            return ResponseBean.success(userId);
-        }catch (Exception e){
-            throw new MyException("获取用户失败，请重新登录");
-        }
-    }
-
-    @Override
-    public ResponseBean getUserInfo(String token) {
-        return null;
     }
 }

@@ -2,8 +2,8 @@ package com.file.manage.controller;
 
 import com.example.common.dto.ResponseBean;
 import com.example.common.exception.MyException;
+import com.example.common.service.MyTokenService;
 import com.file.manage.service.DwgUploadService;
-import com.file.manage.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -13,14 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/dwg")
 public class DwgController {
     @Autowired
-    TokenService ts;
+    MyTokenService ts;
 
     @Autowired
     DwgUploadService dwgUploadService;

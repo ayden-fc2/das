@@ -8,13 +8,16 @@ import {
     Menu,
     Home,
     People,
-    AddCircle, AlignHorizontalRight, CloudQueue, CrisisAlert, DoneAll, Logout, AddCircleOutlined, AddCircleOutline,
+    AlignHorizontalRight,
+    CloudQueue,
+    Logout,
+    CollectionsBookmark,
 } from '@mui/icons-material';
 import {Box, Typography} from "@mui/material";
 
 const spaceNavData = [
-    { icon: <CloudQueue />, label: 'My Spaces', path: '/spaces' }, // 增删改自己管理的space， 查自己管理的/自己加入的
-    { icon: <AddCircleOutline />, label: 'New Space', path: '/new-space' }, // 查所有的Space并申请加入，可以根据Org筛选
+    { icon: <CollectionsBookmark />, label: 'Demo', path: '/demo' }, // 查所有的Space并申请加入，可以根据Org筛选
+    { icon: <CloudQueue />, label: 'Projects', path: '/spaces' }, // 增删改自己管理的space， 查自己管理的/自己加入的
     // { icon: <DoneAll />, label: 'Requests', path: '/join-request' }, //批准/拒绝加入请求，查看自己的所有请求
 ];
 

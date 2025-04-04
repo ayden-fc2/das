@@ -20,11 +20,11 @@ public class ReadController {
     @Autowired
     ReadService readService;
 
-    //观察者用户测试
+    // 观察者用户测试
     @GetMapping("/userTest")
     public ResponseBean userTestFuc(){return ResponseBean.success("hello");}
 
-    // 获取公共demo列表
+    //任意用户demo 获取公共demo列表
     @GetMapping("/getPublicList")
     public ResponseBean<List<UploadDwgSt>> getPublicList() {
         try {
@@ -35,7 +35,7 @@ public class ReadController {
         }
     }
 
-    // 获取project components分析结果
+    //任意用户demo 获取project components分析结果
     @GetMapping("/getProjectGraph")
     public ResponseBean<JSONArray> getProjectGraph(@Param("projectId") long projectId) {
         try {
@@ -46,7 +46,7 @@ public class ReadController {
         }
     }
 
-    // 获取project 图结构
+    //任意用户demo 获取project 图结构
     @GetMapping("/getProjectGraphStructure")
     public ResponseBean<List<GraphDto>> getProjectGraphStructure(@Param("projectId") long projectId) {
         try {

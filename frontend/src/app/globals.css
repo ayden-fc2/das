@@ -28,3 +28,7 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+.react-calendar-heatmap {
+  height: 112px;
+}

@@ -1,5 +1,6 @@
 package com.auth.oauth2.mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.auth.oauth2.entity.AccountSt;
 import com.auth.oauth2.entity.RelationshipSt;
 import org.apache.ibatis.annotations.*;
@@ -26,6 +27,6 @@ public interface UserMapper {
     @Update("UPDATE account_st SET passwordDetail = #{newPassword} WHERE phoneNum = #{phoneNum}")
     void updatePassword(@Param("phoneNum") String phoneNum, @Param("newPassword") String newPassword);
 
-    @Select("SELECT nickName FROM account_st WHERE accountId = #{userId}")
-    String selectNicknameByUserId(@Param("userId") int userId);
+    @Select("SELECT nickName, COALESCE(avatar, '') AS avatar, phoneNum AS email FROM account_st WHERE accountId = #{userId}")
+    JSONObject selectBasicInfoByUserId(@Param("userId") int userId);
 }

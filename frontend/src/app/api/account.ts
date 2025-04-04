@@ -2,7 +2,8 @@ import {get, post} from "@/app/utils/api";
 
 const urls = {
     LOGIN_API: "/auth-service/sign/signInCheck", // 登陆
-    GET_AUTH_ROLE: '/auth-service/getRoles', // 获取用户角色
+    GET_AUTH_ROLE: '/auth-service/role/getRoles', // 获取用户角色
+    GET_USER_INFO: '/auth-service/role/getUserInfo', // 获取用户信息
     GET_CODE: '/auth-service/sign/getPhoneCode', // 获取验证码
     REGISTER_API: '/auth-service/sign/signUp', // 注册
     RESET_PASSWORD_API: '/auth-service/sign/resetPassword' // 重设密码
@@ -38,4 +39,8 @@ export const resetPasswordApi = (email: string, newPassword: string, code: strin
         code,
         mode: 1
     })
+}
+
+export const getUserInfoApi = () => {
+    return get(urls.GET_USER_INFO)
 }
