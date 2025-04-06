@@ -25,7 +25,7 @@ const TotalControlPanel: React.FC<TotalControlPanelProps> = ({
     }
 
     return (
-        <div className={`${expanded? "opacity-100" : "opacity-80 h-6"} rounded transition-all duration-300 ease-in-out absolute top-0 left-1/2 -translate-x-1/2 bg-white shadow-md p-2 flex justify-center gap-4 z-50`}>
+        <div className={`${expanded? "opacity-100" : "opacity-80 h-6"} rounded transition-all duration-300 ease-in-out fixed top-0 left-1/2 -translate-x-1/2 bg-white shadow-md p-2 flex justify-center gap-4 z-50`}>
             <Box
                 className="flex items-center cursor-pointer"
                 onClick={handleExpandChange}

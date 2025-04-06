@@ -173,7 +173,7 @@ export default function Page() {
                         />
                         <div className="flex items-center justify-between">
                             <InputFileUpload
-                                disabled={!roleContext.role?.includes(ROLE_TYPE.S_MANAGER)}
+                                disabled={!roleContext.isSuperManager}
                                 apiUrl="/file-manage/dwg/upload"
                                 maxFiles={1}
                                 acceptTypes=".dwg"
@@ -206,7 +206,7 @@ export default function Page() {
                         color="primary"
                         onClick={handleSubmit}
                         className="w-full"
-                        disabled={!roleContext.role?.includes(ROLE_TYPE.S_MANAGER)}
+                        disabled={!roleContext.isSuperManager}
                     >
                         Submit
                     </Button>

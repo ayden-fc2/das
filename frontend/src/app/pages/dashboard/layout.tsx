@@ -197,7 +197,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     open ? 'ml-64' : 'ml-16'
                 }`}
             >
-                <Box className="m-4 bg-transparent flex-1 text-gray-800">
+                <Box className="bg-transparent flex-1 text-gray-800">
                     {children}
                 </Box>
             </main>

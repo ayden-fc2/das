@@ -40,7 +40,7 @@ export default function AnalysisPage() {
     const [scale, setScale] = useState(1);
 
     // 展示Modal TODO all false
-    const [showRelay, setShowRelay] = useState(true);
+    const [showRelay, setShowRelay] = useState(false);
     const [showStdCom, setShowStd] = useState(false);
     const [showCurCom, setShowCurCom] = useState(false);
 

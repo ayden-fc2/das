@@ -11,7 +11,7 @@ import {
     drawMtext,
     drawText, handleInsert
 } from "@/app/components/draw/utils/draw";
-import {calcComBox} from "@/app/components/draw/utils/drawCalc";
+import {calcComBox, handleInsertTypes} from "@/app/components/draw/utils/drawCalc";
 
 interface CanvasComponentProps {
     projectJson: any;
@@ -168,7 +168,7 @@ const CanvasComponent = forwardRef(({
             if (insertDetail.handle[2] === 556166) {
                 debug = true
             }
-            const insertBox = calcComBox(blockEntities.TYPES, insertDetail.rotation, insertDetail.scale, debug)
+            const insertBox = calcComBox(blockEntities.TYPES)
             const originalCenterPt = [(insertBox.minX + insertBox.maxX) / 2, (insertBox.minY + insertBox.maxY) / 2]
             insertDetail.center_pt = handleInsert(originalCenterPt[0], originalCenterPt[1], insertDetail.scale, insertDetail.rotation, insertDetail.ins_pt)
             insertDetail.maxBoxSize = Math.max((insertBox.maxX - insertBox.minX), (insertBox.maxY - insertBox.minY))
@@ -209,8 +209,19 @@ const CanvasComponent = forwardRef(({
                 const centerPtX: number = (insertBox.minX + insertBox.maxX) / 2
                 const centerPtY: number = (insertBox.minY + insertBox.maxY) / 2
                 const [handledX, handledY] = handleInsert(centerPtX, centerPtY, insertDetail.scale, insertDetail.rotation, insertDetail.ins_pt)
-                const boxWidth = insertBox.maxX - insertBox.minX
-                const boxHeight = insertBox.maxY - insertBox.minY
+                // TODO: new InsertBox
+                const keepKeys = ['LINE', 'LWPOLYLINE', 'CIRCLE', 'ARC']
+                const copyedTypes = JSON.parse(JSON.stringify(blockEntities.TYPES))
+                for (const key in copyedTypes) {
+                    if (keepKeys.includes(key)) {
+                        continue
+                    }
+                    delete copyedTypes[key]
+                }
+                const handledTYPES = handleInsertTypes(copyedTypes, insertDetail.ins_pt, insertDetail.rotation, insertDetail.scale)
+                const handledBox = calcComBox(handledTYPES)
+                const boxWidth = handledBox.maxX - handledBox.minX
+                const boxHeight = handledBox.maxY - handledBox.minY
                 if (boxWidth > 0 && boxHeight > 0) {
                     insertsRef.current.push({
                         handle0: insertDetail.handle[1],

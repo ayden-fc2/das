@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
             <Box className="mt-8 text-center">
                 {isLoggedIn ? (
                     <>
-                        <Link href="/pages/homepage" passHref>
+                        <Link href="/pages/dashboard" passHref>
                             <Button variant="contained" color="success" className="bg-green-500 hover:bg-green-600 !mx-2">
                                 Welcome Back
                             </Button>

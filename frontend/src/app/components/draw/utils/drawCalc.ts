@@ -16,8 +16,73 @@ interface Box {
     maxY: number;
 }
 
+export const handleInsertTypes = (typeProps: ComTypeProps, insertInsPt?: number[], insertRotation?: number, insertScale?: number[]) => {
+    let handledLines = JSON.parse(JSON.stringify(typeProps.LINE || []));
+    if (insertInsPt && insertRotation !== undefined && insertScale) {
+        for (const line of handledLines ?? []) {
+            [line.start[0], line.start[1]] = handleInsert(line.start[0], line.start[1], insertScale, insertRotation, insertInsPt);
+            [line.end[0], line.end[1]] = handleInsert(line.end[0], line.end[1], insertScale, insertRotation, insertInsPt);
+        }
+    }
+    let handledLwpolylines = JSON.parse(JSON.stringify(typeProps.LWPOLYLINE || []));
+    if (insertInsPt && insertRotation !== undefined && insertScale) {
+        for (const line of handledLwpolylines ?? []) {
+            for (let i = 0; i < line.points.length; i++) {
+                const point = line.points[i];
+                const [x, y] = handleInsert(point[0], point[1], insertScale, insertRotation, insertInsPt);
+                line.points[i] = [x, y];
+            }
+        }
+    }
+    let handledCircles = JSON.parse(JSON.stringify(typeProps.CIRCLE || []));
+    if (insertInsPt && insertRotation !== undefined && insertScale) {
+        for (const circle of handledCircles) {
+            // 处理圆心（平移、旋转、缩放）
+            [circle.center[0], circle.center[1]] = handleInsert(
+                circle.center[0],
+                circle.center[1],
+                insertScale,
+                insertRotation,
+                insertInsPt
+            );
+            // 处理半径：仅进行缩放（假设均匀缩放）
+            if (insertScale[0] < 0) {
+                circle.radius = -circle.radius;
+            }
+            if (isNaN(circle.radius)) {
+                console.log('NaN warning!!!')
+            }
+            circle.radius = circle.radius * insertScale[0];
+        }
+    }
+    let handledArcs = JSON.parse(JSON.stringify(typeProps.ARC || []));
+    if (insertInsPt && insertRotation !== undefined && insertScale) {
+        for (const arc of handledArcs) {
+            // 1. 处理圆心：平移、旋转、缩放
+            [arc.center[0], arc.center[1]] = handleInsert(
+                arc.center[0],
+                arc.center[1],
+                insertScale,
+                insertRotation,
+                insertInsPt
+            );
+            // 2. 处理半径：仅进行缩放（假设均匀缩放）
+            arc.radius = arc.radius * insertScale[0];
+            // 3. 处理角度：旋转会影响弧线的起始和终止角度，需加上插入的旋转角度
+            arc.start_angle = arc.start_angle + insertRotation;
+            arc.end_angle = arc.end_angle + insertRotation;
+        }
+    }
+    return {
+        LINE: handledLines,
+        CIRCLE: handledCircles,
+        LWPOLYLINE: handledLwpolylines,
+        ARC: handledArcs
+    }
+}
+
 // TODO: 包围盒围绕中心旋转缩放，更改返回类型，后端同步更新处理
-export const calcComBox = (typeProps: ComTypeProps, insertRotation?: number, insertScale?: number[], debug = false) => {
+export const calcComBox = (typeProps: ComTypeProps) => {
     const CIRCLE = JSON.parse(JSON.stringify(typeProps?.CIRCLE || []));
     const LINE = JSON.parse(JSON.stringify(typeProps?.LINE || []));
     const LWPOLYLINE = JSON.parse(JSON.stringify(typeProps?.LWPOLYLINE || []));
@@ -58,82 +123,82 @@ export const calcComBox = (typeProps: ComTypeProps, insertRotation?: number, ins
         maxY: -Infinity
     });
     // 算两次
-    if (insertRotation && insertScale) {
-        const centerX = (result.minX + result.maxX) / 2
-        const centerY = (result.minY + result.maxY) / 2;
-        // if (debug) {
-        //     console.log(insertRotation, insertScale, 'aaa')
-        // }
-        for (const line of LINE ?? []) {
-            [line.start[0], line.start[1]] = handleInsert(line.start[0], line.start[1], insertScale, insertRotation, [centerX, centerY]);
-            [line.end[0], line.end[1]] = handleInsertFromCenter(line.end[0], line.end[1], insertScale, insertRotation, [centerX, centerY]);
-        }
-        for (const line of LWPOLYLINE ?? []) {
-            for (let i = 0; i < line.points.length; i++) {
-                const point = line.points[i];
-                const [x, y] = handleInsertFromCenter(point[0], point[1], insertScale, insertRotation, [centerX, centerY], debug);
-                line.points[i] = [x, y];
-            }
-        }
-        for (const circle of CIRCLE ?? []) {
-            // 处理圆心（平移、旋转、缩放）
-            [circle.center[0], circle.center[1]] = handleInsertFromCenter(
-                circle.center[0],
-                circle.center[1],
-                insertScale,
-                insertRotation,
-                [centerX, centerY]
-            );
-            // 处理半径：仅进行缩放（假设均匀缩放）
-            if (insertScale[0] < 0) {
-                circle.radius = -circle.radius;
-            }
-            if (isNaN(circle.radius)) {
-                console.log('NaN warning!!!')
-            }
-            circle.radius = circle.radius * insertScale[0];
-        }
-        for (const arc of ARC ?? []) {
-            // 1. 处理圆心：平移、旋转、缩放
-            [arc.center[0], arc.center[1]] = handleInsertFromCenter(
-                arc.center[0],
-                arc.center[1],
-                insertScale,
-                insertRotation,
-                [centerX, centerY]
-            );
-            // 2. 处理半径：仅进行缩放（假设均匀缩放）
-            arc.radius = arc.radius * insertScale[0];
-            // 3. 处理角度：旋转会影响弧线的起始和终止角度，需加上插入的旋转角度
-            arc.start_angle = arc.start_angle + insertRotation;
-            arc.end_angle = arc.end_angle + insertRotation;
-        }
-        // 重新计算包围盒
-        boxs = [];
-        for (const lineElement of LINE) {
-            boxs.push(getLineBox(lineElement));
-        }
-        for (const circleElement of CIRCLE) {
-            boxs.push(getCircleBox(circleElement));
-        }
-        for (const lwpolylineElement of LWPOLYLINE) {
-            boxs.push(getLwpolylineBox(lwpolylineElement));
-        }
-        for (const arcElement of ARC) {
-            boxs.push(getArcBox(arcElement));
-        }
-        result = boxs.reduce((acc, box) => ({
-            minX: Math.min(acc.minX, box.minX),
-            maxX: Math.max(acc.maxX, box.maxX),
-            minY: Math.min(acc.minY, box.minY),
-            maxY: Math.max(acc.maxY, box.maxY)
-        }), {
-            minX: Infinity,
-            maxX: -Infinity,
-            minY: Infinity,
-            maxY: -Infinity
-        });
-    }
+    // if (insertRotation && insertScale) {
+    //     const centerX = (result.minX + result.maxX) / 2
+    //     const centerY = (result.minY + result.maxY) / 2;
+    //     // if (debug) {
+    //     //     console.log(insertRotation, insertScale, 'aaa')
+    //     // }
+    //     for (const line of LINE ?? []) {
+    //         [line.start[0], line.start[1]] = handleInsert(line.start[0], line.start[1], insertScale, insertRotation, [centerX, centerY]);
+    //         [line.end[0], line.end[1]] = handleInsertFromCenter(line.end[0], line.end[1], insertScale, insertRotation, [centerX, centerY]);
+    //     }
+    //     for (const line of LWPOLYLINE ?? []) {
+    //         for (let i = 0; i < line.points.length; i++) {
+    //             const point = line.points[i];
+    //             const [x, y] = handleInsertFromCenter(point[0], point[1], insertScale, insertRotation, [centerX, centerY], debug);
+    //             line.points[i] = [x, y];
+    //         }
+    //     }
+    //     for (const circle of CIRCLE ?? []) {
+    //         // 处理圆心（平移、旋转、缩放）
+    //         [circle.center[0], circle.center[1]] = handleInsertFromCenter(
+    //             circle.center[0],
+    //             circle.center[1],
+    //             insertScale,
+    //             insertRotation,
+    //             [centerX, centerY]
+    //         );
+    //         // 处理半径：仅进行缩放（假设均匀缩放）
+    //         if (insertScale[0] < 0) {
+    //             circle.radius = -circle.radius;
+    //         }
+    //         if (isNaN(circle.radius)) {
+    //             console.log('NaN warning!!!')
+    //         }
+    //         circle.radius = circle.radius * insertScale[0];
+    //     }
+    //     for (const arc of ARC ?? []) {
+    //         // 1. 处理圆心：平移、旋转、缩放
+    //         [arc.center[0], arc.center[1]] = handleInsertFromCenter(
+    //             arc.center[0],
+    //             arc.center[1],
+    //             insertScale,
+    //             insertRotation,
+    //             [centerX, centerY]
+    //         );
+    //         // 2. 处理半径：仅进行缩放（假设均匀缩放）
+    //         arc.radius = arc.radius * insertScale[0];
+    //         // 3. 处理角度：旋转会影响弧线的起始和终止角度，需加上插入的旋转角度
+    //         arc.start_angle = arc.start_angle + insertRotation;
+    //         arc.end_angle = arc.end_angle + insertRotation;
+    //     }
+    //     // 重新计算包围盒
+    //     boxs = [];
+    //     for (const lineElement of LINE) {
+    //         boxs.push(getLineBox(lineElement));
+    //     }
+    //     for (const circleElement of CIRCLE) {
+    //         boxs.push(getCircleBox(circleElement));
+    //     }
+    //     for (const lwpolylineElement of LWPOLYLINE) {
+    //         boxs.push(getLwpolylineBox(lwpolylineElement));
+    //     }
+    //     for (const arcElement of ARC) {
+    //         boxs.push(getArcBox(arcElement));
+    //     }
+    //     result = boxs.reduce((acc, box) => ({
+    //         minX: Math.min(acc.minX, box.minX),
+    //         maxX: Math.max(acc.maxX, box.maxX),
+    //         minY: Math.min(acc.minY, box.minY),
+    //         maxY: Math.max(acc.maxY, box.maxY)
+    //     }), {
+    //         minX: Infinity,
+    //         maxX: -Infinity,
+    //         minY: Infinity,
+    //         maxY: -Infinity
+    //     });
+    // }
     // if (debug) {
     //     console.log(result);
     // }
