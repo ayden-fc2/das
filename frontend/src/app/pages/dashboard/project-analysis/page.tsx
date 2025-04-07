@@ -4,11 +4,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useQueryParams} from "@/app/utils/navigator";
 import {getJsonObj} from "@/app/components/draw/utils/das";
 import CanvasComponent from "@/app/components/draw/CanvasComponent";
-import TotalControlPanel from "@/app/pages/demo/das/analysis/coms/TotalControlPanel";
 import ResizableDialog from "@/app/components/ResizableDialog";
-import StdCom from "@/app/pages/demo/das/analysis/coms/panles/StdCom";
-import CurCom from "@/app/pages/demo/das/analysis/coms/panles/CurCom";
-import RelayCom, {CytoscapeElement} from "@/app/pages/demo/das/analysis/coms/panles/RelayCom";
 import SvgGetter from "@/app/components/draw/SvgGetter";
 import {createRoot} from "react-dom/client";
 import {err} from "@/app/utils/alerter";
@@ -16,6 +12,10 @@ import {analysisPublicProjectGraphML, getProjectComponents, getProjectGraph} fro
 import {checkValidBlock} from "@/app/components/draw/utils/drawCalc";
 import {MyResponse} from "@/app/types/common";
 import {Box} from "@mui/material";
+import RelayCom, {CytoscapeElement} from "@/app/pages/dashboard/project-analysis/coms/panles/RelayCom";
+import TotalControlPanel from "@/app/pages/dashboard/project-analysis/coms/TotalControlPanel";
+import StdCom from "@/app/pages/dashboard/project-analysis/coms/panles/StdCom";
+import CurCom from "@/app/pages/dashboard/project-analysis/coms/panles/CurCom";
 
 interface AnalysisPageProps {
     projectName: string;
@@ -385,6 +385,7 @@ export default function AnalysisPage() {
                     canvasFocus={handleCanvasFocus}
                 />}
                 {showRelay && <RelayCom
+                    projectId={basicInfo.projectId}
                     sourceElements={currentGraph}
                     canvasFocus={handleCanvasFocus}
                 />}

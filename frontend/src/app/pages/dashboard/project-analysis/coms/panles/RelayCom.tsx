@@ -15,7 +15,8 @@ import {
 import React, {useEffect, useRef, useState} from "react";
 import CytoscapeComponent from 'react-cytoscapejs';
 import SvgRender from "@/app/components/draw/SvgRender";
-import {info} from "@/app/utils/alerter";
+import {err, info} from "@/app/utils/alerter";
+import {genTraceApi} from "@/app/api/das";
 
 /**
  * 渲染图结构，支持选中关键节点，展示它的基本信息和上下游关系
@@ -42,9 +43,10 @@ export interface CytoscapeElement {
 export interface RelayComProps {
     sourceElements: CytoscapeElement[],
     canvasFocus: (centerPt: any, maxBoxSize: any) => void,
+    projectId: number
 }
 
-const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
+const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComProps)=> {
     /**
      * 图数据
      */
@@ -147,6 +149,15 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
                 'outline-color': 'red',
             },
         },
+        {
+            selector: 'node.fault', // 选中节点样式
+            style: {
+                'border-width': errorBase.current * 0.02,
+                'border-color': '#f3f4f6',
+                'outline-width': errorBase.current * 0.02,
+                'outline-color': 'blue',
+            },
+        },
     ];
 
     /**
@@ -213,9 +224,9 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
         // 故障分析
         if (currentMode === 'fault') {
             if (faultMode === "add") {
-                addFaultNode(currentNode)
+                addFaultNode(currentNode, e)
             } else if (faultMode === "delete") {
-                deleteFaultNode(currentNode)
+                deleteFaultNode(currentNode, e)
             }
         }
     }
@@ -234,21 +245,42 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
      * 故障排查
      */
     const [faultMode, setFaultMode] = useState("add");
-    const [faultNodeTable, setFaultNodeTable] = useState<any[]>([]);
-    const addFaultNode = (node: CytoscapeElement | undefined)=> {
-        const newFault = {
-            label: node?.data?.label || "",
-            id: node?.data?.id || "",
-            box: node?.box || "",
-            position: node?.position || "",
-        }
-        setFaultNodeTable([...faultNodeTable, newFault])
-    }
-    const deleteFaultNode = (node: CytoscapeElement | undefined)=> {
-        const newFaultNodeTable = faultNodeTable.filter(fault => fault.data.id !== node?.data.id)
-        setFaultNodeTable(newFaultNodeTable)
-    }
+    const [faultNodes, setFaultNodes] = useState<any[]>([]);
 
+    // 添加节点
+    const addFaultNode = (node: CytoscapeElement | undefined, e: any) => {
+        e.target.removeClass('fault');
+        e.target.addClass('fault');
+        const id = node?.data?.id;
+        if (id !== undefined) {
+            setFaultNodes(prev =>
+                prev.includes(id) ? prev : [...prev, id]
+            );
+        }
+    };
+
+    // 删除节点
+    const deleteFaultNode = (node: CytoscapeElement | undefined, e: any) => {
+        const id = node?.data?.id;
+        if (id !== undefined) {
+            setFaultNodes(prev => prev.filter(item => item !== id));
+        }
+        e.target.removeClass('fault');
+    };
+
+    const [predicts, setPredicts] = useState<any[]>([]);
+    const runAnalysis = () => {
+        if (faultNodes.length === 0) {
+            err('Please select at least one fault node to run analysis.')
+            return
+        }
+        const getResult = genTraceApi(projectId, faultNodes.join(","))
+        getResult.then(res => {
+            setPredicts(res.data.predictions);
+        }).catch(e => {
+            err('something went wrong!')
+        })
+    }
 
     return (
         <Box className={`w-full h-full text-black overscroll-hidden flex`}>
@@ -414,24 +446,45 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
                 }
                 {currentMode === "fault" && (<Box className={`flex-1 w-full flex flex-col relative overscroll-y-auto overflow-x-hidden`}>
                     {/*表格*/}
-                    <Box className={`w-full flex-1 pb-4 bg-red-200 overflow-x-hidden overscroll-y-auto`}>
+                    <Box className={`w-full flex-1 pb-4 overflow-x-hidden overscroll-y-auto`}>
+                        {/* 故障节点标志 */}
+                        <Box className={`w-full h-12 flex items-center justify-between px-4`}>
+                            <Box className={`flex items-center justify-between`}>
+                                <Typography variant="body2" fontWeight={"bold"}>
+                                    Fault Nodes:
+                                </Typography>
+                                <Box className="ml-4 w-6 h-6 rounded-full border-2 border-blue-500" />
+                            </Box>
+                            <Box className={`flex items-center justify-between`}>
+                                <Typography variant="body2" fontWeight={"bold"}>
+                                    Top Reasons:
+                                </Typography>
+                                <Box className="ml-4 w-6 h-6 rounded-full border-2 border-purple-500" />
+                            </Box>
+                            <Typography variant="body2" fontWeight={"bold"}>
+                                Faults: {faultNodes.length}
+                            </Typography>
+                        </Box>
+                        {/* 故障溯源结果表格 */}
                         <TableContainer component={Paper}>
                             <Table size="small">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="center">Index</TableCell>
-                                        <TableCell align="center">Info</TableCell>
+                                        <TableCell align="center">Id</TableCell>
+                                        <TableCell align="center">Confidence</TableCell>
                                         <TableCell align="center">Operation</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {faultNodeTable.map((node, index) => (
+                                    {predicts.map((node, index) => (
                                         <TableRow key={index}>
                                             <TableCell align="center">{index + 1}</TableCell>
-                                            <TableCell align="center">{node.label} {node.id}</TableCell>
+                                            <TableCell align="center">{node.node_id}</TableCell>
+                                            <TableCell align="center">{node.predicted_confidence}</TableCell>
                                             <TableCell align="center">
                                                 <Button size={"small"} onClick={()=> {
-                                                    focusInnerClick([node.position.x, node.position.y], Math.max(node.box.width, node.box.height))
+                                                    // focusInnerClick([node.position.x, node.position.y], Math.max(node.box.width, node.box.height))
                                                 }}>focus</Button>
                                             </TableCell>
                                         </TableRow>
@@ -454,7 +507,7 @@ const RelayCom = React.memo(({sourceElements, canvasFocus}: RelayComProps)=> {
                                 <Button onClick={()=>{setFaultMode("delete")}} variant={"contained"} color={"error"}>Delete Fault Nodes</Button>
                             </>
                         )}
-                        <Button onClick={()=>{setFaultMode("run")}} variant={"contained"} color={"primary"}>Run Fault Analysis</Button>
+                        <Button onClick={runAnalysis} variant={"contained"} color={"primary"}>Run Fault Analysis</Button>
                     </Box>
                 </Box>)}
             </Box>
