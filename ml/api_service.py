@@ -68,21 +68,25 @@ def process_input(input_json):
     """将输入JSON转换为PyG Data对象，返回数据和节点id列表"""
     graph = input_json  # 假设每次只处理一个图
 
+    # 先收集原始节点 id（字符串）
+    node_ids = [node["id"] for node in graph["nodes"]]
+    # 建立从原始 id 到 0-based 索引的映射
+    id2idx = {nid: idx for idx, nid in enumerate(node_ids)}
+
     node_features = []
-    node_ids = []
     for node in graph["nodes"]:
-        features = [
+        node_features.append([
             node["in_degree"],
             node["betweenness"],
             node["closeness"],
             1.0 if node["is_anomalous_node"] else 0.0
-        ]
-        node_features.append(features)
-        node_ids.append(node["id"])
+        ])
 
-    edge_index = []
-    for edge in graph["edges"]:
-        edge_index.append([edge["source"], edge["target"]])
+        # 构造 edge_index，要把 source/target 的 string id 转成数字索引
+    edge_index = [
+        [id2idx[edge["source"]], id2idx[edge["target"]]]
+        for edge in graph["edges"]
+    ]
 
     data = Data(
         x=torch.tensor(node_features, dtype=torch.float).to(device),
@@ -108,7 +112,7 @@ def predict():
 
         # 格式化输出，每个节点返回其预测的故障置信度
         results = [{
-            "node_id": int(node_id),
+            "node_id": node_id,
             "predicted_confidence": round(float(confidence), 4)
         } for node_id, confidence in zip(node_ids, pred.cpu().numpy().flatten())]
 

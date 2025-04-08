@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dwg.handler.dao.*;
 import com.dwg.handler.entity.*;
 import com.dwg.handler.service.DwgService;
+import com.dwg.handler.service.feign.FaultFeign;
 import com.dwg.handler.utils.GraphProcessor;
 import com.dwg.handler.utils.JsonProcessor;
 import com.example.common.exception.MyException;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DwgServiceImpl implements DwgService {
@@ -406,12 +408,206 @@ public class DwgServiceImpl implements DwgService {
             }
 
             // TODO: 入库分析结果
-//            uploadDwgStMapper.setAnalysed(projectId);
+            uploadDwgStMapper.setAnalysed(projectId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             throw new MyException(e.getMessage());
         }
+    }
+
+    @Autowired
+    FaultFeign ff;
+
+    @Override
+    public JSONObject genTrace(Long projectId, String faultIds) {
+        List<InsertSt> keyNodes = insertStMapper.getInsertStListByDwgId(projectId);
+        List<String> faultIdList = Arrays.asList(faultIds.split(","));
+
+        JSONArray nodes = new JSONArray();
+        JSONArray edges = new JSONArray();
+        Set<String> edgeKeys = new HashSet<>();
+
+        // ----------------- 第一部分：构建边关系 -----------------
+        Map<String, List<String>> adjacencyList = new HashMap<>(); // 邻接表（用于后续中心性计算）
+        Map<String, Integer> inDegreeMap = new HashMap<>();       // 入度统计
+
+        for (InsertSt node : keyNodes) {
+            String currentNodeId = node.getInsertHandle0() + "-" + node.getInsertHandle1();
+
+            // 处理上游边
+            processEdges(node.getUpstream(), currentNodeId, edges, edgeKeys, adjacencyList, inDegreeMap, false);
+
+            // 处理下游边
+            processEdges(node.getDownstream(), currentNodeId, edges, edgeKeys, adjacencyList, inDegreeMap, true);
+        }
+
+        // ----------------- 第二部分：计算中心性指标 -----------------
+        Map<String, Double> betweennessMap = calculateBetweenness(adjacencyList);  // 中介中心性
+        Map<String, Double> closenessMap = calculateCloseness(adjacencyList);      // 接近中心性
+
+        // ----------------- 第三部分：构建节点数据 -----------------
+        for (InsertSt keyNode : keyNodes) {
+            String nodeId = keyNode.getInsertHandle0() + "-" + keyNode.getInsertHandle1();
+
+            JSONObject node = new JSONObject();
+            node.put("id", nodeId);
+            node.put("x", keyNode.getCenterPtX());
+            node.put("y", keyNode.getCenterPtY());
+            node.put("is_fault_confidence", 0);
+            node.put("is_anomalous_node", faultIdList.contains(nodeId));
+
+            // 添加指标
+            node.put("in_degree", inDegreeMap.getOrDefault(nodeId, 0));
+            node.put("betweenness", betweennessMap.getOrDefault(nodeId, 0.0));
+            node.put("closeness", closenessMap.getOrDefault(nodeId, 0.0));
+
+            nodes.add(node);
+        }
+
+        System.out.println("Edges: " + edges.toJSONString());
+        System.out.println("Nodes: " + nodes.toJSONString());
+        JSONObject result = new JSONObject();
+        result.put("nodes", nodes);
+        result.put("edges", edges);
+        result.put("graph_name", "demo");
+        System.out.println(result.toJSONString());
+
+        return ff.getResult(result);
+    }
+
+// ----------------- 工具方法 -----------------
+
+    /**
+     * 处理边关系并构建邻接表
+     * @param edgeStr 边字符串（如"2-956,3-1024"）
+     * @param currentNodeId 当前节点ID
+     * @param isDownstream 是否处理下游边
+     */
+    private void processEdges(String edgeStr, String currentNodeId,
+                              JSONArray edges, Set<String> edgeKeys,
+                              Map<String, List<String>> adjacencyList,
+                              Map<String, Integer> inDegreeMap,
+                              boolean isDownstream) {
+        if (edgeStr == null || edgeStr.isEmpty()) return;
+
+        Arrays.stream(edgeStr.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .forEach(neighborId -> {
+                    // 构建边唯一标识
+                    String source = isDownstream ? currentNodeId : neighborId;
+                    String target = isDownstream ? neighborId : currentNodeId;
+                    String edgeKey = source + "->" + target;
+
+                    if (!edgeKeys.contains(edgeKey)) {
+                        JSONObject edge = new JSONObject();
+                        edge.put("source", source);
+                        edge.put("target", target);
+                        edges.add(edge);
+                        edgeKeys.add(edgeKey);
+
+                        // 更新邻接表
+                        adjacencyList.computeIfAbsent(source, k -> new ArrayList<>()).add(target);
+
+                        // 更新入度
+                        inDegreeMap.put(target, inDegreeMap.getOrDefault(target, 0) + 1);
+                    }
+                });
+    }
+
+    /**
+     * 计算中介中心性（Brandes算法简化实现）
+     */
+    private Map<String, Double> calculateBetweenness(Map<String, List<String>> adjacencyList) {
+        Map<String, Double> betweenness = new HashMap<>();
+        List<String> nodes = new ArrayList<>(adjacencyList.keySet());
+
+        for (String s : nodes) {
+            // BFS初始化
+            Map<String, List<String>> predecessors = new HashMap<>();
+            Map<String, Integer> distance = new HashMap<>();
+            Deque<String> queue = new LinkedList<>();
+
+            distance.put(s, 0);
+            queue.offer(s);
+
+            while (!queue.isEmpty()) {
+                String v = queue.poll();
+                for (String w : adjacencyList.getOrDefault(v, Collections.emptyList())) {
+                    if (!distance.containsKey(w)) {
+                        distance.put(w, distance.get(v) + 1);
+                        queue.offer(w);
+                        predecessors.put(w, new ArrayList<>());
+                    }
+                    if (distance.get(w) == distance.get(v) + 1) {
+                        predecessors.get(w).add(v);
+                    }
+                }
+            }
+
+            // 回溯累加中心性
+            Map<String, Double> delta = new HashMap<>();
+            Stack<String> stack = new Stack<>();
+            stack.addAll(distance.keySet().stream()
+                    .sorted((a, b) -> Integer.compare(distance.get(b), distance.get(a)))
+                    .collect(Collectors.toList()));
+
+            while (!stack.isEmpty()) {
+                String w = stack.pop();
+                for (String v : predecessors.getOrDefault(w, Collections.emptyList())) {
+                    double contrib = (1.0 + delta.getOrDefault(w, 0.0)) / predecessors.get(w).size();
+                    delta.put(v, delta.getOrDefault(v, 0.0) + contrib);
+                }
+                if (!w.equals(s)) {
+                    betweenness.put(w, betweenness.getOrDefault(w, 0.0) + delta.getOrDefault(w, 0.0));
+                }
+            }
+        }
+
+        // 标准化（可选）
+        int n = nodes.size();
+        double factor = 1.0 / ((n - 1) * (n - 2));
+        betweenness.replaceAll((k, v) -> v * factor);
+
+        return betweenness;
+    }
+
+    /**
+     * 计算接近中心性（基于BFS）
+     */
+    private Map<String, Double> calculateCloseness(Map<String, List<String>> adjacencyList) {
+        Map<String, Double> closeness = new HashMap<>();
+
+        for (String node : adjacencyList.keySet()) {
+            Map<String, Integer> distance = new HashMap<>();
+            Deque<String> queue = new LinkedList<>();
+
+            distance.put(node, 0);
+            queue.offer(node);
+
+            while (!queue.isEmpty()) {
+                String current = queue.poll();
+                for (String neighbor : adjacencyList.getOrDefault(current, Collections.emptyList())) {
+                    if (!distance.containsKey(neighbor)) {
+                        distance.put(neighbor, distance.get(current) + 1);
+                        queue.offer(neighbor);
+                    }
+                }
+            }
+
+            // 计算总和和可达节点数
+            int totalDistance = distance.values().stream().mapToInt(Integer::intValue).sum();
+            int reachableNodes = distance.size() - 1;  // 排除自己
+
+            if (reachableNodes > 0 && totalDistance > 0) {
+                closeness.put(node, (double) reachableNodes / totalDistance);
+            } else {
+                closeness.put(node, 0.0);
+            }
+        }
+
+        return closeness;
     }
 
 }

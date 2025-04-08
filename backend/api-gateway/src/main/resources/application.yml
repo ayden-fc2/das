@@ -47,6 +47,9 @@ zuul:
       # service-id: file-manage
       # url: http://localhost:2076
       url: ${FILE_SERVICE_URL:http://localhost:2076}
+    das-analysis:
+      path: /das-analysis/**
+      url: http://localhost:2080
   host:
     connect-timeout-millis: 30000
     socket-timeout-millis: 30000

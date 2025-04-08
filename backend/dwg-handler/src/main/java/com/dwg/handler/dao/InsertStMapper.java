@@ -36,4 +36,5 @@ public interface InsertStMapper {
             @Result(property = "downstream", column = "downstream")
     })
     List<InsertSt> getInsertStListByDwgId(@Param("projectId") long projectId);
+
 }

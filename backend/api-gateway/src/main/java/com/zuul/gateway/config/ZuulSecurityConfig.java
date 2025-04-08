@@ -19,7 +19,8 @@ public class ZuulSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth-service/**",
                         "/example2060/**",
                         "/dwg-handler/**",
-                        "/file-manage/**"
+                        "/file-manage/**",
+                        "/das-analysis/**"
                 )
                 .permitAll()
                 .anyRequest()
