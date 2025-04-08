@@ -20,7 +20,6 @@ import {genTraceApi} from "@/app/api/das";
 
 /**
  * 渲染图结构，支持选中关键节点，展示它的基本信息和上下游关系
- * TODO: 使用GNN实现故障排查
  * @constructor
  */
 export interface CytoscapeElement {
@@ -146,16 +145,41 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
                 'border-width': errorBase.current * 0.02,
                 'border-color': '#f3f4f6',
                 'outline-width': errorBase.current * 0.02,
-                'outline-color': 'red',
+                'outline-color': 'green',
             },
         },
         {
             selector: 'node.fault', // 选中节点样式
             style: {
+                'label': 'F', // 显示字母F
+                'color': '#fff', // 文字颜色
+                'text-valign': 'center', // 垂直居中
+                'text-halign': 'center', // 水平居中
+                'text-outline-width': 1, // 文字描边
+                'z-index': 999, // 确保在最上层
+                'font-size': 'auto', // 根据节点尺寸自动调整
+                'text-outline-color': 'blue', // 白色描边保证对比度
                 'border-width': errorBase.current * 0.02,
                 'border-color': '#f3f4f6',
-                'outline-width': errorBase.current * 0.02,
+                'outline-width': errorBase.current * 0.04,
                 'outline-color': 'blue',
+            },
+        },
+        {
+            selector: 'node.reason',
+            style: {
+                'label': 'R', // 显示字母F
+                'color': '#fff', // 文字颜色
+                'text-valign': 'center', // 垂直居中
+                'text-halign': 'center', // 水平居中
+                'text-outline-width': 1, // 文字描边
+                'z-index': 999, // 确保在最上层
+                'font-size': 'auto', // 根据节点尺寸自动调整
+                'text-outline-color': 'red', // 白色描边保证对比度
+                'border-width': errorBase.current * 0.02,
+                'border-color': '#f3f4f6',
+                'outline-width': errorBase.current * 0.04,
+                'outline-color': 'red', // 使用紫色边框标识原因节点
             },
         },
     ];
@@ -269,6 +293,7 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
     };
 
     const [predicts, setPredicts] = useState<any[]>([]);
+    const e = useRef<any>();
     const runAnalysis = () => {
         if (faultNodes.length === 0) {
             err('Please select at least one fault node to run analysis.')
@@ -276,7 +301,18 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
         }
         const getResult = genTraceApi(projectId, faultNodes.join(","))
         getResult.then(res => {
+            e.current.nodes().removeClass('reason');
             setPredicts(res.data.predictions);
+            const topReasonNodeIds = res.data.predictions
+                .slice(0, 3) // 取置信度前三的节点
+                .map((p: any) => p.node_id);
+
+            topReasonNodeIds.forEach((id: string) => {
+                const node = e.current.getElementById(id);
+                if (node) {
+                    node.addClass('reason');
+                }
+            });
         }).catch(e => {
             err('something went wrong!')
         })
@@ -295,6 +331,7 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
                             fit: true
                         }}
                         cy={(cy: any) => {
+                            e.current = cy
                             cy.on('click', 'node', (e: any) => {
                                 // 只有点击关键节点时有反应
                                 if (e.target.data().type === 'key') {
@@ -453,13 +490,17 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
                                 <Typography variant="body2" fontWeight={"bold"}>
                                     Fault Nodes:
                                 </Typography>
-                                <Box className="ml-4 w-6 h-6 rounded-full border-2 border-blue-500" />
+                                <Box className="ml-4 w-8 h-8 text-blue-500 text-xl font-bold rounded-full border-2 border-blue-500 flex justify-center text-center align-center" >
+                                    F
+                                </Box>
                             </Box>
                             <Box className={`flex items-center justify-between`}>
                                 <Typography variant="body2" fontWeight={"bold"}>
                                     Top Reasons:
                                 </Typography>
-                                <Box className="ml-4 w-6 h-6 rounded-full border-2 border-purple-500" />
+                                <Box className="ml-4 w-8 h-8 text-red-500 text-xl font-bold rounded-full border-2 border-red-500 flex justify-center text-center align-center" >
+                                    R
+                                </Box>
                             </Box>
                             <Typography variant="body2" fontWeight={"bold"}>
                                 Faults: {faultNodes.length}
@@ -484,6 +525,7 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
                                             <TableCell align="center">{node.predicted_confidence}</TableCell>
                                             <TableCell align="center">
                                                 <Button size={"small"} onClick={()=> {
+                                                    // TODO: focus操作
                                                     // focusInnerClick([node.position.x, node.position.y], Math.max(node.box.width, node.box.height))
                                                 }}>focus</Button>
                                             </TableCell>
@@ -497,17 +539,23 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
                     <Box className={`w-full h-16 my-2 flex justify-between items-center rounded-md border-t-2 border-gray-200`}>
                         {faultMode === "delete" && (
                             <>
-                                <Typography variant="body2">Click node to delete</Typography>
-                                <Button onClick={()=>{setFaultMode("add")}} variant={"contained"} color={"success"}>Add Fault Nodes</Button>
+                                <Typography variant="body2">Click to delete fault nodes</Typography>
+                                <Button onClick={()=>{setFaultMode("add")}} variant={"contained"} color={"success"}>Add</Button>
                             </>
                         )}
                         {faultMode === "add" && (
                             <>
-                                <Typography variant="body2">Click node to add</Typography>
-                                <Button onClick={()=>{setFaultMode("delete")}} variant={"contained"} color={"error"}>Delete Fault Nodes</Button>
+                                <Typography variant="body2">Click node to add fault nodes</Typography>
+                                <Button onClick={()=>{setFaultMode("delete")}} variant={"contained"} color={"error"}>Delete</Button>
                             </>
                         )}
-                        <Button onClick={runAnalysis} variant={"contained"} color={"primary"}>Run Fault Analysis</Button>
+                        <Button onClick={()=>{
+                            e.current.nodes().removeClass('reason');
+                            e.current.nodes().removeClass('fault');
+                            setFaultNodes([])
+                            setPredicts([])
+                        }} variant={"contained"} color={"secondary"}>Clear</Button>
+                        <Button onClick={runAnalysis} variant={"contained"} color={"primary"}>Analysis</Button>
                     </Box>
                 </Box>)}
             </Box>
