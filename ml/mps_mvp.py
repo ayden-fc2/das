@@ -132,7 +132,7 @@ def train():
 
     # 训练循环
     best_val_loss = float("inf")
-    for epoch in range(300):
+    for epoch in range(150):
         # 训练阶段
         model.train()
         train_loss = 0.0
