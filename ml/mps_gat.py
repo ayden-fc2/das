@@ -210,50 +210,6 @@ def train(config):
 
     return best_val_loss
 
-configs_0 = [
-    {"in_dim": 4, "hidden_dim": 32, "heads": 2, "dropout": 0.3, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 32, "heads": 4, "dropout": 0.4, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 4, "dropout": 0.6, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 128, "heads": 2, "dropout": 0.5, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 128, "heads": 4, "dropout": 0.5, "lr": 0.0001, "weight_decay": 5e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-
-    # 控制变量：改变 dropout
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.2, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.8, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-
-    # 控制变量：改变 edge drop & feature mask
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.4, "feat_mask_rate": 0.4},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.0, "feat_mask_rate": 0.0},
-
-    # 控制变量：改变学习率
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2}
-]
-
-configs = [
-# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
-#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0007,
-#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0003,
-#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.25, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
-     "weight_decay":5e-5, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
-     "weight_decay":2e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":1, "dropout":0.2, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":48, "heads":2, "dropout":0.2, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-]
-config = {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0007,
-     "weight_decay":1e-4, "epochs":150, "edge_drop_rate":0.2, "feat_mask_rate":0.2}
-
 def train_save_best():
     device = torch.device(
         "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
@@ -334,6 +290,52 @@ def train_save_best():
             out = model(data)
             test_loss += criterion(out, data.y).item()
     print(f"GAT Test Loss: {test_loss / len(test_dataset):.4f}")
+
+configs_0 = [
+    {"in_dim": 4, "hidden_dim": 32, "heads": 2, "dropout": 0.3, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 32, "heads": 4, "dropout": 0.4, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 4, "dropout": 0.6, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 128, "heads": 2, "dropout": 0.5, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 128, "heads": 4, "dropout": 0.5, "lr": 0.0001, "weight_decay": 5e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+
+    # 控制变量：改变 dropout
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.2, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.8, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+
+    # 控制变量：改变 edge drop & feature mask
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.4, "feat_mask_rate": 0.4},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.0, "feat_mask_rate": 0.0},
+
+    # 控制变量：改变学习率
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2}
+]
+
+configs = [
+# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
+#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0007,
+#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0003,
+#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.25, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
+     "weight_decay":5e-5, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
+     "weight_decay":2e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":1, "dropout":0.2, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":48, "heads":2, "dropout":0.2, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+]
+config = {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0007,
+     "weight_decay":1e-4, "epochs":150, "edge_drop_rate":0.2, "feat_mask_rate":0.2}
+
+
 
 if __name__ == "__main__":
     if false:

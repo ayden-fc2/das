@@ -90,8 +90,8 @@ services:
     depends_on:
       - service-discovery
       - auth-service
-      - dwg-handler
-      - file-manage
+#      - dwg-handler
+#      - file-manage
   redis:
     image: redis:latest
     container_name: redis
