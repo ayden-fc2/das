@@ -234,6 +234,11 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
         canvasFocus(centerPt, maxBoxSize)
     }
 
+    const handleNodeFocus = (nodeId: any) => {
+        const nodeToFocus = sourceElements.filter(item => item.data.id === nodeId)[0]
+        focusInnerClick([nodeToFocus?.position?.x ?? 0, nodeToFocus?.position?.y ?? 0], Math.max(nodeToFocus.box.width, nodeToFocus.box.height))
+    }
+
     /**
      * 节点点击事件
      */
@@ -525,6 +530,7 @@ const RelayCom = React.memo(({sourceElements, canvasFocus, projectId}: RelayComP
                                             <TableCell align="center">{node.predicted_confidence}</TableCell>
                                             <TableCell align="center">
                                                 <Button size={"small"} onClick={()=> {
+                                                    handleNodeFocus(node.node_id)
                                                     // TODO: focus操作
                                                     // focusInnerClick([node.position.x, node.position.y], Math.max(node.box.width, node.box.height))
                                                 }}>focus</Button>

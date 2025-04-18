@@ -11,7 +11,7 @@
  Target Server Version : 90200 (9.2.0)
  File Encoding         : 65001
 
- Date: 08/04/2025 21:17:38
+ Date: 18/04/2025 13:23:35
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,7 @@ CREATE TABLE `block_st` (
   `handle1` int DEFAULT NULL,
   `dwg_id` int DEFAULT NULL,
   PRIMARY KEY (`block_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2064 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2253 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for insert_st
@@ -64,7 +64,7 @@ CREATE TABLE `insert_st` (
   `upstream` varchar(255) DEFAULT NULL,
   `downstream` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`insert_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31753 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33627 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for key_pipe_st
@@ -84,7 +84,7 @@ CREATE TABLE `key_pipe_st` (
   `v_start_uuid` varchar(255) DEFAULT NULL,
   `v_end_uuid` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`key_pipe_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11077 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for log_st
@@ -112,6 +112,22 @@ CREATE TABLE `org_st` (
   `org_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`org_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for project_st
+-- ----------------------------
+DROP TABLE IF EXISTS `project_st`;
+CREATE TABLE `project_st` (
+  `project_key` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `desc` varchar(255) DEFAULT NULL,
+  `parent_key` varchar(255) DEFAULT NULL,
+  `children_key` varchar(255) DEFAULT NULL,
+  `upload_id` int DEFAULT NULL,
+  `org_id` int DEFAULT NULL,
+  `creater_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for relationship_st
@@ -142,7 +158,7 @@ CREATE TABLE `upload_dwg_st` (
   `is_deleted` int DEFAULT NULL,
   `analysised` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
 -- Table structure for virtual_node_st
@@ -156,6 +172,6 @@ CREATE TABLE `virtual_node_st` (
   `dwg_id` int DEFAULT NULL,
   `finished` int DEFAULT NULL,
   PRIMARY KEY (`v_node_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4270 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6842 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

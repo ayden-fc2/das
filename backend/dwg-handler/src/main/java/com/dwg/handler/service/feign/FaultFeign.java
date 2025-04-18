@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-@FeignClient(name = "fault-feign", url = "http://localhost:2080")
+@FeignClient(name = "fault-feign", url = "http://localhost:2081")
 public interface FaultFeign {
     @PostMapping("/predict")
     JSONObject getResult(@RequestBody JSONObject request);

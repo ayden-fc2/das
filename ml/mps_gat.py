@@ -4,8 +4,9 @@ import torch
 from sympy import false
 from torch_geometric.data import Data
 from torch_geometric.nn import GATConv  # 关键修改：GCNConv -> GATConv
+import matplotlib.pyplot as plt
 
-config = {
+config_default = {
     "in_dim": 4,
     "hidden_dim": 64,
     "heads": 2,
@@ -17,9 +18,53 @@ config = {
     "feat_mask_rate": 0.2
 }
 
+configs_0 = [
+    {"in_dim": 4, "hidden_dim": 32, "heads": 2, "dropout": 0.3, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 32, "heads": 4, "dropout": 0.4, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 4, "dropout": 0.6, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 128, "heads": 2, "dropout": 0.5, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 128, "heads": 4, "dropout": 0.5, "lr": 0.0001, "weight_decay": 5e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+
+    # 控制变量：改变 dropout
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.2, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.8, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+
+    # 控制变量：改变 edge drop & feature mask
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.4, "feat_mask_rate": 0.4},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.0, "feat_mask_rate": 0.0},
+
+    # 控制变量：改变学习率
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
+    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2}
+]
+
+configs = [
+# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
+#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0007,
+#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0003,
+#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.25, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
+     "weight_decay":5e-5, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
+     "weight_decay":2e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":64, "heads":1, "dropout":0.2, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+{"in_dim":4, "hidden_dim":48, "heads":2, "dropout":0.2, "lr":0.0005,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
+]
+config = {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0007,
+     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2}
+
 
 # ===========================================
-# 数据预处理（保持不变）
+# 数据预处理
 # ===========================================
 def load_data(file_path):
     with open(file_path) as f:
@@ -50,7 +95,7 @@ def load_data(file_path):
 
 
 # ===========================================
-# 数据增强（保持不变）
+# 数据增强
 # ===========================================
 def graph_augmentation(data, edge_drop_rate=0.2, feat_mask_rate=0.2):
     data_aug = copy.deepcopy(data)
@@ -65,7 +110,7 @@ def graph_augmentation(data, edge_drop_rate=0.2, feat_mask_rate=0.2):
 
 
 # ===========================================
-# 改进的GAT模型（核心修改部分）
+# 改进的GAT模型
 # ===========================================
 class FaultGAT(torch.nn.Module):
     def __init__(self, in_dim=4, hidden_dim=64, heads=2, dropout=0.6):
@@ -210,50 +255,6 @@ def train(config):
 
     return best_val_loss
 
-configs_0 = [
-    {"in_dim": 4, "hidden_dim": 32, "heads": 2, "dropout": 0.3, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 32, "heads": 4, "dropout": 0.4, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 4, "dropout": 0.6, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 128, "heads": 2, "dropout": 0.5, "lr": 0.0003, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 128, "heads": 4, "dropout": 0.5, "lr": 0.0001, "weight_decay": 5e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-
-    # 控制变量：改变 dropout
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.2, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.8, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-
-    # 控制变量：改变 edge drop & feature mask
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.4, "feat_mask_rate": 0.4},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0005, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.0, "feat_mask_rate": 0.0},
-
-    # 控制变量：改变学习率
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2},
-    {"in_dim": 4, "hidden_dim": 64, "heads": 2, "dropout": 0.6, "lr": 0.0001, "weight_decay": 1e-4, "epochs": 100, "edge_drop_rate": 0.2, "feat_mask_rate": 0.2}
-]
-
-configs = [
-# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
-#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0007,
-#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-# {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0003,
-#      "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.25, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
-     "weight_decay":5e-5, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.2, "lr":0.0005,
-     "weight_decay":2e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":64, "heads":1, "dropout":0.2, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-{"in_dim":4, "hidden_dim":48, "heads":2, "dropout":0.2, "lr":0.0005,
-     "weight_decay":1e-4, "epochs":100, "edge_drop_rate":0.2, "feat_mask_rate":0.2},
-]
-config = {"in_dim":4, "hidden_dim":64, "heads":2, "dropout":0.15, "lr":0.0007,
-     "weight_decay":1e-4, "epochs":150, "edge_drop_rate":0.2, "feat_mask_rate":0.2}
-
 def train_save_best():
     device = torch.device(
         "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
@@ -263,16 +264,16 @@ def train_save_best():
     # train_dataset = full_dataset[:30]
     # val_dataset = full_dataset[30:35]
     # test_dataset = full_dataset[35:40]
-    # 训练集: 0-6, 10-16, 20-26, 30-36
-    train_indices = list(range(0, 6)) + list(range(10, 16)) + list(range(20, 26)) + list(range(30, 36))
+    # 训练集
+    train_indices = list(range(2, 8)) + list(range(12, 18)) + list(range(22, 28)) + list(range(32, 38)) + list(range(42, 48))
     train_dataset = [full_dataset[i] for i in train_indices]
 
-    # 验证集: 6-8, 16-18, 26-28
-    val_indices = list(range(6, 8)) + list(range(16, 18)) + list(range(26, 28)) + list(range(36, 38))
+    # 验证集
+    val_indices = list(range(0, 2)) + list(range(10, 12)) + list(range(20, 22)) + list(range(30, 32)) + list(range(40, 42))
     val_dataset = [full_dataset[i] for i in val_indices]
 
-    # 测试集: 8-10, 18-20, 28-30
-    test_indices = list(range(8, 10)) + list(range(18, 20)) + list(range(28, 30)) + list(range(38, 40))
+    # 测试集
+    test_indices = list(range(8, 10)) + list(range(18, 20)) + list(range(28, 30)) + list(range(38, 40)) + list(range(48, 50))
     test_dataset = [full_dataset[i] for i in test_indices]
 
     # 模型初始化（关键修改）
@@ -291,7 +292,11 @@ def train_save_best():
 
     # 训练循环
     best_val_loss = float("inf")
-    for epoch in range(100):
+
+    train_loss_list = []  # 用于记录每个 epoch 的训练损失
+    val_loss_list = []  # 用于记录每个 epoch 的验证损失
+
+    for epoch in range(config["epochs"]):
         model.train()
         train_loss = 0.0
         for data in train_dataset:
@@ -307,6 +312,10 @@ def train_save_best():
             optimizer.step()
             train_loss += loss.item()
 
+        # 记录训练损失均值
+        avg_train_loss = train_loss / len(train_dataset)
+        train_loss_list.append(avg_train_loss)
+
         # 验证阶段
         model.eval()
         val_loss = 0.0
@@ -315,6 +324,8 @@ def train_save_best():
                 data = data.to(device)
                 out = model(data)
                 val_loss += criterion(out, data.y).item()
+        avg_val_loss = val_loss / len(val_dataset)
+        val_loss_list.append(avg_val_loss)
 
         # 早停逻辑
         if val_loss < best_val_loss:
@@ -323,6 +334,19 @@ def train_save_best():
 
         print(
             f"Epoch {epoch + 1:03d} | Train Loss: {train_loss / len(train_dataset):.4f} | Val Loss: {val_loss / len(val_dataset):.4f}")
+
+    # 绘制训练过程的损失曲线
+    epochs_range = range(1, config["epochs"] + 1)
+    plt.figure(figsize=(8, 5))
+    plt.plot(epochs_range, train_loss_list, label='Train Loss')
+    plt.plot(epochs_range, val_loss_list, label='Validation Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training and Validation Loss Curve')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig("training_loss_curve.png", dpi=300)
+    plt.show()
 
     # 测试阶段
     model.load_state_dict(torch.load("best_gat_model.pth"))

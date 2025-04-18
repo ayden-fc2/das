@@ -408,7 +408,7 @@ public class DwgServiceImpl implements DwgService {
             }
 
             // TODO: 入库分析结果
-            uploadDwgStMapper.setAnalysed(projectId);
+//            uploadDwgStMapper.setAnalysed(projectId);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

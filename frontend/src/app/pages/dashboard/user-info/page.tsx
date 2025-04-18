@@ -27,7 +27,7 @@ const UserInfo: React.FC = () => {
                     <Avatar className={`!h-20 !w-20`} alt="Remy Sharp" src={authContext.basicUserInfo?.avatar || ''} />
                     {/*  昵称和邮箱  */}
                     <Box className={`h-full flex-1 ml-4 flex-col flex justify-center relative`}>
-                        <Typography variant="h6" className={`font-bold max-w-60 truncate whitespace-nowrap overflow-hidden`}>{authContext.basicUserInfo?.nickname || '神秘用户'}</Typography>
+                        <Typography variant="h6" className={`font-bold max-w-60 truncate whitespace-nowrap overflow-hidden`}>{authContext.basicUserInfo?.nickname || 'Default Name'}</Typography>
                         <Typography variant="body2" className={`text-gray-600 truncate max-w-60 whitespace-nowrap overflow-hidden`}>{authContext.basicUserInfo?.email || ''}</Typography>
                     </Box>
                 </Box>
