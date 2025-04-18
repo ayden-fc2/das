@@ -427,6 +427,7 @@ public class DwgServiceImpl implements DwgService {
         JSONArray nodes = new JSONArray();
         JSONArray edges = new JSONArray();
         Set<String> edgeKeys = new HashSet<>();
+        Set<String> allNodeIds = new HashSet<>();
 
         // ----------------- 第一部分：构建边关系 -----------------
         Map<String, List<String>> adjacencyList = new HashMap<>(); // 邻接表（用于后续中心性计算）
@@ -434,17 +435,41 @@ public class DwgServiceImpl implements DwgService {
 
         for (InsertSt node : keyNodes) {
             String currentNodeId = node.getInsertHandle0() + "-" + node.getInsertHandle1();
-
+            allNodeIds.add(currentNodeId);
             // 处理上游边
-            processEdges(node.getUpstream(), currentNodeId, edges, edgeKeys, adjacencyList, inDegreeMap, false);
+            processEdges(node.getUpstream(), currentNodeId, edges, edgeKeys, adjacencyList, inDegreeMap, true);
 
             // 处理下游边
-            processEdges(node.getDownstream(), currentNodeId, edges, edgeKeys, adjacencyList, inDegreeMap, true);
+            processEdges(node.getDownstream(), currentNodeId, edges, edgeKeys, adjacencyList, inDegreeMap, false);
         }
 
         // ----------------- 第二部分：计算中心性指标 -----------------
-        Map<String, Double> betweennessMap = calculateBetweenness(adjacencyList);  // 中介中心性
-        Map<String, Double> closenessMap = calculateCloseness(adjacencyList);      // 接近中心性
+        Map<String, Double> betweennessMap = calculateBetweenness(adjacencyList, allNodeIds);  // 中介中心性
+        Map<String, Double> closenessMap = calculateCloseness(adjacencyList, allNodeIds);      // 接近中心性
+
+        // 重新计算边和入度
+        Map<String, Integer> newInDegreeMap = new HashMap<>();
+        JSONArray newEdges = new JSONArray();
+        for (Object edge : edges.toArray()) {
+            JSONObject newEdge = new JSONObject();
+            newEdge.put("source", ((JSONObject) edge).get("target"));
+            newEdge.put("target", ((JSONObject) edge).get("source"));
+            newEdges.add(newEdge);
+        }
+        for (InsertSt node : keyNodes) {
+            String nodeId = node.getInsertHandle0() + "-" + node.getInsertHandle1();
+            newInDegreeMap.put(nodeId, 0);
+        }
+
+        // 3. 统一遍历边计算入度（避免嵌套循环）
+        for (Object edgeObj : newEdges) {
+            JSONObject edge = (JSONObject) edgeObj;
+            String target = edge.get("target").toString();
+            // 仅统计存在于 keyNodes 中的节点
+            if (newInDegreeMap.containsKey(target)) {
+                newInDegreeMap.put(target, newInDegreeMap.get(target) + 1);
+            }
+        }
 
         // ----------------- 第三部分：构建节点数据 -----------------
         for (InsertSt keyNode : keyNodes) {
@@ -458,7 +483,7 @@ public class DwgServiceImpl implements DwgService {
             node.put("is_anomalous_node", faultIdList.contains(nodeId));
 
             // 添加指标
-            node.put("in_degree", inDegreeMap.getOrDefault(nodeId, 0));
+            node.put("in_degree", newInDegreeMap.getOrDefault(nodeId, 0));
             node.put("betweenness", betweennessMap.getOrDefault(nodeId, 0.0));
             node.put("closeness", closenessMap.getOrDefault(nodeId, 0.0));
 
@@ -469,7 +494,7 @@ public class DwgServiceImpl implements DwgService {
         System.out.println("Nodes: " + nodes.toJSONString());
         JSONObject result = new JSONObject();
         result.put("nodes", nodes);
-        result.put("edges", edges);
+        result.put("edges", newEdges);
         result.put("graph_name", "demo");
         System.out.println(result.toJSONString());
 
@@ -519,73 +544,85 @@ public class DwgServiceImpl implements DwgService {
     /**
      * 计算中介中心性（Brandes算法简化实现）
      */
-    private Map<String, Double> calculateBetweenness(Map<String, List<String>> adjacencyList) {
+    private Map<String, Double> calculateBetweenness(Map<String, List<String>> adjacencyList, Set<String> allNodes) {
         Map<String, Double> betweenness = new HashMap<>();
-        List<String> nodes = new ArrayList<>(adjacencyList.keySet());
+        List<String> nodes = new ArrayList<>(allNodes);
+        int n = nodes.size();
 
         for (String s : nodes) {
-            // BFS初始化
-            Map<String, List<String>> predecessors = new HashMap<>();
             Map<String, Integer> distance = new HashMap<>();
+            Map<String, Integer> sigma = new HashMap<>();
+            Map<String, List<String>> predecessors = new HashMap<>();
             Deque<String> queue = new LinkedList<>();
+            Stack<String> stack = new Stack<>();
 
+            // 初始化
+            for (String node : nodes) {
+                distance.put(node, -1);
+                sigma.put(node, 0);
+                predecessors.put(node, new ArrayList<>());
+            }
             distance.put(s, 0);
-            queue.offer(s);
+            sigma.put(s, 1);
+            queue.add(s);
 
+            // BFS遍历计算最短路径
             while (!queue.isEmpty()) {
                 String v = queue.poll();
+                stack.push(v);
                 for (String w : adjacencyList.getOrDefault(v, Collections.emptyList())) {
-                    if (!distance.containsKey(w)) {
+                    if (distance.get(w) == -1) {
                         distance.put(w, distance.get(v) + 1);
-                        queue.offer(w);
-                        predecessors.put(w, new ArrayList<>());
+                        queue.add(w);
                     }
                     if (distance.get(w) == distance.get(v) + 1) {
+                        sigma.put(w, sigma.get(w) + sigma.get(v));
                         predecessors.get(w).add(v);
                     }
                 }
             }
 
-            // 回溯累加中心性
+            // 回溯计算delta
             Map<String, Double> delta = new HashMap<>();
-            Stack<String> stack = new Stack<>();
-            stack.addAll(distance.keySet().stream()
-                    .sorted((a, b) -> Integer.compare(distance.get(b), distance.get(a)))
-                    .collect(Collectors.toList()));
+            for (String node : nodes) {
+                delta.put(node, 0.0);
+            }
 
             while (!stack.isEmpty()) {
                 String w = stack.pop();
-                for (String v : predecessors.getOrDefault(w, Collections.emptyList())) {
-                    double contrib = (1.0 + delta.getOrDefault(w, 0.0)) / predecessors.get(w).size();
-                    delta.put(v, delta.getOrDefault(v, 0.0) + contrib);
+                if (w.equals(s)) continue;
+                for (String v : predecessors.get(w)) {
+                    double contrib = (sigma.get(v) * (1.0 + delta.get(w))) / sigma.get(w);
+                    delta.put(v, delta.get(v) + contrib);
                 }
-                if (!w.equals(s)) {
-                    betweenness.put(w, betweenness.getOrDefault(w, 0.0) + delta.getOrDefault(w, 0.0));
-                }
+                betweenness.put(w, betweenness.getOrDefault(w, 0.0) + delta.get(w));
             }
         }
 
-        // 标准化（可选）
-        int n = nodes.size();
-        double factor = 1.0 / ((n - 1) * (n - 2));
-        betweenness.replaceAll((k, v) -> v * factor);
-
+        // 标准化
+        if (n > 2) {
+            double factor = 1.0 / ((n - 1) * (n - 2));
+            betweenness.replaceAll((k, v) -> v * factor);
+        }
         return betweenness;
     }
+
 
     /**
      * 计算接近中心性（基于BFS）
      */
-    private Map<String, Double> calculateCloseness(Map<String, List<String>> adjacencyList) {
+    private Map<String, Double> calculateCloseness(Map<String, List<String>> adjacencyList, Set<String> allNodes) {
         Map<String, Double> closeness = new HashMap<>();
+        int totalNodes = allNodes.size(); // 总节点数
 
-        for (String node : adjacencyList.keySet()) {
+        // 遍历所有节点
+        for (String node : allNodes) {
             Map<String, Integer> distance = new HashMap<>();
             Deque<String> queue = new LinkedList<>();
-
             distance.put(node, 0);
             queue.offer(node);
 
+            // BFS 遍历图，计算每个节点到当前节点的最短路径
             while (!queue.isEmpty()) {
                 String current = queue.poll();
                 for (String neighbor : adjacencyList.getOrDefault(current, Collections.emptyList())) {
@@ -596,18 +633,37 @@ public class DwgServiceImpl implements DwgService {
                 }
             }
 
-            // 计算总和和可达节点数
-            int totalDistance = distance.values().stream().mapToInt(Integer::intValue).sum();
-            int reachableNodes = distance.size() - 1;  // 排除自己
-
-            if (reachableNodes > 0 && totalDistance > 0) {
-                closeness.put(node, (double) reachableNodes / totalDistance);
-            } else {
-                closeness.put(node, 0.0);
+            // 计算可达节点数量和总距离
+            int totalDistance = 0;
+            int reachableNodes = 0;
+            for (Map.Entry<String, Integer> entry : distance.entrySet()) {
+                if (!entry.getKey().equals(node)) { // 排除自己
+                    totalDistance += entry.getValue();
+                    reachableNodes++;
+                }
             }
+
+            // 如果节点不可达，接近中心性设为 0
+            double closenessCentrality = 0.0;
+            if (reachableNodes > 0 && totalDistance > 0) {
+                // 正常情况下的接近中心性计算
+                closenessCentrality = (double) (reachableNodes) / totalDistance;
+
+                // 如果图是多连通分量的, 使用改进公式
+                if (totalNodes > 1) {
+                    // 计算图的接近中心性标准化 (Wasserman 和 Faust 改进公式)
+                    closenessCentrality *= (double) (reachableNodes) / (totalNodes - 1);
+                }
+            }
+
+            // 存储接近中心性
+            closeness.put(node, closenessCentrality);
         }
 
         return closeness;
     }
+
+
+
 
 }
