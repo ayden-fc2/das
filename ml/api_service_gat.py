@@ -114,7 +114,7 @@ def process_input(input_json):
 # ===========================================
 # API端点：/predict-gat
 # ===========================================
-@app.route('/predict-gat', methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
     try:
         # 解析输入数据（JSON格式）
