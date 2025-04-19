@@ -62,7 +62,7 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public boolean joinOrg(int userId, String orgCode) {
         int orgId = orgMapper.getOrgIdByCode(orgCode);
-        if (relationshipMapper.getRelationship(userId, orgId).isEmpty()) {
+        if (!relationshipMapper.getRelationship(userId, orgId).isEmpty()) {
             throw new MyException("already joined！");
         }
         if (orgId > 0) {
@@ -85,6 +85,11 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public List<JSONObject> getMyOrgs(int userId, int page, int size) {
         return relationshipMapper.getMyOrgs(userId, (page - 1) * size, size);
+    }
+
+    @Override
+    public Integer getMyOrgsNum(int userId) {
+        return relationshipMapper.getMyOrgsNum(userId);
     }
 
     @Override

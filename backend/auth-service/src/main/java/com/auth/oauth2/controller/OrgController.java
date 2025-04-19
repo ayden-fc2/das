@@ -167,6 +167,17 @@ public class OrgController {
         }
     }
 
+    // 用户获取自己加入的群组列表页数
+    @GetMapping("/getMyOrgsNum")
+    public ResponseBean<Integer> getMyOrgsPageNum(@RequestHeader("Authorization") String token) {
+        try {
+            int userId = myTokenService.tokenToUserId(token);
+            return ResponseBean.success(orgService.getMyOrgsNum(userId));
+        } catch (Exception e) {
+            throw new MyException(e.getMessage());
+        }
+    }
+
     // 管理员删除用户
     @GetMapping("/deleteUser")
     @PreAuthorize("@orgRoleService.hasAnyRoleInOrg(" +

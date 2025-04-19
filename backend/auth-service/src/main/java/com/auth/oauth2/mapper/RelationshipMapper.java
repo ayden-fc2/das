@@ -42,6 +42,13 @@ public interface RelationshipMapper {
                                @Param("offset") int offset,
                                @Param("size") int size);
 
+    @Select("SELECT COUNT(DISTINCT o.org_id) " +
+            "FROM relationship_st r " +
+            "JOIN org_st o ON r.orgId = o.org_id " +
+            "JOIN account_st a ON o.creater_id = a.accountId " +
+            "WHERE r.accountId = #{userId}")
+    Integer getMyOrgsNum(@Param("userId") int userId);
+
 
     @Delete("DELETE FROM relationship_st WHERE accountId = #{userId} AND orgId = #{orgId}")
     boolean deleteUser(int managerId, @Param("orgId") int orgId, @Param("userId") int userId);

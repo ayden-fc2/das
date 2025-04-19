@@ -25,4 +25,6 @@ public interface OrgService {
     boolean deleteUser(int managerId, int orgId, int userId);
 
     boolean manageUserRoles(int managerId, int orgId, int userId, List<Integer> roleIds);
+
+    Integer getMyOrgsNum(int userId);
 }
