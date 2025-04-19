@@ -140,13 +140,11 @@ public class OrgController {
             ")")
     public ResponseBean<List<JSONObject>> getOrgsMember(
             @RequestHeader("Authorization") String token,
-            @Param("orgId") int orgId,
-            @Param("page") int page,
-            @Param("size") int size
+            @Param("orgId") int orgId
     ) {
         try {
             int userId = myTokenService.tokenToUserId(token);
-            return ResponseBean.success(orgService.getOrgsMember(userId, orgId, page, size));
+            return ResponseBean.success(orgService.getOrgsMember(userId, orgId));
         } catch (Exception e) {
             throw new MyException(e.getMessage());
         }
@@ -193,6 +191,9 @@ public class OrgController {
     ) {
         try {
             int managerId = myTokenService.tokenToUserId(token);
+            if (managerId == userId) {
+                throw new MyException("Can not delete yourself.");
+            }
             return ResponseBean.success(orgService.deleteUser(managerId, orgId, userId));
         } catch (Exception e) {
             throw new MyException(e.getMessage());

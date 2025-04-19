@@ -22,11 +22,8 @@ public interface RelationshipMapper {
             "FROM relationship_st r " +
             "JOIN account_st a ON r.accountId = a.accountId " +
             "WHERE r.orgId = #{orgId} " +
-            "GROUP BY a.accountId " +
-            "LIMIT #{size} OFFSET #{offset}")
-    List<JSONObject> getOrgsMember(@Param("orgId") int orgId,
-                                   @Param("offset") int offset,
-                                   @Param("size") int size);
+            "GROUP BY a.accountId ")
+    List<JSONObject> getOrgsMember(@Param("orgId") int orgId);
 
 
     @Select("SELECT o.org_id, o.org_name, o.created_time, o.creater_id, o.org_desc, o.org_code, " +

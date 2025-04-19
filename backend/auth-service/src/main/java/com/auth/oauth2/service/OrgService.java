@@ -18,7 +18,7 @@ public interface OrgService {
 
     boolean quitOrg(int userId, int orgId);
 
-    List<JSONObject> getOrgsMember(int userId, int orgId, int page, int size);
+    List<JSONObject> getOrgsMember(int userId, int orgId);
 
     List<JSONObject> getMyOrgs(int userId, int page, int size);
 

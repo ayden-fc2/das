@@ -5,11 +5,23 @@ import {
     Avatar,
     Box,
     Button,
-    Dialog, DialogActions,
+    Checkbox,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Divider, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField,
+    Divider,
+    FormControlLabel,
+    Pagination,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
     Typography
 } from "@mui/material";
 import {useAuth} from "@/app/context/AuthContext";
@@ -18,13 +30,13 @@ import 'react-calendar-heatmap/dist/styles.css';
 import {err, success} from "@/app/utils/alerter";
 import {
     createOrg,
-    deleteOrg,
+    deleteOrg, deleteOrgMember,
     getMyOrgNum,
-    getMyOrgs,
+    getMyOrgs, getOrgMembers,
     joinOrg,
     quitOrgByUsr,
     updateOrgCode,
-    updateOrgInfo
+    updateOrgInfo, updateOrgMemberRole
 } from "@/app/api/org";
 import {Stack} from "@mui/system";
 import {convertToChinaTime} from "@/app/utils/common";
@@ -224,6 +236,116 @@ const UserInfo: React.FC = () => {
         })
     }
 
+    /**
+     * 管理组织内用户
+     */
+    const [showOrgUsrs, setShowOrgUsrs] = React.useState(false);
+    const [orgUsrList, setOrgUsrList] = React.useState([]);
+    const [currentOrgUsrOrgId, setCurrentOrgUsrOrgId] = React.useState(0);
+    const handleOpenOrgUsr = (orgId: number) => {
+        setShowOrgUsrs(true);
+        setCurrentOrgUsrOrgId(orgId)
+        getOrgMembers(orgId).then(res=> {
+            if (res.success) {
+                setOrgUsrList(res.data);
+                return
+            }
+            err(res.message);
+        }).catch(e=> {
+            console.error(e);
+        })
+    }
+    const handleCloseOrgUsr = () => {
+        setShowOrgUsrs(false);
+        setOrgUsrList([])
+        setCurrentOrgUsrOrgId(0)
+    }
+    const getMemberRoles = (roleIds: string) => {
+        const idTable = roleIds.split(',');
+
+        const elements = idTable.map(id => {
+            const role = roleMap[id];
+            return role ? (
+                <span key={id} style={{
+                    backgroundColor: role.color,
+                    color: '#fff',
+                    padding: '2px 8px',
+                    borderRadius: '12px',
+                    fontSize: '12px',
+                    marginRight: '6px',
+                    display: 'inline-block',
+                }}>
+        {role.label}
+      </span>
+            ) : null;
+        });
+
+        const checkedMap: Record<'1' | '2' | '3', boolean> = {
+            '1': idTable.includes('1'),
+            '2': idTable.includes('2'),
+            '3': idTable.includes('3'),
+        };
+
+        return { elements, checkedMap };
+    }
+
+    const handleOrgUsrRoleUpdate = (orgUsr: any, type: string) => {
+        const roleMap = orgUsr.authorityIds
+            .split(',')
+            .map((r: string) => parseInt(r, 10))
+            .filter((r: number) => !isNaN(r));
+
+        let changeKey = 0;
+        switch (type) {
+            case 'Operator':
+                changeKey = 1;
+                break;
+            case 'Engineer':
+                changeKey = 2;
+                break;
+            case 'Admin':
+                changeKey = 3;
+                break;
+        }
+
+        let newRoleMap: number[];
+        if (roleMap.includes(changeKey)) {
+            newRoleMap = roleMap.filter((role: number) => role !== changeKey);
+        } else {
+            newRoleMap = [...roleMap, changeKey];
+        }
+        const updatedRoles = newRoleMap.join(',')
+        updateOrgMemberRole(currentOrgUsrOrgId, orgUsr.accountId, updatedRoles).then(res => {
+            if (res.success) {
+                setOrgUsrList((prevList:any) =>
+                    prevList.map((user:any) =>
+                        user.accountId === orgUsr.accountId
+                            ? { ...user, authorityIds: updatedRoles }
+                            : user
+                    )
+                );
+                return
+            }
+            err(res.message);
+        }).catch(e=>{
+            console.error(e);
+        })
+    };
+
+    const handleDeleteMember = (userId: number) => {
+        deleteOrgMember(currentOrgUsrOrgId, userId).then(res=> {
+            if (res.success) {
+                success('Successfully deleted');
+                setOrgUsrList(orgUsrList.filter((usr: any) => usr.accountId !== userId));
+                return
+            }
+            err(res.message);
+        }).catch(e=> {
+            console.error(e);
+            err('Can not delete yourself')
+        })
+    }
+
 
     /**
      * 全局
@@ -343,7 +465,7 @@ const UserInfo: React.FC = () => {
                                                     checkManager(row.authorityIds) ?
                                                         <Box className={`flex flex-col`}>
                                                             <Button onClick={()=>{manageOrg(row.org_id, row.org_name, row.org_desc, row.org_code)}}>Manage Org</Button>
-                                                            <Button>Manage Members</Button>
+                                                            <Button onClick={() => {handleOpenOrgUsr(row.org_id)}}>Manage Members</Button>
                                                         </Box> :
                                                         <Button onClick={() => {quitOrg(row.org_id)}}>Quit</Button>}
                                             </TableCell>
@@ -420,6 +542,59 @@ const UserInfo: React.FC = () => {
                             <Button onClick={handleUpdateOrgCode} className={`!ml-4`}>Update</Button>
                         </Box>
                         <Button onClick={handleDeleteOrg} className={`w-full !mt-2`} color={`error`} variant={`outlined`}>Delete</Button>
+                    </DialogContent>
+                </Dialog>
+                {/*  组织管理用户  */}
+                <Dialog
+                    open={showOrgUsrs}
+                    onClose={handleCloseOrgUsr}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description">
+                    <DialogTitle id="alert-dialog-title">
+                        {`Manage Org Members`}
+                    </DialogTitle>
+                    <DialogContent className={`flex flex-col items-center`}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align={`center`}>User Name</TableCell>
+                                    <TableCell align={`center`}>Roles</TableCell>
+                                    <TableCell align={`center`}>Operation</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    orgUsrList.map((orgUsr: any) => {
+                                        const { checkedMap } = getMemberRoles(orgUsr.authorityIds);
+                                        return (
+                                            <TableRow key={orgUsr.accountId}>
+                                                <TableCell align={`center`}>{orgUsr.nickName}</TableCell>
+                                                <TableCell align={`center`}>
+                                                    <Box className={`flex`}>
+                                                        <FormControlLabel
+                                                            control={<Checkbox size={`small`} onClick={()=>{handleOrgUsrRoleUpdate(orgUsr, 'Operator')}} checked={checkedMap['1']} />}
+                                                            label="Operator"
+                                                        />
+                                                        <FormControlLabel
+                                                            control={<Checkbox size={`small`} onClick={()=>{handleOrgUsrRoleUpdate(orgUsr, 'Engineer')}} checked={checkedMap['2']} />}
+                                                            label="Engineer"
+                                                        />
+                                                        <FormControlLabel
+                                                            control={<Checkbox size={`small`} onClick={()=>{handleOrgUsrRoleUpdate(orgUsr, 'Admin')}} checked={checkedMap['3']} />}
+                                                            label="Admin"
+                                                        />
+                                                    </Box>
+                                                </TableCell>
+                                                <TableCell align={`center`}>
+                                                    <Button onClick={()=>{handleDeleteMember(orgUsr.accountId)}} color={`error`}>DELETE</Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+
                     </DialogContent>
                 </Dialog>
             </Box>

@@ -78,8 +78,8 @@ public class OrgServiceImpl implements OrgService {
     }
 
     @Override
-    public List<JSONObject> getOrgsMember(int userId, int orgId, int page, int size) {
-        return relationshipMapper.getOrgsMember(orgId, (page - 1) * size, size);
+    public List<JSONObject> getOrgsMember(int userId, int orgId) {
+        return relationshipMapper.getOrgsMember(orgId);
     }
 
     @Override
