@@ -25,6 +25,7 @@ interface InputFileUploadProps {
     apiUrl: string;  // 上传 API 地址
     onSuccess?: (files: string[]) => void;  // 上传成功后的回调函数
     disabled?: boolean;
+    btnSize?: 'medium' | 'large' | 'small';
 }
 
 export default function InputFileUpload({
@@ -33,6 +34,7 @@ export default function InputFileUpload({
                                             apiUrl,
                                             onSuccess,
                                             disabled = false,
+                                            btnSize = 'medium',
                                         }: InputFileUploadProps) {
     const [fileCount, setFileCount] = useState(0);
 
@@ -70,6 +72,7 @@ export default function InputFileUpload({
     return (
         <div>
             <Button
+                size={btnSize}
                 disabled={disabled}
                 component="label"
                 variant="contained"
@@ -83,7 +86,9 @@ export default function InputFileUpload({
                     accept={acceptTypes}
                 />
             </Button>
-            <div className="text-gray-500 text-sm mt-2">{`You have uploaded ${fileCount} files.`}</div>
+            {
+                btnSize !== 'small' && <div className="text-gray-500 text-sm mt-2">{`You have uploaded ${fileCount} files.`}</div>
+            }
         </div>
     );
 }

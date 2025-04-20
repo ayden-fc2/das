@@ -96,7 +96,7 @@ public class ProjectController {
     public ResponseBean<Boolean> addChildProjectByProjectKey(
             @RequestHeader("Authorization") String token,
             @RequestParam("orgId") String orgId,
-            @RequestParam("projectKey") String projectKey,
+            @RequestParam("projectKey") long projectKey,
             @RequestParam("title") String title,
             @RequestParam("description") String description
     ) {
@@ -155,7 +155,7 @@ public class ProjectController {
     public ResponseBean<Boolean> deleteProjectByProjectKey(
             @RequestHeader("Authorization") String token,
             @RequestParam("orgId") String orgId,
-            @RequestParam("projectKey") String projectKey
+            @RequestParam("projectKey") long projectKey
     ) {
         try {
             int createrId = mts.tokenToUserId(token);

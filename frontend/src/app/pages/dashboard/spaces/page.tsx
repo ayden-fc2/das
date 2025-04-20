@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Accordion, AccordionDetails,
     AccordionSummary,
@@ -15,10 +15,19 @@ import {
     Typography
 } from "@mui/material";
 import {getAllMyOrgs} from "@/app/api/org";
-import {err} from "@/app/utils/alerter";
-import {createProjectApi, getAllProjectsApi} from "@/app/api/project";
+import {err, success} from "@/app/utils/alerter";
+import {
+    createChildProjectApi,
+    createProjectApi,
+    deleteProjectApi,
+    getAllProjectsApi,
+    updateProjectApi
+} from "@/app/api/project";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {convertToChinaTime, handleCopy} from "@/app/utils/common";
+import {convertToChinaTime, handleCopy, handleDownload} from "@/app/utils/common";
+import InputFileUpload from "@/app/components/InputFileUpload";
+import {Project} from "@/app/types/das";
+import {navigateTo} from "@/app/utils/navigator";
 
 interface Org {
     org_id: string;
@@ -79,6 +88,15 @@ const Spaces: React.FC = () => {
         if (idx !== -1) setCurrentIdx(idx);
     };
 
+    const checkEngineer = (): boolean => {
+        const currentOrg = myOrgs[currentIdx];
+        if (!currentOrg || !currentOrg.authorityIds) return false;
+
+        const authorityIds = currentOrg.authorityIds.split(',');
+        return authorityIds.some(id => Number(id) === 2);
+    };
+
+
     /**
      * 项目
      */
@@ -124,9 +142,90 @@ const Spaces: React.FC = () => {
             err('something went wrong');
         })
     }
-    const getFirstList = (allList: any) => {
+    const getFirstList = (allList: any, key: number) => {
         return allList.filter((item:any)=>{
-            return Number(item.parentKey) === -1
+            return Number(item.parentKey) === key
+        })
+    }
+    const deleteProject = (projectKey: number) => {
+        deleteProjectApi(Number(myOrgs[currentIdx].org_id), projectKey).then(res=> {
+            if (res.success) {
+                success('success');
+                refreshProjects();
+                return
+            }
+            err(res.message);
+        }).catch(e=>{
+            console.error(e);
+            err('something went wrong');
+        })
+    }
+    // 增加子弹窗
+    const [openChild, setOpenChild] = React.useState(false);
+    const [currentParentProjectKey, setCurrentParentProjectKey] = React.useState(-1);
+    const [currentChildTitle, setCurrentChildTitle] = React.useState("");
+    const [currentChildDesc, setCurrentChildDesc] = React.useState("");
+    const handleOpenChild = (parentKey: number) => {
+        setOpenChild(true);
+        setCurrentParentProjectKey(parentKey);
+    }
+    const handleCloseChild = () => {
+        setOpenChild(false);
+        setCurrentChildTitle("");
+        setCurrentChildDesc("")
+        setCurrentParentProjectKey(-1)
+    }
+    const handleCreateChild = () => {
+        if (currentChildTitle.length < 0 || currentChildTitle.length > 20) {
+            err('Project name must be between 1 and 20 characters');
+            return
+        }
+        createChildProjectApi(Number(myOrgs[currentIdx].org_id), currentParentProjectKey, currentChildTitle, currentChildDesc).then(res=> {
+            if (res.success) {
+                refreshProjects()
+                success('successfully created')
+                handleCloseChild();
+                return
+            }
+            err(res.message);
+        }).catch(e=> {
+            console.error(e);
+            err('something went wrong');
+        })
+    }
+
+    /**
+     * DCS
+     */
+    const [newDCSProject, setNewDCSProject] = React.useState({
+        projectName: "",
+        isPublic: true,
+        dwgPath: "",
+        id: 0,
+        analysised: 0
+    });
+    const [uploadKey, setUploadKey] = useState(0);
+    const handleFileChange = (files: string[], projectKey: number) => {
+        updateProjectApi(files[0], Number(myOrgs[currentIdx].org_id), projectKey).then(res=>{
+            if (res.success){
+                refreshProjects()
+                success('successfully updated')
+                return
+            }
+            err(res.message);
+        }).catch(e=>{
+            console.error(e);
+            err('something went wrong');
+        }).finally(()=>{
+            setUploadKey(uploadKey + 1);
+        })
+    };
+    const analysisProject = (project: any) => {
+        navigateTo('/pages/dashboard/project-analysis', {
+            jsonPath: project.jsonPath as string,
+            projectName: project.title,
+            analysised: project.analysised || 0,
+            projectId: project.uploadId
         })
     }
 
@@ -134,6 +233,63 @@ const Spaces: React.FC = () => {
     /**
      * 全局
      */
+    const getTree = (startKey: number) => {
+        return getFirstList(currentProjects, startKey).map((project: any, index: number) => (
+            <Accordion key={project.projectKey} className={`my-2`}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    id={String(index)}
+                >
+                    <Box className={`flex w-full items-center justify-between`}>
+                        {/* 名称，创建者，时间，增加子项目，删除项目 */}
+                        <Typography component="h6">
+                            Project Name:<strong className={`text-blue-600 ml-2`}>{project.title}</strong>
+                        </Typography>
+                        <Box className={`flex-1`}></Box>
+                        <Typography className={`!text-[13px] !mx-2`}>Created By:
+                            <strong onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopy(project.createrPhoneNum)
+                            }} className={`ml-2 text-blue-600 cursor-pointer`}>{project.createrNickName}</strong>
+                        </Typography>
+                        <Typography className={`!text-[13px] !mx-2`}>{convertToChinaTime(project.createdTime)}</Typography>
+                    </Box>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Box className={`ml-2`}>
+                        {/* Detail */}
+                        <Typography className={`!text-[13px] font-gray-500`}>{project.desc}</Typography>
+                        {/* DWGPath Analysis Upload Delete*/}
+                        <Box className={`h-12 w-full flex my-2 items-center justify-between`}>
+                            <Box className={`flex-1 border-r-2 flex items-center justify-start`}>
+                                <InputFileUpload
+                                    btnSize={`small`}
+                                    disabled={!checkEngineer()}
+                                    apiUrl="/file-manage/dwg/upload"
+                                    maxFiles={1}
+                                    acceptTypes=".dwg"
+                                    onSuccess={(res)=>{handleFileChange(res, project.projectKey)}}  // 上传成功后的回调函数
+                                    key={uploadKey} // 提交后重置组件
+                                />
+                                <Typography className={`!ml-2`} component="h6">DCS Graph: {project.uploadId === -1 ? 'None' : ''}</Typography>
+                                <Button onClick={()=>{handleDownload(project.dwgPath)}} disabled={project.uploadId === -1 || !project?.dwgPath} className={`!ml-2`}>Download</Button>
+                                <Button onClick={() => {analysisProject(project)}} disabled={project.uploadId === -1} className={`!ml-2`}>Analysis</Button>
+                            </Box>
+                            <Box className={``}>
+                                <Button onClick={() => {handleOpenChild(project.projectKey)}} className={`!ml-4`} size={`small`} variant={`contained`}>Add Child</Button>
+                                <Button onClick={() => {deleteProject(project.projectKey)}} className={`!ml-2`} color={`error`} size={`small`} variant={`contained`}>Delete</Button>
+                            </Box>
+                        </Box>
+                        {/*  子项目  */}
+                        <Box className={`ml-2 mt-4`}>
+                            <Divider className={`!mb-4`} />
+                            { getTree(project.projectKey) }
+                        </Box>
+                    </Box>
+                </AccordionDetails>
+            </Accordion>
+        ))
+    }
     useEffect(() => {
         getAllOrgs();
     }, []);
@@ -176,41 +332,7 @@ const Spaces: React.FC = () => {
                 {/*  当前组织的项目树  */}
                 <Box className={`flex-1 p-2 overflow-x-hidden overflow-y-scroll`}>
                     {
-                        getFirstList(currentProjects).map((project: any, index: number) => (
-                            <Accordion key={project.projectKey} className={`my-2`}>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    id={String(index)}
-                                >
-                                    <Box className={`flex w-full items-center justify-between`}>
-                                        {/* 名称，创建者，时间，增加子项目，删除项目 */}
-                                        <Typography component="h6">
-                                            Project Name:<strong className={`text-blue-600 ml-2`}>{project.title}</strong>
-                                        </Typography>
-                                        <Box className={`flex-1`}></Box>
-                                        <Typography className={`!text-[13px] !mx-2`}>Created By:
-                                            <strong onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleCopy(project.createrPhoneNum)
-                                            }} className={`ml-2 text-blue-600 cursor-pointer`}>{project.createrNickName}</strong>
-                                        </Typography>
-                                        <Typography className={`!text-[13px] !mx-2`}>{convertToChinaTime(project.createdTime)}</Typography>
-                                    </Box>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <Box className={`ml-2`}>
-                                        {/* Detail */}
-                                        <Typography className={`!text-[13px] font-gray-500`}>{project.desc}</Typography>
-                                        {/* DWGPath Analysis Upload Delete*/}
-                                        <Box className={`h-12 w-full bg-amber-200 my-2`}>
-
-                                        </Box>
-                                    </Box>
-
-
-                                </AccordionDetails>
-                            </Accordion>
-                        ))
+                        getTree(-1)
                     }
                 </Box>
                 {/* 新增项目 */}
@@ -239,6 +361,27 @@ const Spaces: React.FC = () => {
                         Cancel
                     </Button>
                     <Button onClick={handleCreateProject}>Create</Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={openChild}
+                onClose={handleCloseChild}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Create a Child Project"}
+                </DialogTitle>
+                <DialogContent className={`flex flex-col`}>
+                    <TextField onChange={(e) => setCurrentChildTitle(e.target.value)} value={currentChildTitle} className={`!my-2 w-96`} id="outlined-basic" label="Project Name" size={`small`} variant="outlined" />
+                    <TextField onChange={(e) => setCurrentChildDesc(e.target.value)} value={currentChildDesc} className={`!my-2 w-96`} id="outlined-basic" label="Project Description" size={`small`} variant="outlined" />
+                </DialogContent>
+                <DialogActions>
+                    <Button color={`error`} onClick={handleCloseChild} autoFocus>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleCreateChild}>Create</Button>
                 </DialogActions>
             </Dialog>
         </Box>

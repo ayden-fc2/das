@@ -27,8 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Boolean addChildProjectByProjectKey(String orgId, String projectKey, String title, String description, int createrId) {
-        return null;
+    public Boolean addChildProjectByProjectKey(String orgId, long projectKey, String title, String description, int createrId) {
+        return pm.insertChildProject(orgId, projectKey, title, description, createrId);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Boolean deleteProjectByProjectKey(String orgId, String projectKey, int createrId) {
-        return null;
+    public Boolean deleteProjectByProjectKey(String orgId, long projectKey, int createrId) {
+        return pm.deleteProject(projectKey);
     }
 }

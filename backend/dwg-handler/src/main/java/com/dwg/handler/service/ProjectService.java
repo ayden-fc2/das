@@ -11,9 +11,9 @@ public interface ProjectService {
 
     Boolean addProjectByOrgId(String orgId, String title, String description, int createrId);
 
-    Boolean addChildProjectByProjectKey(String orgId, String projectKey, String title, String description, int createrId);
+    Boolean addChildProjectByProjectKey(String orgId, long projectKey, String title, String description, int createrId);
 
     Boolean updateProjectByProjectKey(String orgId, String title, String description, int createrId);
 
-    Boolean deleteProjectByProjectKey(String orgId, String projectKey, int createrId);
+    Boolean deleteProjectByProjectKey(String orgId, long projectKey, int createrId);
 }

@@ -49,10 +49,13 @@ public class DwgServiceImpl implements DwgService {
     @Autowired
     VirtualNodeStMapper virtualNodeStMapper;
 
+    @Autowired
+    ProjectStMapper pm;
+
 
     // 使用libreDWG生成JSON文件
     @Override
-    public Boolean genAnalysis(int userId, String projectName, String dwgPath, int isPublic) {
+    public long genAnalysis(int userId, String projectName, String dwgPath, int isPublic) {
         String file;
         if (dwgPath.startsWith(dwgReturnUrl)) {
             file = dwgPath.substring(dwgReturnUrl.length());
@@ -92,11 +95,20 @@ public class DwgServiceImpl implements DwgService {
             newDwgAna.setIsPublic(isPublic);
             newDwgAna.setJsonPath(jsonPath);
             newDwgAna.setUserId(userId);
-            return uploadDwgStMapper.insert(newDwgAna);
+            uploadDwgStMapper.insert(newDwgAna);
+            return newDwgAna.getId();
         } catch (Exception e) {
             e.printStackTrace();
             throw new MyException(e.getMessage());
         }
+    }
+
+    // 类似的生成json文件，更新upload表后同时更新project表
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean uploadDwgByOrgId(String dwgPath, Long orgId, Long userId, Long projectId) {
+        long uploadId = genAnalysis(userId.intValue(), "in_org_", dwgPath, 0);;
+        return pm.updateProjectUploadId(projectId, uploadId);
     }
 
     @Override

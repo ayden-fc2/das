@@ -25,22 +25,43 @@ public class DwgController {
     // 管理员demo 上传文件后分析并存储，分析存储完毕后存表返回boolean
     @GetMapping("/genAnalysis")
     @PreAuthorize("@orgRoleService.isSuperManager(#token)")
-    public ResponseBean<Boolean> genAnalysis(@RequestHeader("Authorization") String token,
+    public ResponseBean<Long> genAnalysis(@RequestHeader("Authorization") String token,
                                           @Param("projectName") String projectName,
                                           @Param("dwgPath") String dwgPath,
                                           @Param("isPublic") int isPublic) {
-        int userId = tokenService.tokenToUserId(token);
-        System.out.println(userId);
-        if (dwgService.genAnalysis(userId, projectName, dwgPath, isPublic)){
-            return ResponseBean.success(true);
-        }else {
+        try {
+            int userId = tokenService.tokenToUserId(token);
+            return ResponseBean.success(dwgService.genAnalysis(userId, projectName, dwgPath, isPublic));
+        } catch (Exception e) {
+            throw new MyException(e.getMessage());
+        }
+    }
+
+    // 项目内工程师上传解析
+    @GetMapping("/uploadDwgByOrgId")
+    @PreAuthorize("@orgRoleService.hasAnyRoleInOrg(" +
+            "#token," +
+            " #orgId," +
+            " T(java.util.Arrays).asList(" +
+            "T(com.example.common.enums.UserType).Controller.getType())" +
+            ")")
+    public ResponseBean<Boolean> uploadDwgByOrgId(
+            @RequestHeader("Authorization") String token,
+            @Param("dwgPath") String dwgPath,
+            @Param("orgId") Long orgId,
+            @Param("projectId") Long projectId
+    ) {
+        try {
+            long userId = tokenService.tokenToUserId(token);
+            return ResponseBean.success(dwgService.uploadDwgByOrgId(dwgPath, orgId, userId, projectId));
+        } catch (Exception e) {
             throw new MyException("Something went wrong");
         }
     }
 
-    // 管理员demo 二次解析
+    // 管理员demo 二次解析 TODO 权限暂时全局
     @PostMapping("/genAnalysisOverview")
-    @PreAuthorize("@orgRoleService.isSuperManager(#token)")
+//    @PreAuthorize("@orgRoleService.isSuperManager(#token)")
     public ResponseBean<Boolean> genAnalysisOverview(@RequestHeader("Authorization") String token, @RequestBody JSONObject jsonObj) {
         int userId = tokenService.tokenToUserId(token);
         if (dwgService.isAnalysed(jsonObj.getLong("projectId"))) {
