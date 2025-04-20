@@ -93,6 +93,11 @@ public class OrgServiceImpl implements OrgService {
     }
 
     @Override
+    public List<JSONObject> getAllMyOrgs(int userId) {
+        return relationshipMapper.getAllMyOrgs(userId);
+    }
+
+    @Override
     public boolean deleteUser(int managerId, int orgId, int userId) {
         return relationshipMapper.deleteUser(managerId, orgId, userId);
     }

@@ -27,4 +27,6 @@ public interface OrgService {
     boolean manageUserRoles(int managerId, int orgId, int userId, List<Integer> roleIds);
 
     Integer getMyOrgsNum(int userId);
+
+    List<JSONObject> getAllMyOrgs(int userId);
 }

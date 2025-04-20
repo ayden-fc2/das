@@ -176,6 +176,19 @@ public class OrgController {
         }
     }
 
+    // 用户获取所有与自己相关的群组列表
+    @GetMapping("/getAllMyOrgs")
+    public ResponseBean<List<JSONObject>> getAllMyOrgs(
+            @RequestHeader("Authorization") String token
+    ) {
+        try {
+            int userId = myTokenService.tokenToUserId(token);
+            return ResponseBean.success(orgService.getAllMyOrgs(userId));
+        } catch (Exception e) {
+            throw new MyException(e.getMessage());
+        }
+    }
+
     // 管理员删除用户
     @GetMapping("/deleteUser")
     @PreAuthorize("@orgRoleService.hasAnyRoleInOrg(" +

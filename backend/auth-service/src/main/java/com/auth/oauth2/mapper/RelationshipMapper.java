@@ -52,4 +52,14 @@ public interface RelationshipMapper {
 
     @Select("SELECT * FROM relationship_st WHERE accountId = #{userId} AND orgId = #{orgId}")
     List<RelationshipSt> getRelationship( @Param("userId") int userId, @Param("orgId") int orgId);
+
+    @Select("SELECT o.org_id, o.org_name, o.created_time, o.creater_id, o.org_desc, o.org_code, " +
+            "GROUP_CONCAT(r.authorityId ORDER BY r.authorityId) AS authorityIds, " +  // 注意这里加了逗号
+            "a.nickName, a.avatar, a.phoneNum " +
+            "FROM relationship_st r " +
+            "JOIN org_st o ON r.orgId = o.org_id " +
+            "JOIN account_st a ON o.creater_id = a.accountId " +
+            "WHERE r.accountId = #{userId} " +
+            "GROUP BY o.org_id ")
+    List<JSONObject> getAllMyOrgs(int userId);
 }

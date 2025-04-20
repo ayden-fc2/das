@@ -1,4 +1,5 @@
 import {get} from "@/app/utils/api";
+import {success} from "@/app/utils/alerter";
 
 // 矫正时间
 export function convertToChinaTime(utcDateStr: string): string {
@@ -40,3 +41,12 @@ export const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 };
+
+export const handleCopy = async (content: string) => {
+    try {
+        await navigator.clipboard.writeText(content);
+        success('Successfully copied');
+    } catch (err) {
+        console.error('复制失败:', err);
+    }
+}

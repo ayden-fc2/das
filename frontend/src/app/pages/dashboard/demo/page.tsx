@@ -13,7 +13,7 @@ import {
     Button,
     FormControlLabel,
     Checkbox,
-    TableContainer
+    TableContainer, Paper
 } from "@mui/material";
 import InputFileUpload from "@/app/components/InputFileUpload";
 import {err, success} from "@/app/utils/alerter";
@@ -130,25 +130,25 @@ export default function Page() {
                     <Typography variant="h5" className="text-center !mb-4 text-gray-700">
                         Public Demo Projects
                     </Typography>
-                    <TableContainer className="w-full max-h-[50vh]">
+                    <TableContainer component={Paper} className="w-full max-h-[50vh]">
                         <Table stickyHeader className="bg-white shadow-md rounded-lg">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Project Name</TableCell>
-                                    <TableCell>Created Time</TableCell>
-                                    <TableCell>DWG Path</TableCell>
-                                    <TableCell>DESIGN</TableCell>
+                                    <TableCell align={`center`}>Project Name</TableCell>
+                                    <TableCell align={`center`}>Created Time</TableCell>
+                                    <TableCell align={`center`}>DWG Path</TableCell>
+                                    <TableCell align={`center`}>DESIGN</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {projects.map((project, index) => (
                                     <TableRow key={index}>
-                                        <TableCell>{project.projectName}</TableCell>
-                                        <TableCell>{project.createdTime}</TableCell>
-                                        <TableCell>
+                                        <TableCell align={`center`}>{project.projectName}</TableCell>
+                                        <TableCell align={`center`}>{project.createdTime}</TableCell>
+                                        <TableCell align={`center`}>
                                             <Button onClick={()=>handleDownload(project.dwgPath)}>download</Button>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell align={`center`}>
                                             <Button variant="contained" onClick={()=>analysisProject(project)}>ANALYSIS</Button>
                                         </TableCell>
                                     </TableRow>

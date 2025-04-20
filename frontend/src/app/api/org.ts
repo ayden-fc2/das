@@ -4,6 +4,7 @@ const urls = {
     CREATE_ORG: '/auth-service/org/create', // 新建群组
     JOIN_ORG: '/auth-service/org/join', // 加入群组
     GET_ORG: '/auth-service/org/getMyOrgs', // 获取用户群组列表
+    GET_ALL_ORG: '/auth-service/org/getAllMyOrgs', // 不分页查询
     ORG_NUM: '/auth-service/org/getMyOrgsNum', // 获取用户群组总数
     QUIT_ORG: '/auth-service/org/quit', // 用户退出群组
     UPDATE_ORG: '/auth-service/org/update', // 群组基本信息
@@ -32,6 +33,10 @@ export const getMyOrgs = (page: number, size: number) => {
         page,
         size
     })
+}
+
+export const getAllMyOrgs = () => {
+    return get(urls.GET_ALL_ORG)
 }
 
 export const getMyOrgNum = () => {

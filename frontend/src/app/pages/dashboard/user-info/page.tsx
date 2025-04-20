@@ -39,7 +39,7 @@ import {
     updateOrgInfo, updateOrgMemberRole
 } from "@/app/api/org";
 import {Stack} from "@mui/system";
-import {convertToChinaTime} from "@/app/utils/common";
+import {convertToChinaTime, handleCopy} from "@/app/utils/common";
 
 const UserInfo: React.FC = () => {
     const authContext = useAuth()
@@ -350,14 +350,7 @@ const UserInfo: React.FC = () => {
     /**
      * 全局
      */
-    const handleCopy = async (content: string) => {
-        try {
-            await navigator.clipboard.writeText(content);
-            success('Successfully copied');
-        } catch (err) {
-            console.error('复制失败:', err);
-        }
-    }
+
     const roleMap: Record<string, { label: string; color: string }> = {
         '1': { label: 'Operator', color: '#1890ff' },       // 蓝色
         '2': { label: 'Engineer', color: '#52c41a' },       // 绿色
